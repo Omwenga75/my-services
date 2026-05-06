@@ -14,15 +14,13 @@ except Exception as e:
 
 app = FastAPI(title="Portfolio Services")
 
-# Get absolute path for static directory to ensure Vercel finds it
+# Static files path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
-# Ensure static directory exists (skip if read-only)
-try:
+# Ensure static directory exists (only for local dev)
+if not os.environ.get("VERCEL"):
     os.makedirs(STATIC_DIR, exist_ok=True)
-except OSError:
-    pass
 
 # Mount static files
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
