@@ -45,7 +45,79 @@ async def submit_inquiry(
     return RedirectResponse(url="/?success=true", status_code=303)
 
 @app.get("/messages", response_class=HTMLResponse)
-async def view_messages(db: Session = Depends(get_db)):
+async def view_messages(pin: str = None, db: Session = Depends(get_db)):
+    # PIN Check
+    CORRECT_PIN = "1999"
+    
+    if pin != CORRECT_PIN:
+        return """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | QuickLearn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background: #F4F7FC; 
+            font-family: 'Outfit', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        .login-card { 
+            background: white; 
+            padding: 2.5rem; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05); 
+            text-align: center; 
+            max-width: 400px; 
+            width: 90%; 
+        }
+        h2 { color: #0B1B3D; margin-bottom: 1rem; }
+        p { color: #666; margin-bottom: 2rem; font-size: 0.9rem; }
+        input { 
+            width: 100%; 
+            padding: 1rem; 
+            margin-bottom: 1.5rem; 
+            border: 2px solid #E2E8F0; 
+            border-radius: 12px; 
+            font-size: 1.2rem; 
+            text-align: center; 
+            letter-spacing: 5px;
+            box-sizing: border-box;
+        }
+        button { 
+            background: #00A8FF; 
+            color: white; 
+            border: none; 
+            padding: 1rem 2rem; 
+            border-radius: 12px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        button:hover { transform: translateY(-2px); background: #0088cc; }
+        .error { color: #ff4d4d; font-size: 0.8rem; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>Admin Access</h2>
+        <p>Please enter the administrator PIN to view messages.</p>
+        <form action="/messages" method="GET">
+            <input type="password" name="pin" placeholder="••••" maxlength="4" required autofocus>
+            <button type="submit">Unlock Messages</button>
+        </form>
+        """ + (f'<div class="error">Incorrect PIN. Please try again.</div>' if pin else "") + """
+    </div>
+</body>
+</html>"""
+
+    # If PIN is correct, show the messages
     inquiries = db.query(models.Inquiry).order_by(models.Inquiry.id.desc()).all()
     
     html_content = """<!DOCTYPE html>
@@ -169,7 +241,7 @@ async def view_messages(db: Session = Depends(get_db)):
             <a href="/#services">Services</a>
             <a href="/#roadmap">Roadmap</a>
             <a href="/#contact">Contact</a>
-            <a href="/messages" class="active">Messages</a>
+            <a href="/messages?pin=""" + CORRECT_PIN + """" class="active">Messages</a>
         </div>
     </nav>
     
