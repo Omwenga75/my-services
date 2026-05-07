@@ -6,33 +6,30 @@ import models
 from database import engine, get_db
 import os
 
-# Create DB tables safely (Vercel has a read-only file system)
-try:
-    models.Base.metadata.create_all(bind=engine)
-except Exception as e:
-    print(f"Warning: Could not create database tables (likely on Vercel): {e}")
-
 app = FastAPI(title="Portfolio Services")
 
 # Static files path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
-# Ensure static directory exists (only for local dev)
-if not os.environ.get("VERCEL"):
-    os.makedirs(STATIC_DIR, exist_ok=True)
-
 # Mount static files
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+# Create DB tables
+@app.on_event("startup")
+def on_startup():
+    try:
+        models.Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"DB Startup Note: {e}")
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
     index_path = os.path.join(STATIC_DIR, "index.html")
-    try:
+    if os.path.exists(index_path):
         with open(index_path, "r", encoding="utf-8") as f:
             return f.read()
-    except FileNotFoundError:
-        return "<h1>Static index.html not found!</h1>"
+    return "<h1>QuickLearn: static/index.html not found!</h1>"
 
 @app.post("/submit_inquiry")
 async def submit_inquiry(

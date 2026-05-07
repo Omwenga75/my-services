@@ -6,7 +6,19 @@ import os
 # Default to SQLite for local development, easily swappable to Postgres
 # For Postgres, set the DATABASE_URL environment variable:
 # e.g., export DATABASE_URL="postgresql://user:password@localhost/dbname"
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./portfolio.db")
+# Default to SQLite for local development
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    if os.environ.get("VERCEL"):
+        # On Vercel, if no Postgres is provided, we use a temp SQLite file 
+        # Note: This will reset on every redeploy/cold start
+        SQLALCHEMY_DATABASE_URL = "sqlite:////tmp/portfolio.db"
+    else:
+        SQLALCHEMY_DATABASE_URL = "sqlite:///./portfolio.db"
+else:
+    # Fix for newer SQLAlchemy/Heroku/Vercel Postgres strings
+    SQLALCHEMY_DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 # SQLite needs check_same_thread=False
 connect_args = {"check_same_thread": False} if SQLALCHEMY_DATABASE_URL.startswith("sqlite") else {}
