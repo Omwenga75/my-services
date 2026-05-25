@@ -444,6 +444,9 @@ async def enroll(course_id: int, db: Session = Depends(get_db), user: models.Use
     if not user:
         raise HTTPException(status_code=401)
     
+    if is_admin_user(user):
+        return {"status": "admin_forbidden"}
+    
     # Check if user is already enrolled in ANY course
     user_enrollments_count = db.query(models.Enrollment).filter(
         models.Enrollment.user_id == user.id
@@ -468,6 +471,9 @@ async def enroll(course_id: int, db: Session = Depends(get_db), user: models.Use
 async def get_my_courses(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
     if not user:
         raise HTTPException(status_code=401)
+    
+    if is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Admins do not have student courses")
     
     # Fetch courses user is enrolled in
     enrolled_courses = db.query(models.Course).join(models.Enrollment).filter(models.Enrollment.user_id == user.id).all()

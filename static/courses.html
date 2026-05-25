@@ -137,6 +137,14 @@
 
         async function loadCourses() {
             try {
+                // Check if user is admin
+                let isAdmin = false;
+                try {
+                    const meRes = await fetch('/api/me');
+                    const meData = await meRes.json();
+                    isAdmin = meData.logged_in && meData.is_admin;
+                } catch(err) {}
+
                 const res = await fetch('/api/courses');
                 let courses = await res.json();
                 const allowedTitles = new Set([
@@ -155,6 +163,15 @@
                 courses.forEach(course => {
                     const card = document.createElement('div');
                     card.className = 'udemy-card';
+                    
+                    let buttonHtml = '';
+                    if (isAdmin) {
+                        buttonHtml = '<button class="btn-enroll-premium btn-enrolled-premium" disabled style="opacity: 0.6; cursor: not-allowed;">Disabled for Admin</button>';
+                    } else if (course.is_enrolled) {
+                        buttonHtml = '<button class="btn-enroll-premium btn-enrolled-premium">Enrolled</button>';
+                    } else {
+                        buttonHtml = `<button class="btn-enroll-premium" onclick="window.location.href='/course-details?id=${course.id}'">Enroll Now</button>`;
+                    }
                     
                     card.innerHTML = `
                         <div class="card-img-wrapper">
@@ -177,10 +194,7 @@
                                 <s style="color: #94a3b8; font-size: 0.85rem;">$${course.price}</s>
                                 <div class="price-tag" style="color: #10b981;">Free</div>
                             </div>
-                            ${course.is_enrolled ? 
-                                '<button class="btn-enroll-premium btn-enrolled-premium">Enrolled</button>' : 
-                                `<button class="btn-enroll-premium" onclick="window.location.href='/course-details?id=${course.id}'">Enroll Now</button>`
-                            }
+                            ${buttonHtml}
                         </div>
                     `;
                     card.onclick = (e) => {

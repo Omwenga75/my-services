@@ -541,6 +541,8 @@
                 ]
             }
         };
+        let isAdmin = false;
+
         async function loadCourseDetails() {
             const urlParams = new URLSearchParams(window.location.search);
             const courseId = urlParams.get('id');
@@ -552,6 +554,12 @@
             currentCourseId = courseId;
 
             try {
+                try {
+                    const meRes = await fetch('/api/me');
+                    const meData = await meRes.json();
+                    isAdmin = meData.logged_in && meData.is_admin;
+                } catch (e) {}
+
                 const res = await fetch('/api/courses');
                 const courses = await res.json();
                 const course = courses.find(c => c.id == courseId);
@@ -672,7 +680,12 @@
                     }
 
                     const enrollBtn = document.getElementById('cd-enroll-btn');
-                    if (course.is_enrolled) {
+                    if (isAdmin) {
+                        enrollBtn.textContent = 'Disabled for Admin';
+                        enrollBtn.style.opacity = '0.6';
+                        enrollBtn.style.cursor = 'not-allowed';
+                        enrollBtn.disabled = true;
+                    } else if (course.is_enrolled) {
                         enrollBtn.textContent = 'Enrolled';
                         enrollBtn.style.opacity = '0.7';
                         enrollBtn.disabled = true;
@@ -687,6 +700,10 @@
 
         async function enrollCourse() {
             if (!currentCourseId) return;
+            if (isAdmin) {
+                alert("Admins are not allowed to enroll in courses.");
+                return;
+            }
             try {
                 const res = await fetch(`/api/enroll/${currentCourseId}`, { method: 'POST' });
                 if (res.status === 401) {
