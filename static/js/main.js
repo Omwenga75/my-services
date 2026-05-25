@@ -7,53 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (successMsg && form) {
             successMsg.classList.remove('hidden');
             form.reset();
-            // Scroll to contact section
             document.getElementById('contact').scrollIntoView();
-            
-            // Remove success param from URL to clean it up
             window.history.replaceState({}, document.title, window.location.pathname);
         }
     }
     
-    // Nav Link Highlighting
-    const navLinks = document.querySelectorAll('.nav-links a');
-    const sections = document.querySelectorAll('section, header');
-
-    function updateActiveLink() {
-        let current = "";
-        const scrollPos = window.scrollY + 100;
-
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-                current = section.getAttribute('id') || "home";
-            }
-        });
-
-        // Special case for hero/home
-        if (window.scrollY < 200) current = "home";
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            const href = link.getAttribute('href');
-            
-            if (current === "home" && (href === "#" || href === "/")) {
-                link.classList.add('active');
-            } else if (href === `#${current}`) {
-                link.classList.add('active');
-            } else if (window.location.pathname === href) {
-                link.classList.add('active');
-            }
-        });
-    }
-
-    window.addEventListener('scroll', updateActiveLink);
-    updateActiveLink(); // Initial check
-
-    // Add simple entrance animations for service cards
+    // Intersection Observer for animations
     const cards = document.querySelectorAll('.service-card');
-    
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -69,4 +29,64 @@ document.addEventListener("DOMContentLoaded", () => {
         card.style.transition = `all 0.5s ease ${index * 0.1}s`;
         observer.observe(card);
     });
+
+    // Check Auth Status for Navbar (Unified)
+    async function checkAuth() {
+        try {
+            const res = await fetch('/api/me');
+            const data = await res.json();
+            const nav = document.getElementById('dynamic-nav');
+            if (!nav) return;
+
+            // Build a base nav with all primary links so they remain visible on all pages
+            let baseNav = `
+                <a href="/">Home</a>
+                <a href="/courses">Courses</a>
+                <a href="/about">About Us</a>
+                <a href="/contact">Contact Us</a>
+            `;
+
+            if (data.logged_in) {
+                baseNav += `
+                    <a href="/dashboard">Dashboard</a>
+                    <a href="/logout" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i></a>
+                `;
+            } else {
+                baseNav += `<a href="/login" class="btn-auth-nav">Login</a>`;
+            }
+
+            nav.innerHTML = baseNav;
+
+            if (data.logged_in && document.getElementById('welcome-text')) {
+                document.getElementById('welcome-text').textContent = `What's next, ${data.name.split(' ')[0]}?`;
+            }
+
+            // mark the active link based on current pathname
+            try {
+                const currentPath = (location.pathname || '/').replace(/\/$/, '') || '/';
+                const links = nav.querySelectorAll('a');
+                links.forEach(a => {
+                    // skip external or anchor links
+                    const href = a.getAttribute('href');
+                    if (!href || href.startsWith('http') || href.startsWith('#')) {
+                        a.classList.remove('active');
+                        a.removeAttribute('aria-current');
+                        return;
+                    }
+                    const path = href.replace(/\/$/, '') || '/';
+                    if (path === currentPath) {
+                        a.classList.add('active');
+                        a.setAttribute('aria-current', 'page');
+                    } else {
+                        a.classList.remove('active');
+                        a.removeAttribute('aria-current');
+                    }
+                });
+            } catch (e) { /* ignore */ }
+        } catch (e) {
+            console.error("Auth check failed", e);
+        }
+    }
+    
+    checkAuth();
 });

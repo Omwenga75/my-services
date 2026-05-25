@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses | Portfolio Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=6">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="logo-image">
+            <img src="/static/images/logo.jpeg" alt="QuickLearn Logo">
+        </a>
+        <div class="nav-links" id="dynamic-nav">
+            <a href="/">Home</a>
+            <a href="/courses" class="active">Courses</a>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/login" class="btn-auth-nav">Login</a>
+        </div>
+    </nav>
+
+    <div class="courses-page">
+        <div class="container">
+            <div class="courses-header">
+                <h1 id="welcome-text">Explore Courses</h1>
+                <p>Master new skills with our professional curriculum.</p>
+
+            </div>
+
+            <div class="course-grid" id="course-grid">
+                <!-- Skeleton loader or initial state -->
+                <div class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p style="margin-top: 1rem;">Loading your future...</p>
+                </div>
+            </div>
+
+            <!-- Tutors Section -->
+            <div style="margin-top: 6rem;">
+                <div style="text-align: center; margin-bottom: 4rem;">
+                    <h2 style="font-size: 2.2rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 0.5rem;">Meet Our Expert Tutors</h2>
+                </div>
+                <div class="tutors-grid" id="tutors-grid">
+                    <!-- Tutors will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary-dark); color: white; padding: 1rem 2rem; border-radius: 50px; font-weight: 600; box-shadow: var(--shadow-xl); display: none; z-index: 2000;"></div>
+
+
+
+    <script>
+        console.log('Courses page version 6 loaded');
+
+        // Tutor Data
+        const tutorsData = [
+            {
+                name: "Nelson Omwenga",
+                role: "Python Expert",
+                lessons: 36,
+                image: "/static/images/nels.jpeg",
+                imageStyle: "object-position: center 2%;"
+            },
+            {
+                name: "Daniel Kitheka",
+                role: "Network Administrator",
+                lessons: 26,
+                image: "/static/images/dan.png",
+                imageStyle: "object-position: center 30%;"
+            },
+            {
+                name: "James Njuguna",
+                role: "Mobile Apps Developer",
+                lessons: 40,
+                image: "/static/images/jemo.png"
+            },
+            {
+                name: "Samuel Maveke",
+                role: "Web Design Specialist ",
+                lessons: 30,
+                image: "/static/images/sam.jpeg"
+            },
+            {
+                name: "Harriet Mukiri",
+                role: "Computer Packages",
+                lessons: 30,
+                image: "/static/images/Harriet.jpeg"
+            },
+            {
+                name: "Isaac Mwangi",
+                role: "Graphic Design Expert",
+                lessons: 30,
+                image: "/static/images/Isaac.jpeg"
+            }
+        ];
+
+        const courseMetadata = {
+            "Python Mastery Bootcamp": {
+                learners: "1.4M learners",
+                lessons: 68
+            },
+            "Graphics & UI/UX Design": {
+                learners: "820k learners",
+                lessons: 44
+            },
+            "Web Development": {
+                learners: "1.1M learners",
+                lessons: 76
+            },
+            "Kotlin Android App Development": {
+                learners: "560k learners",
+                lessons: 50
+            },
+            "Microsoft Office Productivity": {
+                learners: "720k learners",
+                lessons: 32
+            },
+            "Networking Fundamentals": {
+                learners: "430k learners",
+                lessons: 38
+            }
+        };
+
+
+
+
+        async function loadCourses() {
+            try {
+                const res = await fetch('/api/courses');
+                let courses = await res.json();
+                const allowedTitles = new Set([
+                    'Python Mastery Bootcamp',
+                    'Graphics & UI/UX Design',
+                    'Web Development',
+                    'Kotlin Android App Development',
+                    'Microsoft Office Productivity',
+                    'Networking Fundamentals'
+                ]);
+                courses = courses.filter(course => allowedTitles.has(course.title));
+
+                const grid = document.getElementById('course-grid');
+                grid.innerHTML = '';
+
+                courses.forEach(course => {
+                    const card = document.createElement('div');
+                    card.className = 'udemy-card';
+                    
+                    card.innerHTML = `
+                        <div class="card-img-wrapper">
+                            <img src="${course.image_url}" alt="${course.title}" class="card-img" onerror="this.onerror=null;this.src='https://via.placeholder.com/500x190?text=Course+Image'">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">${course.title}</h3>
+                            <div class="card-tags">
+                                <div class="tag rating"><i class="fas fa-star"></i> ${course.rating}</div>
+                                <div class="tag">0 learners</div>
+                                <div class="tag">${tutorsData.find(t => t.name === course.instructor)?.lessons || (courseMetadata[course.title] ? courseMetadata[course.title].lessons : 30)} Lessons</div>
+                            </div>
+                            <div class="card-duration" style="font-size: 0.74rem; color: var(--text-muted); font-weight: 700; margin-top: auto; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.35rem;">
+                                <i class="far fa-calendar-alt" style="color: var(--primary-accent); font-size: 0.78rem;"></i>
+                                <span>June - August Learning</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="price-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <s style="color: #94a3b8; font-size: 0.85rem;">$${course.price}</s>
+                                <div class="price-tag" style="color: #10b981;">Free</div>
+                            </div>
+                            ${course.is_enrolled ? 
+                                '<button class="btn-enroll-premium btn-enrolled-premium">Enrolled</button>' : 
+                                `<button class="btn-enroll-premium" onclick="window.location.href='/course-details?id=${course.id}'">Enroll Now</button>`
+                            }
+                        </div>
+                    `;
+                    card.onclick = (e) => {
+                        if (!e.target.closest('button')) {
+                            window.location.href = '/course-details?id=' + course.id;
+                        }
+                    };
+                    grid.appendChild(card);
+                });
+            } catch (e) {
+                console.error("Error loading courses:", e);
+            }
+        }
+
+        async function enroll(event, courseId) {
+            if (event) event.stopPropagation();
+            try {
+                const res = await fetch(`/api/enroll/${courseId}`, { method: 'POST' });
+                if (res.status === 401) {
+                    window.location.href = '/login';
+                    return;
+                }
+                const data = await res.json();
+                if (data.status === 'success') {
+                    closeCourseDetails();
+                    showToast('Welcome to the course!');
+                    loadCourses();
+                } else if (data.status === 'already_enrolled') {
+                    showToast('You are already in!');
+                } else if (data.status === 'limit_reached') {
+                    showToast('You can only enroll in one course.');
+                }
+            } catch (e) {
+                showToast('Something went wrong. Try again.');
+            }
+        }
+
+
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        function loadTutors() {
+            const tutorsGrid = document.getElementById('tutors-grid');
+            tutorsGrid.innerHTML = '';
+            
+            tutorsData.forEach(tutor => {
+                const tutorCard = document.createElement('div');
+                tutorCard.className = 'tutor-card';
+                tutorCard.innerHTML = `
+                    <div class="tutor-card-wrapper">
+                        <div class="tutor-badge">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="tutor-img-container">
+                            <img src="${tutor.image}" alt="${tutor.name}" class="tutor-img" style="${tutor.imageStyle || ''}">
+                        </div>
+                        <div class="tutor-info">
+                            <p class="tutor-role">${tutor.role}</p>
+                            <h3 class="tutor-name">${tutor.name}</h3>
+                            <div class="tutor-stats">
+                                <div class="stat">
+                                    <i class="fas fa-book-open"></i>
+                                    <span>${tutor.lessons} Lessons</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                tutorsGrid.appendChild(tutorCard);
+            });
+        }
+
+        loadCourses();
+        loadTutors();
+    </script>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>QuickLearn</h3>
+                <p>Fast, practical tech training with real-world courses designed for career growth.</p>
+                <a href="tel:+254111307585">+254 111 307 585</a>
+                <a href="mailto:info@quicklearn.co.ke">info@quicklearn.co.ke</a>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="/">Home</a>
+                <a href="/courses">Courses</a>
+                <a href="/about">About Us</a>
+                <a href="/contact">Contact Us</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 QuickLearn Programming School. All Rights Reserved.</p>
+        </div>
+    </footer>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+

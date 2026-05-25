@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Course Details | QuickLearn Programming School</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=4">
+    <link rel="stylesheet" href="/static/css/course_details.css?v=4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Tutor Modal */
+        .tutor-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 10, 40, 0.65);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .tutor-modal-overlay.active { display: flex; animation: fadeInOverlay 0.25s ease; }
+        @keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+        .tutor-modal {
+            background: #fff;
+            border-radius: 24px;
+            max-width: 480px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(109,40,217,0.25);
+            animation: slideUpModal 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            position: relative;
+        }
+        @keyframes slideUpModal { from { transform: translateY(40px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
+        .tutor-modal-header {
+            background: linear-gradient(135deg, #6D28D9, #4F46E5);
+            padding: 2.5rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+        }
+        .tutor-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .tutor-modal-close:hover { background: rgba(255,255,255,0.35); }
+        .tutor-modal-avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+            margin-bottom: 0.75rem;
+        }
+        .tutor-modal-name {
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 0 0 0.25rem;
+        }
+        .tutor-modal-title {
+            color: rgba(255,255,255,0.82);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .tutor-modal-body {
+            padding: 2rem;
+            margin-top: -2rem;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+        }
+        .tutor-modal-bio {
+            font-size: 0.97rem;
+            color: #4A5568;
+            line-height: 1.75;
+            margin-bottom: 1.5rem;
+        }
+        .tutor-modal-badges {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .tutor-badge {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #6D28D9, #4F46E5);
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 0.38rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(109,40,217,0.25);
+        }
+        .tutor-modal-footer {
+            border-top: 1px solid #f1f5f9;
+            padding-top: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tutor-modal-footer span {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+        /* Clickable instructor card */
+        .instructor-card-clickable {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+            border: 1px solid rgba(109,40,217,0.15);
+            border-radius: 12px;
+            padding: 0.85rem 1.4rem;
+            margin-top: 0.25rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+        .instructor-card-clickable:hover {
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
+            border-color: rgba(109,40,217,0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(109,40,217,0.15);
+        }
+        .instructor-card-clickable:hover .ic-arrow { opacity: 1; transform: translateX(3px); }
+        .ic-arrow {
+            opacity: 0;
+            transform: translateX(0);
+            transition: all 0.2s ease;
+            color: #6D28D9;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body class="course-details-page">
+    <nav class="navbar">
+        <a href="/" class="logo-image">
+            <img src="/static/images/logo.jpeg" alt="QuickLearn Logo">
+        </a>
+        <div class="nav-links" id="dynamic-nav">
+            <a href="/">Home</a>
+            <a href="/courses">Courses</a>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/login" class="btn-auth-nav">Login</a>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="container">
+            
+            <!-- Hero Section -->
+            <div class="cd-hero-card">
+                <div class="cd-hero-content">
+                    <h1 id="cd-title" class="cd-title">Loading Course...</h1>
+                    <p id="cd-description" class="cd-desc">Please wait while we fetch the course details.</p>
+                    
+                    <div class="cd-stats">
+                        <div class="cd-stat-item">
+                            <div class="cd-stat-value"><i class="fas fa-star" style="color: #F59E0B; font-size: 1.1rem; margin-right: 4px;"></i><span id="cd-rating">4.8</span></div>
+                            <span class="cd-stat-label">average course rating</span>
+                        </div>
+                        <div class="cd-stat-item">
+                            <div class="cd-stat-value" id="cd-exercises">0</div>
+                            <span class="cd-stat-label">practice exercises <i class="fas fa-info-circle" style="font-size: 0.85em; opacity: 0.6; margin-left: 2px;"></i></span>
+                        </div>
+                        <div class="cd-stat-item">
+                            <div class="cd-stat-value" id="cd-hours">0</div>
+                            <span class="cd-stat-label">lessons</span>
+                        </div>
+                    </div>
+                    <div class="cd-action-area">
+                        <button id="cd-enroll-btn" class="cd-btn-primary" onclick="enrollCourse()">Get started</button>
+                        <div class="cd-price-display">
+                            <span class="cd-price-current" id="cd-price">$0.00</span>
+                            <span class="cd-price-old" id="cd-price-old" style="text-decoration: line-through; color: #94a3b8; font-size: 0.9rem; margin-left: 0.5rem;">$0.00</span>
+                        </div>
+                        <div id="cd-enrollment-status" class="cd-enroll-msg" style="display: none; color: #10B981; font-weight: 600; margin-left: 1rem;">
+                            Enrolled Successfully!
+                        </div>
+                    </div>
+                    <div class="cd-enrolled-count">
+                        <i class="fas fa-user-friends"></i> <strong id="cd-students">0</strong> learners already enrolled
+                    </div>
+                </div>
+                
+                <div class="cd-hero-image-wrapper">
+                    <div class="cd-instructor-photo-container">
+                        <div class="cd-photo-badge">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop" alt="Instructor" class="cd-instructor-img">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Overview Section -->
+            <section class="cd-section">
+                <h2 class="cd-section-title">Course overview</h2>
+                <div id="cd-course-overview" class="cd-overview">The course highlights and details will appear here once the selected course loads.</div>
+            </section>
+
+            <!-- What you'll learn Section -->
+            <section class="cd-section">
+                <h2 class="cd-section-title">What you'll learn</h2>
+                <div class="cd-learn-grid" id="cd-learn-grid"></div>
+            </section>
+
+            <!-- Skills Section -->
+            <section class="cd-section">
+                <h2 class="cd-section-title">Learn the skills that matter most</h2>
+                <div class="cd-skills-grid" id="cd-skills-grid"></div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <section class="cd-testimonials-section">
+        <div class="container">
+            <h2 class="cd-testimonials-title">What other learners are saying</h2>
+            <div class="cd-testimonials-grid" id="cd-testimonials-grid">
+                <div class="cd-testimonial-card">
+                    <div class="cd-quote-icon">"</div>
+                    <p class="cd-testimonial-text">Taking this course was a great decision for me, as it boosted my confidence into finally doing something and feeling capable of being a solid professional.</p>
+                    <div class="cd-reviewer">
+                        <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=pnuxfziz" alt="Reviewer">
+                        <div class="cd-reviewer-info">
+                            <h4>Sarah J.</h4>
+                            <span>Review from Software Engineer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cd-testimonial-card">
+                    <div class="cd-quote-icon">"</div>
+                    <p class="cd-testimonial-text">QuickLearn was truly a game-changer and a great guide for me as we brought our startup to life. The instructors are top-notch and the content is very relevant.</p>
+                    <div class="cd-reviewer">
+                        <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=gavgztbe" alt="Reviewer">
+                        <div class="cd-reviewer-info">
+                            <h4>Alvin L.</h4>
+                            <span>Technical Co-Founder, CTO</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cd-testimonial-card">
+                    <div class="cd-quote-icon">"</div>
+                    <p class="cd-testimonial-text">This academy was rated the most popular online course or certification program for learning how to code according to recent industry developer surveys. Highly recommended.</p>
+                    <div class="cd-reviewer">
+                        <div class="cd-reviewer-logo"><i class="fab fa-stack-overflow" style="color: #F48024;"></i> stackoverflow</div>
+                        <div class="cd-reviewer-info">
+                            <span>37,076 responses collected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>QuickLearn</h3>
+                <p>Fast, practical tech training with real-world courses designed for career growth.</p>
+                <a href="tel:+254111307585">+254 111 307 585</a>
+                <a href="mailto:info@quicklearn.co.ke">info@quicklearn.co.ke</a>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="/">Home</a>
+                <a href="/courses">Courses</a>
+                <a href="/about">About Us</a>
+                <a href="/contact">Contact Us</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 QuickLearn Programming School. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Tutor Profile Modal -->
+    <div class="tutor-modal-overlay" id="tutorModalOverlay" onclick="closeTutorModal(event)">
+        <div class="tutor-modal" id="tutorModalBox">
+            <div class="tutor-modal-header">
+                <button class="tutor-modal-close" onclick="closeTutorModalDirect()"><i class="fas fa-times"></i></button>
+                <img src="" alt="Tutor Photo" class="tutor-modal-avatar" id="tutorModalPhoto">
+                <h2 class="tutor-modal-name" id="tutorModalName">Instructor</h2>
+                <p class="tutor-modal-title" id="tutorModalTitle">Course Mentor</p>
+            </div>
+            <div class="tutor-modal-body">
+                <p class="tutor-modal-bio" id="tutorModalBio"></p>
+                <div class="tutor-modal-footer">
+                    <span><i class="fas fa-shield-alt" style="color:#6D28D9;margin-right:6px;"></i>Verified QuickLearn Instructor</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="/static/js/main.js?v=3"></script>
+    <script>
+        let currentCourseId = null;
+
+        const courseDetailsMap = {
+            "Python Mastery Bootcamp": {
+                overview: "Master Python for automation, web APIs, and data analysis.",
+                stats: { rating: "4.9", exercises: 220, hours: 36 },
+                learnItems: [
+                    { title: "Python, Automation & APIs", description: "Write scripts, automate workflows, and connect with web APIs to solve real business problems." },
+                    { title: "Data Analysis with Python", description: "Explore datasets, visualize trends, and prepare reports using Python libraries." },
+                    { title: "Build Production-Ready Apps", description: "Create robust applications with clean code, debugging, and deployment best practices." }
+                ],
+                skills: [
+                    { title: "Python Fundamentals", subtitle: "1.4M learners" },
+                    { title: "Automation", subtitle: "980k learners" },
+                    { title: "Web APIs", subtitle: "710k learners" },
+                    { title: "Data Analysis", subtitle: "1.1M learners" }
+                ],
+                testimonials: [
+                    {
+                        text: "Taking this course was a great decision for me, as it boosted my confidence in writing Python scripts and automating my daily workflows.",
+                        name: "Sarah J.",
+                        role: "Data Analyst",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=zveasvts"
+                    },
+                    {
+                        text: "Nelson Omwenga is amazing! The exercises were challenging but rewarding. I built 10+ projects during the bootcamp.",
+                        name: "David K.",
+                        role: "Junior Developer",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=cxvzfoqt"
+                    },
+                    {
+                        text: "The Python Mastery course helped me transition from spreadsheets to writing fully automated scripts. Highly recommend!",
+                        name: "Maya R.",
+                        role: "Business Operations Specialist",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=jaobuobl"
+                    }
+                ]
+            },
+            "Graphics & UI/UX Design": {
+                overview: "Design interfaces and brand systems using Figma and UX principles.",
+                stats: { rating: "4.7", exercises: 95, hours: 30 },
+                learnItems: [
+                    { title: "UI Design Principles", description: "Master layout, typography, color, and visual hierarchy for modern interfaces." },
+                    { title: "Figma Prototyping", description: "Build interactive prototypes and handoffs for real product design workflows." },
+                    { title: "UX Research & Strategy", description: "Learn user research techniques, personas, and usability testing for better design decisions." }
+                ],
+                skills: [
+                    { title: "User Experience (UX)", subtitle: "2.2M learners" },
+                    { title: "Graphic Design", subtitle: "4.7M learners" },
+                    { title: "Figma", subtitle: "1.3M learners" },
+                    { title: "Web Design", subtitle: "5M learners" }
+                ],
+                testimonials: [
+                    {
+                        text: "QuickLearn's UI/UX course was a game-changer for me. Gary Simon explains typography, spacing, and colors in a very logical way.",
+                        name: "Alvin L.",
+                        role: "Product Designer",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=jinilkvx"
+                    },
+                    {
+                        text: "Figma prototyping section alone was worth the course! I redesigned my portfolio and landed a freelancing gig right away.",
+                        name: "Jessica M.",
+                        role: "Freelance Designer",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=wdgagbkg"
+                    },
+                    {
+                        text: "This course covers both aesthetics and user testing. Essential for anyone wanting to get into modern product design.",
+                        name: "Ryan T.",
+                        role: "Product Manager",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=hayfukoa"
+                    }
+                ]
+            },
+            "Web Development": {
+                overview: "Build full-stack web apps with HTML, CSS, JavaScript, React, and Node.js.",
+                stats: { rating: "4.8", exercises: 180, hours: 30 },
+                learnItems: [
+                    { title: "JavaScript, React, & Node.js", description: "Build full-stack apps using modern front-end and back-end technologies." },
+                    { title: "JavaScript Interviews", description: "Prepare for developer interviews with practical coding challenges and concepts." },
+                    { title: "Data Structures & Algorithms", description: "Practice algorithms and key data structures commonly asked in technical interviews." }
+                ],
+                skills: [
+                    { title: "Web Development", subtitle: "15M learners" },
+                    { title: "JavaScript", subtitle: "19M learners" },
+                    { title: "HTML", subtitle: "12M learners" },
+                    { title: "CSS", subtitle: "10M learners" },
+                    { title: "Node.js", subtitle: "3.5M learners" }
+                ],
+                testimonials: [
+                    {
+                        text: "Colt Steele is a legendary teacher. The React and Node.js sections are so detailed. I finally understand database schemas!",
+                        name: "Carlos R.",
+                        role: "Full-Stack Engineer",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=paqnqlnk"
+                    },
+                    {
+                        text: "The assignments forced me to think. Moving from HTML/CSS to database-driven applications feels like a superpower now.",
+                        name: "Emily S.",
+                        role: "Front-End Developer",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=nkfpxpxp"
+                    },
+                    {
+                        text: "I appreciate the focus on modern JavaScript and clean coding habits. Best web dev course on the web.",
+                        name: "Arthur N.",
+                        role: "Web Developer",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=iojthpoe"
+                    }
+                ]
+            },
+            "Kotlin Android App Development": {
+                overview: "Build native Android apps with Kotlin and Jetpack Compose.",
+                stats: { rating: "4.9", exercises: 120, hours: 40 },
+                learnItems: [
+                    { title: "Kotlin Language Essentials", description: "Learn the Kotlin syntax, data types, functions, and object-oriented features." },
+                    { title: "Jetpack Compose UI", description: "Build responsive Android interfaces with declarative UI components." },
+                    { title: "Mobile APIs & Data", description: "Connect your apps to APIs, local storage, and cloud services." }
+                ],
+                skills: [
+                    { title: "Kotlin", subtitle: "560k learners" },
+                    { title: "Android UI", subtitle: "420k learners" },
+                    { title: "Jetpack Compose", subtitle: "315k learners" },
+                    { title: "Mobile Architecture", subtitle: "190k learners" }
+                ],
+                testimonials: [
+                    {
+                        text: "Jetpack Compose was a mystery to me, but this course broke it down step-by-step. I published my first app to the Play Store!",
+                        name: "Liam B.",
+                        role: "Mobile App Developer",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=soicexiq"
+                    },
+                    {
+                        text: "Transitioning from Java to Kotlin was seamless with these lectures. Excellent focus on modern architecture patterns.",
+                        name: "Sophia V.",
+                        role: "Android Developer",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=hrbbsore"
+                    },
+                    {
+                        text: "Highly structured, detailed explanations, and great code walkthroughs. Max does it again.",
+                        name: "Ken O.",
+                        role: "Software Engineer",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=fnaekrbh"
+                    }
+                ]
+            },
+            "Microsoft Office Productivity": {
+                overview: "Master Word, Excel, and PowerPoint for business workflows.",
+                stats: { rating: "4.8", exercises: 80, hours: 30 },
+                learnItems: [
+                    { title: "Excel Dashboards & Formulas", description: "Build automated spreadsheets, dashboards, and powerful formulas." },
+                    { title: "Professional Word Documents", description: "Create polished reports, templates, and business documents." },
+                    { title: "PowerPoint Storytelling", description: "Design presentations that communicate clearly and engage audiences." }
+                ],
+                skills: [
+                    { title: "Word", subtitle: "1.2M learners" },
+                    { title: "Excel", subtitle: "1.8M learners" },
+                    { title: "PowerPoint", subtitle: "950k learners" },
+                    { title: "Business Productivity", subtitle: "720k learners" }
+                ],
+                testimonials: [
+                    {
+                        text: "My spreadsheets went from boring to advanced financial models. The Excel macro section saved me hours of manual work.",
+                        name: "Helen G.",
+                        role: "Financial Analyst",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=nvunnfno"
+                    },
+                    {
+                        text: "Learned how to make professional reports in Word and presentations in PowerPoint that clients actually love.",
+                        name: "Thomas P.",
+                        role: "Business Consultant",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=vxocozwn"
+                    },
+                    {
+                        text: "If you work in an office, this course is not optional. It teaches you how to automate document generation.",
+                        name: "Alice W.",
+                        role: "Executive Assistant",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=yskauuvs"
+                    }
+                ]
+            },
+            "Networking Fundamentals": {
+                overview: "Learn routing, switching, wireless networking, and security essentials.",
+                stats: { rating: "4.9", exercises: 105, hours: 26 },
+                learnItems: [
+                    { title: "Networking Principles", description: "Understand protocols, LAN/WAN design, and foundational network architecture." },
+                    { title: "Routing & Switching", description: "Configure routers and switches, and manage traffic across networks." },
+                    { title: "Wireless & Security", description: "Secure wireless networks and apply best practices for safe network operations." }
+                ],
+                skills: [
+                    { title: "Networking Basics", subtitle: "430k learners" },
+                    { title: "Routing & Switching", subtitle: "210k learners" },
+                    { title: "Wireless", subtitle: "140k learners" },
+                    { title: "Security", subtitle: "320k learners" }
+                ],
+                testimonials: [
+                    {
+                        text: "This course is the perfect preparation for IT certifications. The diagrams and configurations were spot on.",
+                        name: "Eric D.",
+                        role: "Systems Administrator",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=lpompceb"
+                    },
+                    {
+                        text: "Routing and switching makes complete sense now. The instructor uses real hardware examples, which is very helpful.",
+                        name: "Brenda M.",
+                        role: "Network Operations Specialist",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=wmpmjyww"
+                    },
+                    {
+                        text: "Provides a solid foundation in security principles, subnets, and protocols. Very clear and concise.",
+                        name: "Frank T.",
+                        role: "Security Analyst",
+                        avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=nszyyoha"
+                    }
+                ]
+            }
+        };
+        async function loadCourseDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseId = urlParams.get('id');
+            if (!courseId) {
+                document.getElementById('cd-title').textContent = 'Course Not Found';
+                document.getElementById('cd-description').textContent = 'Please return to the courses page and select a valid course.';
+                return;
+            }
+            currentCourseId = courseId;
+
+            try {
+                const res = await fetch('/api/courses');
+                const courses = await res.json();
+                const course = courses.find(c => c.id == courseId);
+                
+                if (course) {
+                    const details = courseDetailsMap[course.title] || {};
+
+                    document.getElementById('cd-title').textContent = course.title;
+                    document.getElementById('cd-description').textContent = details.overview || course.description || 'Course details will display here.';
+                    const stats = details.stats || { rating: course.rating || '4.8', exercises: course.exercises || 0, hours: course.hours || 0 };
+                    document.getElementById('cd-rating').textContent = stats.rating;
+                    document.getElementById('cd-exercises').textContent = stats.exercises;
+                    const tutorLessonsMap = { "Nelson Omwenga": 36, "Daniel Kitheka": 26, "James Njuguna": 40, "Samuel Maveke": 30, "Harriet Mukiri": 30, "Isaac Mwangi": 30 };
+                    document.getElementById('cd-hours').textContent = tutorLessonsMap[course.instructor] || stats.hours;
+                    if(document.getElementById('cd-category')) document.getElementById('cd-category').textContent = course.category || 'Category';
+                    if(document.getElementById('cd-instructor')) document.getElementById('cd-instructor').textContent = course.instructor || 'Instructor';
+                    document.getElementById('cd-students').textContent = '0';
+                    
+                    const priceEl = document.getElementById('cd-price');
+                    if(priceEl) {
+                        priceEl.textContent = 'FREE';
+                        priceEl.style.color = '#10B981'; // green color for FREE
+                        priceEl.style.textTransform = 'uppercase';
+                    }
+                    const oldPriceEl = document.getElementById('cd-price-old');
+                    if(oldPriceEl) oldPriceEl.textContent = '$' + (course.price || 59.99);
+
+                    const heroImage = document.querySelector('.cd-instructor-img');
+                    if (heroImage && course.image_url) {
+                        heroImage.src = course.image_url;
+                        heroImage.alt = `${course.title} image`;
+                    }
+                    const instructorName = document.getElementById('cd-instructor-name');
+                    if (instructorName) {
+                        instructorName.textContent = course.instructor || 'Lead Instructor';
+                    }
+                    const instructorRole = document.querySelector('.cd-instructor-role');
+                    if (instructorRole) {
+                        instructorRole.textContent = course.category ? `${course.category} Mentor` : 'Course mentor';
+                    }
+
+                    const courseOverview = document.getElementById('cd-course-overview');
+                    if (courseOverview) {
+                        const overviewText = details.overview || course.description || 'This course provides the core details you need to succeed.';
+                        const instructorName = course.instructor || 'our expert tutor';
+                        courseOverview.innerHTML = `
+                            <p style="font-size:1.05rem; color:#4A5568; line-height:1.8; margin-bottom:1.25rem;">${overviewText}</p>
+                            <div class="instructor-card-clickable" onclick="showTutorModal('${instructorName}')" title="View instructor profile">
+                                <span style="width:36px;height:36px;background:#6D28D9;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                    <i class="fas fa-chalkboard-teacher" style="color:white;font-size:0.95rem;"></i>
+                                </span>
+                                <span style="font-size:0.95rem; color:#4A5568; line-height:1.4;">
+                                    This course is taught by <strong style="color:#5B21B6; font-weight:800;">${instructorName}</strong>
+                                </span>
+                                <i class="fas fa-chevron-right ic-arrow"></i>
+                            </div>
+                        `;
+                    }
+
+                    const learnGrid = document.getElementById('cd-learn-grid');
+                    if (learnGrid) {
+                        learnGrid.innerHTML = '';
+                        const learnItems = details.learnItems || (course.skills && course.skills.length ? course.skills.map(skill => ({ title: skill, description: 'Practical course content and guided learning.' })) : [{ title: course.category || 'Course mastery', description: 'Core topics and practical outcomes.' }]);
+                        learnItems.forEach((item, index) => {
+                            const title = typeof item === 'string' ? item : item.title;
+                            const description = typeof item === 'string' ? 'Build confidence with practical content and clear outcomes.' : item.description;
+                            const card = document.createElement('div');
+                            card.className = 'cd-learn-card';
+                            card.innerHTML = `
+                                <div class="cd-card-number">${index + 1}</div>
+                                <h3>${title}</h3>
+                                <p>${description}</p>
+                                <a href="#" class="cd-link">Course content <i class="fas fa-chevron-right"></i></a>
+                            `;
+                            learnGrid.appendChild(card);
+                        });
+                    }
+
+                    const skillsGrid = document.getElementById('cd-skills-grid');
+                    if (skillsGrid) {
+                        skillsGrid.innerHTML = '';
+                        const skills = details.skills || course.skills || [];
+                        skills.forEach(skill => {
+                            const title = typeof skill === 'string' ? skill : skill.title;
+                            const subtitle = typeof skill === 'string' ? 'Skill built' : skill.subtitle;
+                            const card = document.createElement('div');
+                            card.className = 'cd-skill-card';
+                            card.innerHTML = `
+                                <div class="cd-skill-icon"><i class="fas fa-check"></i></div>
+                                <div class="cd-skill-info">
+                                    <h4>${title}</h4>
+                                    <span>${subtitle}</span>
+                                </div>
+                            `;
+                            skillsGrid.appendChild(card);
+                        });
+                    }
+
+                    const testimonialsGrid = document.getElementById('cd-testimonials-grid');
+                    if (testimonialsGrid && details.testimonials) {
+                        testimonialsGrid.innerHTML = '';
+                        details.testimonials.forEach(t => {
+                            const card = document.createElement('div');
+                            card.className = 'cd-testimonial-card';
+                            card.innerHTML = `
+                                <div class="cd-quote-icon">"</div>
+                                <p class="cd-testimonial-text">${t.text}</p>
+                                <div class="cd-reviewer">
+                                    <img src="${t.avatar}" alt="${t.name}">
+                                    <div class="cd-reviewer-info">
+                                        <h4>${t.name}</h4>
+                                        <span>${t.role}</span>
+                                    </div>
+                                </div>
+                            `;
+                            testimonialsGrid.appendChild(card);
+                        });
+                    }
+
+                    const enrollBtn = document.getElementById('cd-enroll-btn');
+                    if (course.is_enrolled) {
+                        enrollBtn.textContent = 'Enrolled';
+                        enrollBtn.style.opacity = '0.7';
+                        enrollBtn.disabled = true;
+                    }
+                } else {
+                    document.getElementById('cd-title').textContent = 'Course Not Found';
+                }
+            } catch (e) {
+                console.error("Error loading course details:", e);
+            }
+        }
+
+        async function enrollCourse() {
+            if (!currentCourseId) return;
+            try {
+                const res = await fetch(`/api/enroll/${currentCourseId}`, { method: 'POST' });
+                if (res.status === 401) {
+                    window.location.href = '/login?error=Please login to enroll';
+                    return;
+                }
+                const data = await res.json();
+                
+                const btn = document.getElementById('cd-enroll-btn');
+                const msg = document.getElementById('cd-enrollment-status');
+
+                if (data.status === 'success') {
+                    btn.textContent = 'Enrolled';
+                    btn.style.opacity = '0.7';
+                    btn.disabled = true;
+                    msg.textContent = 'Enrolled Successfully!';
+                    msg.style.display = 'inline-block';
+                    msg.style.color = '#10B981';
+                } else if (data.status === 'already_enrolled') {
+                    msg.textContent = 'You are already in!';
+                    msg.style.display = 'inline-block';
+                    msg.style.color = '#F59E0B';
+                } else if (data.status === 'limit_reached') {
+                    msg.textContent = 'Limit Reached: Max 1 course allowed.';
+                    msg.style.display = 'inline-block';
+                    msg.style.color = '#EF4444';
+                }
+            } catch (e) {
+                console.error("Error enrolling:", e);
+                alert("Something went wrong.");
+            }
+        }
+
+        const tutorProfiles = {
+            "Nelson Omwenga": {
+                photo: "/static/images/nels.jpeg",
+                title: "Python & Automation Expert",
+                bio: "Nelson is a passionate Python educator with 4 years of hands-on teaching experience. He specializes in automation, web APIs, and data analysis, having mentored 100 students to build real-world production-ready applications.",
+                badges: ["Python", "Automation", "Data Analysis", "Web APIs"]
+            },
+            "Isaac Mwangi": {
+                photo: "/static/images/Isaac.jpeg",
+                title: "UI/UX & Graphics Design Mentor",
+                bio: "Isaac is a talented designer with 2 years of teaching experience in Figma, UX Research, and brand identity. He blends practical design skills with modern aesthetics, having guided 35 students to build polished portfolios.",
+                badges: ["Figma", "UX Research", "UI Design", "Brand Identity"]
+            },
+            "Samuel Maveke": {
+                photo: "/static/images/sam.jpeg",
+                title: "Full-Stack Web Development Tutor",
+                bio: "Samuel is a full-stack engineer and educator with 3 years of teaching experience. Covering HTML, CSS, JavaScript, React, and Node.js, he has helped 42 students build and deploy complete web applications.",
+                badges: ["HTML/CSS", "JavaScript", "React", "Node.js"]
+            },
+            "Harriet Mukiri": {
+                photo: "/static/images/Harriet.jpeg",
+                title: "Microsoft Office Productivity Coach",
+                bio: "Harriet transforms everyday office workers into productivity power-users. With 2 years of teaching experience, she has empowered 28 learners in Excel automation, professional Word documents, and impactful PowerPoint presentations.",
+                badges: ["Excel", "Word", "PowerPoint", "Business Productivity"]
+            },
+            "James Njuguna": {
+                photo: "/static/images/jemo.png",
+                title: "Kotlin & Android App Developer",
+                bio: "James is a mobile development expert with 3 years of teaching experience and a passion for Jetpack Compose and modern Android architecture. He has guided 38 students through publishing their own apps on the Google Play Store.",
+                badges: ["Kotlin", "Jetpack Compose", "Android UI", "Mobile Architecture"]
+            },
+            "Daniel Kitheka": {
+                photo: "/static/images/dan.png",
+                title: "Networking & Security Specialist",
+                bio: "Daniel brings 2 years of networking teaching experience into the classroom. He covers routing, switching, wireless administration, and security fundamentals — having prepared 45 learners for real-world IT roles.",
+                badges: ["Routing & Switching", "Wireless", "Network Security", "IT Fundamentals"]
+            }
+        };
+
+        function showTutorModal(instructorName) {
+            const profile = tutorProfiles[instructorName];
+            if (!profile) return;
+            document.getElementById('tutorModalPhoto').src = profile.photo;
+            document.getElementById('tutorModalPhoto').alt = instructorName;
+            document.getElementById('tutorModalName').textContent = instructorName;
+            document.getElementById('tutorModalTitle').textContent = profile.title;
+            document.getElementById('tutorModalBio').textContent = profile.bio;
+            const overlay = document.getElementById('tutorModalOverlay');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTutorModal(e) {
+            if (e.target === document.getElementById('tutorModalOverlay')) {
+                closeTutorModalDirect();
+            }
+        }
+
+        function closeTutorModalDirect() {
+            document.getElementById('tutorModalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeTutorModalDirect();
+        });
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof checkAuth === 'function') {
+                checkAuth();
+            }
+            loadCourseDetails();
+        });
+    </script>
+</body>
+</html>

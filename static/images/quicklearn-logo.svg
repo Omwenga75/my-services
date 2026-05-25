@@ -1,0 +1,27 @@
+<svg viewBox="30 120 700 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circle with circuit dots -->
+  <circle cx="150" cy="250" r="110" fill="none" stroke="#0B1B3D" stroke-width="25"/>
+  
+  <!-- Circuit dots inside circle -->
+  <circle cx="150" cy="180" r="8" fill="#00A8FF"/>
+  <circle cx="150" cy="250" r="8" fill="#00A8FF"/>
+  <circle cx="150" cy="320" r="8" fill="#00A8FF"/>
+  
+  <!-- Lines connecting dots -->
+  <line x1="150" y1="180" x2="150" y2="250" stroke="#00A8FF" stroke-width="4"/>
+  <line x1="150" y1="250" x2="150" y2="320" stroke="#00A8FF" stroke-width="4"/>
+  
+  <!-- Arrow/triangle pointing up right -->
+  <polygon points="280,150 280,300 400,225" fill="#00A8FF"/>
+  
+  <!-- Text: QuickLearn -->
+  <text x="450" y="320" font-family="Arial, sans-serif" font-size="90" font-weight="bold" fill="#0B1B3D">Quick</text>
+  <text y="320" font-family="Arial, sans-serif" font-size="90" font-weight="bold" fill="#00A8FF" text-anchor="start" x="710">Learn</text>
+  
+  <!-- Subtitle -->
+  <text x="450" y="390" font-family="Arial, sans-serif" font-size="28" letter-spacing="3" fill="#0B1B3D">PROGRAMMING SCHOOL</text>
+  
+  <!-- Decorative lines -->
+  <line x1="550" y1="410" x2="620" y2="410" stroke="#FF7A00" stroke-width="6"/>
+  <line x1="430" y1="410" x2="500" y2="410" stroke="#FF7A00" stroke-width="6"/>
+</svg>

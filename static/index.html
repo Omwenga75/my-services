@@ -3,33 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Your Design Done Fast!</title>
-    <meta name="description" content="Professional Mobile Apps, Web Apps, Websites, and Design services. Fast and reliable.">
+    <title>Master Programming | QuickLearn Programming School</title>
+    <meta name="description" content="Professional Technology and Programming Courses. Python, Web Development, Design, and more.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="home-page">
     <nav class="navbar">
-        <div class="logo">Quick<span>Learn</span></div>
-        <div class="nav-links">
-            <a href="#">Home</a>
-            <a href="#services">Services</a>
-            <a href="#roadmap">Roadmap</a>
-            <a href="#contact">Contact</a>
-            <a href="/messages">Messages</a>
+        <a href="/" class="logo-image">
+            <img src="/static/images/logo.jpeg" alt="QuickLearn Logo">
+        </a>
+        <div class="nav-links" id="dynamic-nav">
+            <a href="/">Home</a>
+            <a href="/courses">Courses</a>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Us</a>
+            <a href="/login" class="btn-auth-nav">Login</a>
         </div>
     </nav>
 
     <header id="home" class="hero">
-        <div class="hero-content">
-            <h1>GET YOUR <br><span class="highlight">DESIGN</span> <br>DONE FAST!</h1>
-            <p>Professional, fast, and high-quality digital services <br>tailored to your needs.</p>
+        <div class="hero-content home-hero-content">
+            <!-- badge removed per request -->
+            <h1>MASTER <br><span class="highlight">PROGRAMMING</span> <br>VERY FAST!</h1>
+            <p>High-quality digital skills tailored for your career. <br>Join thousands of students learning from industry experts.</p>
             <div class="hero-buttons">
-                <a href="#services" class="btn btn-primary">Explore Services</a>
-                <a href="https://wa.me/254111307585" target="_blank" class="btn btn-secondary">WhatsApp Me</a>
+                <a href="/courses" class="btn btn-primary" style="background: var(--primary-accent); padding: 1rem 2.5rem;">Start Learning Now</a>
+                <a href="#contact" class="btn btn-secondary" style="background: var(--primary-dark); padding: 1rem 2.5rem;">Get in Touch</a>
             </div>
         </div>
         <div class="hero-image">
@@ -40,122 +43,73 @@
                     <span class="dot green"></span>
                 </div>
                 <div class="code-content">
-                    <pre><code><span class="variable">dataset_id</span> = <span class="string">"req_892"</span>
-<span class="variable">max_retries</span> = <span class="number">3</span>
-<span class="variable">is_active</span> = <span class="keyword">True</span>
+                    <pre><code><span class="variable">class</span> <span class="function-name">Academy</span>:
+  <span class="keyword">def</span> <span class="function-name">__init__</span>(<span class="variable">self</span>):
+    <span class="variable">self</span>.<span class="variable">courses</span> = [<span class="string">"Python"</span>, <span class="string">"Web"</span>, <span class="string">"Design"</span>]
+    
+  <span class="keyword">def</span> <span class="function-name">enroll</span>(<span class="variable">self</span>, <span class="variable">student</span>):
+    <span class="keyword">return</span> <span class="string">"Enrolled successfully!"</span>
 
-<span class="keyword">def</span> <span class="function-name">use_array</span>(<span class="variable">a</span>, <span class="variable">b</span>):
-  <span class="variable">c</span> = <span class="number">-1</span>
-  <span class="keyword">for</span> <span class="variable">d</span> <span class="keyword">in</span> <span class="keyword">range</span>(<span class="method">len</span>(<span class="variable">a</span>)):
-    <span class="keyword">if</span> <span class="variable">a</span>[<span class="variable">d</span>] == <span class="variable">b</span>: <span class="keyword">return</span> <span class="variable">c</span>
-  <span class="keyword">return</span> <span class="variable">c</span> + <span class="number">1</span>
-
-<span class="function-name">dynamic_sort</span>(<span class="variable">a</span>)</code></pre>
+<span class="variable">quick_learn</span> = <span class="function-name">Academy</span>()
+<span class="method">print</span>(<span class="variable">quick_learn</span>.<span class="function-name">enroll</span>(<span class="string">"You"</span>))</code></pre>
                 </div>
             </div>
         </div>
     </header>
 
-    <section id="services" class="services-section">
+    <section id="features" class="services-section" style="background: white;">
         <div class="section-header">
-            <h2>My Services</h2>
-            <p>What I offer to help you succeed</p>
+            <h2>Why Choose QuickLearn?</h2>
+            <p>The best way to learn digital skills</p>
         </div>
         <div class="services-grid">
             <div class="service-card">
-                <div class="icon">📱</div>
-                <h3>1. Mobile Apps</h3>
-                <p>Custom Android & iOS applications tailored to your business needs.</p>
-            </div>
-            <div class="service-card">
-                <div class="icon">💻</div>
-                <h3>2. Web Apps</h3>
-                <p>Powerful, scalable, and secure web applications.</p>
-            </div>
-            <div class="service-card">
-                <div class="icon">🌐</div>
-                <h3>3. Websites</h3>
-                <p>Modern, responsive, and fast websites that convert visitors.</p>
-            </div>
-            <div class="service-card">
-                <div class="icon">⚙️</div>
-                <h3>4. OS Installation</h3>
-                <p>Professional Windows, Linux, and macOS setups and troubleshooting.</p>
-            </div>
-            <div class="service-card">
-                <div class="icon">💡</div>
-                <h3>5. Project Ideas</h3>
-                <p>Consultation and innovative concepts for your next big thing.</p>
+                <div class="icon">🚀</div>
+                <h3>Practical Learning</h3>
+                <p>Build real-world projects that get you hired. No boring theory only.</p>
             </div>
             <div class="service-card">
                 <div class="icon">👨‍🏫</div>
-                <h3>6. Tutoring</h3>
-                <p>One-on-one technology and programming lessons to boost your skills.</p>
+                <h3>Expert Mentors</h3>
+                <p>Learn from professionals with years of industry experience.</p>
             </div>
             <div class="service-card">
-                <div class="icon">🛠️</div>
-                <h3>7. Code Error Fixing</h3>
-                <p>Expert debugging, troubleshooting, and resolving complex code issues quickly.</p>
+                <div class="icon">🏆</div>
+                <h3>Certificates</h3>
+                <p>Earn certificates of completion to showcase your new skills.</p>
             </div>
-            <div class="service-card">
-                <div class="icon">🚩</div>
-                <h3>8. Banner Design</h3>
-                <p>Professional, high-impact banners for web, social media, and marketing.</p>
-            </div>
-            <div class="service-card">
-                <div class="icon">🖼️</div>
-                <h3>9. Poster Design</h3>
-                <p>Creative digital and print posters that effectively communicate your message.</p>
-            </div>
+        </div>
+        <div style="text-align: center; margin-top: 4rem;">
+            <a href="/courses" class="btn btn-primary" style="font-size: 1.2rem; padding: 1.2rem 3rem;">View All Course Categories</a>
         </div>
     </section>
 
-    <section id="roadmap" class="roadmap-section">
-        <div class="section-header">
-            <h2>Project Roadmap</h2>
-            <p>How we bring your ideas to life</p>
-        </div>
-        <div class="roadmap-container">
-            <img src="/static/assets/roadmap.png" alt="QuickLearn Project Roadmap" class="roadmap-img">
-        </div>
-    </section>
-
-    <section id="contact" class="contact-section">
-        <div class="contact-container">
-            <div class="contact-info">
-                <h2>Ready to Start?</h2>
-                <p>Contact me directly via WhatsApp for the <br> fastest response, or leave a message here 24/7.</p>
-                <div class="phone-number">
-                    <strong>CALL:</strong> <a href="tel:+254111307585">+254 111 307 585</a>
-                </div>
-                <a href="https://wa.me/254111307585" target="_blank" class="btn btn-whatsapp-large">
-                    <i class="fab fa-whatsapp"></i> Chat on WhatsApp
-                </a>
-            </div>
-            <div class="contact-form-wrapper glass-card">
-                <h3>Leave a Message</h3>
-                <form id="contactForm" action="/submit_inquiry" method="POST">
-                    <div class="form-group">
-                        <label for="name">Your Name</label>
-                        <input type="text" id="name" name="name" required placeholder="John Doe">
-                    </div>
-                    <div class="form-group">
-                        <label for="contact">Phone or Email</label>
-                        <input type="text" id="contact" name="contact" required placeholder="example@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="4" required placeholder="How can I help you?"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-submit">Send Message</button>
-                </form>
-                <div id="successMessage" class="hidden success-msg">Message sent successfully! I will get back to you soon.</div>
-            </div>
-        </div>
-    </section>
+    <!-- Contact section removed from home page; use dedicated /contact page -->
 
     <footer>
-        <p>&copy; 2026 QuickLearn. All Rights Reserved.</p>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>QuickLearn</h3>
+                <p>Fast, practical tech training with real-world courses designed for career growth.</p>
+                <a href="tel:+254111307585">+254 111 307 585</a>
+                <a href="mailto:info@quicklearn.co.ke">info@quicklearn.co.ke</a>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="/">Home</a>
+                <a href="/courses">Courses</a>
+                <a href="/about">About Us</a>
+                <a href="/contact">Contact Us</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 QuickLearn Programming School. All Rights Reserved.</p>
+        </div>
     </footer>
 
     <!-- Floating WhatsApp Button -->
