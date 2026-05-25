@@ -1483,14 +1483,14 @@ footer {
     }
 
     .logo-image {
-        min-width: 240px;
-        height: 55px;
+        min-width: 300px;
+        height: 58px;
         justify-content: flex-start;
         margin: 0 auto 0.2rem;
     }
 
     .logo-image img {
-        max-height: 45px;
+        max-height: 48px;
         transform: scale(2.2);
         transform-origin: center left;
     }
@@ -1621,14 +1621,14 @@ footer {
     }
 
     .logo-image {
-        min-width: 200px;
-        height: 50px;
+        min-width: 270px;
+        height: 52px;
         justify-content: flex-start;
         margin: 0 auto 0.2rem;
     }
 
     .logo-image img {
-        max-height: 40px;
+        max-height: 44px;
         transform: scale(2.0);
         transform-origin: center left;
     }
