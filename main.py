@@ -321,7 +321,7 @@ async def login(
         return RedirectResponse(url="/login?error=Invalid credentials", status_code=303)
     
     access_token = create_access_token(data={"sub": user.email})
-    response = RedirectResponse(url="/courses", status_code=303)
+    response = RedirectResponse(url="/", status_code=303)
     response.set_cookie(key="access_token", value=access_token, httponly=True)
     return response
 
@@ -465,6 +465,17 @@ async def get_me(user: models.User = Depends(get_current_user)):
     if not user:
         return {"logged_in": False}
     return {"logged_in": True, "name": user.name, "email": user.email}
+
+@app.get("/api/stats")
+async def get_stats(db: Session = Depends(get_db)):
+    courses_count = db.query(models.Course).count()
+    students_count = db.query(models.User).count()
+    tutors_count = db.query(models.Course.instructor).distinct().count()
+    return {
+        "courses": courses_count,
+        "students": students_count,
+        "tutors": tutors_count
+    }
 
 # Inquiries
 @app.post("/submit_inquiry")

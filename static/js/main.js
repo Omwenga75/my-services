@@ -88,5 +88,25 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
     
+    // Fetch stats for the banner
+    async function loadStats() {
+        const coursesEl = document.getElementById('stat-courses');
+        const studentsEl = document.getElementById('stat-students');
+        const tutorsEl = document.getElementById('stat-tutors');
+        
+        if (coursesEl && studentsEl && tutorsEl) {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                coursesEl.textContent = data.courses + "+";
+                studentsEl.textContent = data.students + "+";
+                tutorsEl.textContent = data.tutors + "+";
+            } catch (e) {
+                console.error("Failed to load stats", e);
+            }
+        }
+    }
+    
     checkAuth();
+    loadStats();
 });
