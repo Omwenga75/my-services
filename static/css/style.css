@@ -1461,9 +1461,11 @@ footer {
     .navbar {
         position: sticky;
         top: 0;
-        flex-direction: column;
-        gap: 0.6rem;
-        padding: 0.75rem 1rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.65rem 1rem;
         min-height: auto;
         width: 100%;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -1483,25 +1485,27 @@ footer {
     }
 
     .logo-image {
-        min-width: 300px;
-        height: 58px;
+        min-width: 260px;
+        height: 52px;
         justify-content: flex-start;
-        margin: 0 auto 0.2rem;
+        margin: 0;
+        flex-shrink: 0;
     }
 
     .logo-image img {
-        max-height: 48px;
+        max-height: 44px;
         transform: scale(2.2);
         transform-origin: center left;
     }
 
     .nav-links {
-        margin-left: auto;
-        margin-right: auto;
-        justify-content: center;
+        margin-left: 0;
+        margin-right: 0;
+        justify-content: flex-start;
         flex-wrap: wrap;
-        gap: 0.6rem 0.9rem;
+        gap: 0.5rem 0.8rem;
         width: 100%;
+        flex: 1 0 100%;
     }
 
     .nav-links a {
@@ -1621,14 +1625,15 @@ footer {
     }
 
     .logo-image {
-        min-width: 270px;
-        height: 52px;
+        min-width: 230px;
+        height: 48px;
         justify-content: flex-start;
-        margin: 0 auto 0.2rem;
+        margin: 0;
+        flex-shrink: 0;
     }
 
     .logo-image img {
-        max-height: 44px;
+        max-height: 40px;
         transform: scale(2.0);
         transform-origin: center left;
     }
