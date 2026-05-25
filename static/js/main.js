@@ -47,8 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
 
             if (data.logged_in) {
+                const dashboardUrl = data.is_admin ? "/admin" : "/dashboard";
                 baseNav += `
-                    <a href="/dashboard">Dashboard</a>
+                    <a href="${dashboardUrl}">Dashboard</a>
                     <a href="/logout" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i></a>
                 `;
             } else {

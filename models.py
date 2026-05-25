@@ -29,7 +29,7 @@ class Course(Base):
 
 class Enrollment(Base):
     __tablename__ = "enrollments"
-    __table_args__ = (UniqueConstraint("user_id", name="uq_enrollments_user_id"),)
+    __table_args__ = (UniqueConstraint("user_id", "course_id", name="uq_user_course"),)
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)

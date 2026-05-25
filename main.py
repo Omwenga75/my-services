@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, Form, Request, HTTPException, status, Response, Cookie
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
-from sqlalchemy import func
+from sqlalchemy import func, text as sql_text
 from sqlalchemy.orm import Session
 import models
 from database import engine, get_db
@@ -16,6 +16,12 @@ from contextlib import asynccontextmanager
 SECRET_KEY = "your-secret-key-change-this-in-production"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 # 24 hours
+
+# Admin configuration — add authorised admin emails here
+ADMIN_EMAILS = {"admin@quicklearn.co.ke", "nel@gmail.com"}
+
+def is_admin_user(user):
+    return user is not None and user.email in ADMIN_EMAILS
 
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
@@ -106,6 +112,27 @@ async def lifespan(app: FastAPI):
     try:
         models.Base.metadata.create_all(bind=engine)
         db = next(get_db())
+        # Migrate enrollments constraint: user_id-only → (user_id, course_id)
+        try:
+            table_info = db.execute(sql_text("SELECT sql FROM sqlite_master WHERE type='table' AND name='enrollments'")).fetchone()
+            if table_info and 'uq_enrollments_user_id' in table_info[0]:
+                db.execute(sql_text("""
+                    CREATE TABLE IF NOT EXISTS enrollments_temp (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user_id INTEGER NOT NULL REFERENCES users(id),
+                        course_id INTEGER NOT NULL REFERENCES courses(id),
+                        enrolled_at DATETIME,
+                        UNIQUE(user_id, course_id)
+                    )"""))
+                db.execute(sql_text("INSERT OR IGNORE INTO enrollments_temp (id, user_id, course_id, enrolled_at) SELECT id, user_id, course_id, enrolled_at FROM enrollments"))
+                db.execute(sql_text("DROP TABLE enrollments"))
+                db.execute(sql_text("ALTER TABLE enrollments_temp RENAME TO enrollments"))
+                db.commit()
+                print("Enrollment table migrated: constraint updated to (user_id, course_id)")
+        except Exception as me:
+            print(f"Migration: {me}")
+            try: db.rollback()
+            except: pass
         # Seed initial course catalog and keep only the requested six courses
         initial_courses = [
             {
@@ -213,12 +240,29 @@ async def lifespan(app: FastAPI):
                 db.delete(duplicate)
         db.commit()
 
-        duplicate_enrollments = db.query(models.Enrollment.user_id).group_by(models.Enrollment.user_id).having(func.count(models.Enrollment.id) > 1).all()
+        duplicate_enrollments = db.query(models.Enrollment.user_id).group_by(models.Enrollment.user_id).having(func.count(models.Enrollment.id) > 2).all()
         for (user_id,) in duplicate_enrollments:
             duplicates = db.query(models.Enrollment).filter(models.Enrollment.user_id == user_id).order_by(models.Enrollment.id).all()
-            for duplicate in duplicates[1:]:
+            for duplicate in duplicates[2:]:
                 db.delete(duplicate)
         db.commit()
+
+        # Seed/Ensure admin user exists with email admin@quicklearn.co.ke and password @Admin688
+        admin_email = "admin@quicklearn.co.ke"
+        admin_user = db.query(models.User).filter(models.User.email == admin_email).first()
+        if not admin_user:
+            admin_user = models.User(
+                name="Admin QuickLearn",
+                email=admin_email,
+                hashed_password=get_password_hash("@Admin688")
+            )
+            db.add(admin_user)
+            db.commit()
+            print(f"Admin user {admin_email} created.")
+        else:
+            admin_user.hashed_password = get_password_hash("@Admin688")
+            db.commit()
+            print(f"Admin user {admin_email} password updated.")
     except Exception as e:
         print(f"Startup error: {e}")
     yield
@@ -237,43 +281,7 @@ async def no_cache_middleware(request: Request, call_next):
     response.headers["Expires"] = "0"
     return response
 
-# Auth Helpers
-def get_password_hash(password):
-    return pwd_context.hash(password)
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
-async def get_current_user(request: Request, db: Session = Depends(get_db)):
-    token = request.cookies.get("access_token")
-    if not token:
-        return None
-    try: 
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            return None
-        user = db.query(models.User).filter(models.User.email == email).first()
-        return user
-    except JWTError:
-        return None
-
-def render_html(filename: str):
-    path = os.path.join(STATIC_DIR, filename)
-    if os.path.exists(path):
-        with open(path, "r", encoding="utf-8") as f:
-            return f.read()
-    return f"<h1>{filename} not found!</h1>"
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(user: models.User = Depends(get_current_user)):
@@ -291,6 +299,8 @@ async def signup(
     password: str = Form(...),
     db: Session = Depends(get_db)
 ):
+    # Normalize email
+    email = email.strip().lower()
     # Check if user exists
     existing_user = db.query(models.User).filter(models.User.email == email).first()
     if existing_user:
@@ -316,12 +326,20 @@ async def login(
     password: str = Form(...),
     db: Session = Depends(get_db)
 ):
+    email = email.strip().lower()
+    print(f"[LOGIN] Attempt for email: '{email}'")
     user = db.query(models.User).filter(models.User.email == email).first()
-    if not user or not verify_password(password, user.hashed_password):
+    if not user:
+        print(f"[LOGIN] No user found with email: '{email}'")
+        return RedirectResponse(url="/login?error=Invalid credentials", status_code=303)
+    if not verify_password(password, user.hashed_password):
+        print(f"[LOGIN] Password verification failed for: '{email}'")
         return RedirectResponse(url="/login?error=Invalid credentials", status_code=303)
     
+    print(f"[LOGIN] Success for: '{email}'")
     access_token = create_access_token(data={"sub": user.email})
-    response = RedirectResponse(url="/", status_code=303)
+    redirect_url = "/admin" if is_admin_user(user) else "/"
+    response = RedirectResponse(url=redirect_url, status_code=303)
     response.set_cookie(key="access_token", value=access_token, httponly=True)
     return response
 
@@ -348,6 +366,8 @@ async def courses_page():
 async def dashboard_page(user: models.User = Depends(get_current_user)):
     if not user:
         return RedirectResponse(url="/login?error=Please login first", status_code=303)
+    if is_admin_user(user):
+        return RedirectResponse(url="/admin", status_code=303)
     return render_html("dashboard.html")
 
 @app.get("/about", response_class=HTMLResponse)
@@ -365,6 +385,12 @@ async def privacy_page():
 @app.get("/terms", response_class=HTMLResponse)
 async def terms_page():
     return render_html("terms.html")
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_page(user: models.User = Depends(get_current_user)):
+    if not user or not is_admin_user(user):
+        return RedirectResponse(url="/login?error=Access denied", status_code=303)
+    return render_html("admin.html")
 
 @app.get("/course-details", response_class=HTMLResponse)
 @app.get("/course-details/", response_class=HTMLResponse)
@@ -423,7 +449,7 @@ async def enroll(course_id: int, db: Session = Depends(get_db), user: models.Use
         models.Enrollment.user_id == user.id
     ).count()
     
-    if user_enrollments_count >= 1:
+    if user_enrollments_count >= 2:
         # Check if they are trying to enroll in the same course again
         existing = db.query(models.Enrollment).filter(
             models.Enrollment.user_id == user.id,
@@ -464,12 +490,12 @@ async def get_my_courses(db: Session = Depends(get_db), user: models.User = Depe
 async def get_me(user: models.User = Depends(get_current_user)):
     if not user:
         return {"logged_in": False}
-    return {"logged_in": True, "name": user.name, "email": user.email}
+    return {"logged_in": True, "name": user.name, "email": user.email, "is_admin": is_admin_user(user)}
 
 @app.get("/api/stats")
 async def get_stats(db: Session = Depends(get_db)):
     courses_count = db.query(models.Course).count()
-    students_count = db.query(models.User).count()
+    students_count = db.query(models.User).filter(models.User.email.notin_(list(ADMIN_EMAILS))).count()
     tutors_count = db.query(models.Course.instructor).distinct().count()
     return {
         "courses": courses_count,
@@ -489,3 +515,94 @@ async def submit_inquiry(
     db.add(new_inquiry)
     db.commit()
     return RedirectResponse(url="/?success=true", status_code=303)
+
+# ── Admin API Routes ────────────────────────────────────────────────────────
+
+@app.get("/api/admin/stats")
+async def admin_stats(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    if not is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    return {
+        "students": db.query(models.User).filter(models.User.email.notin_(list(ADMIN_EMAILS))).count(),
+        "courses": db.query(models.Course).count(),
+        "enrollments": db.query(models.Enrollment).count(),
+        "inquiries": db.query(models.Inquiry).count()
+    }
+
+@app.get("/api/admin/students")
+async def admin_students(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    if not is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    students = db.query(models.User).filter(models.User.email.notin_(list(ADMIN_EMAILS))).order_by(models.User.created_at.desc()).all()
+    return [{
+        "id": s.id,
+        "name": s.name,
+        "email": s.email,
+        "is_active": s.is_active,
+        "created_at": s.created_at.strftime("%Y-%m-%d %H:%M") if s.created_at else "N/A",
+        "enrollments": [{
+            "id": e.id,
+            "course_title": e.course.title if e.course else "N/A",
+            "enrolled_at": e.enrolled_at.strftime("%Y-%m-%d") if e.enrolled_at else "N/A"
+        } for e in s.enrollments]
+    } for s in students]
+
+@app.get("/api/admin/enrollments")
+async def admin_enrollments(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    if not is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    enrollments = db.query(models.Enrollment).order_by(models.Enrollment.enrolled_at.desc()).all()
+    return [{
+        "id": e.id,
+        "student_name": e.user.name if e.user else "N/A",
+        "student_email": e.user.email if e.user else "N/A",
+        "course_title": e.course.title if e.course else "N/A",
+        "enrolled_at": e.enrolled_at.strftime("%Y-%m-%d %H:%M") if e.enrolled_at else "N/A"
+    } for e in enrollments]
+
+@app.get("/api/admin/inquiries")
+async def admin_inquiries(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    if not is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    inquiries = db.query(models.Inquiry).order_by(models.Inquiry.created_at.desc()).all()
+    return [{
+        "id": i.id,
+        "name": i.name,
+        "contact": i.contact,
+        "message": i.message,
+        "created_at": i.created_at.strftime("%Y-%m-%d %H:%M") if i.created_at else "N/A"
+    } for i in inquiries]
+
+@app.delete("/api/admin/students/{student_id}")
+async def admin_delete_student(student_id: int, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    if not is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    student = db.query(models.User).filter(models.User.id == student_id).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+    db.query(models.Enrollment).filter(models.Enrollment.user_id == student_id).delete()
+    db.delete(student)
+    db.commit()
+    return {"status": "deleted"}
+
+@app.delete("/api/admin/enrollments/{enrollment_id}")
+async def admin_delete_enrollment(enrollment_id: int, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    if not is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    enrollment = db.query(models.Enrollment).filter(models.Enrollment.id == enrollment_id).first()
+    if not enrollment:
+        raise HTTPException(status_code=404, detail="Enrollment not found")
+    db.delete(enrollment)
+    db.commit()
+    return {"status": "deleted"}
+
+@app.delete("/api/admin/inquiries/{inquiry_id}")
+async def admin_delete_inquiry(inquiry_id: int, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    if not is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    inquiry = db.query(models.Inquiry).filter(models.Inquiry.id == inquiry_id).first()
+    if not inquiry:
+        raise HTTPException(status_code=404, detail="Inquiry not found")
+    db.delete(inquiry)
+    db.commit()
+    return {"status": "deleted"}

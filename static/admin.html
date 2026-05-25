@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | QuickLearn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --sidebar: #0f172a;
+            --sidebar-hover: rgba(255,255,255,0.06);
+            --sidebar-active-bg: rgba(99,102,241,0.15);
+            --sidebar-active: #818cf8;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --purple: #8b5cf6;
+            --cyan: #06b6d4;
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+            --bg: #f1f5f9;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --shadow: 0 4px 24px rgba(0,0,0,0.07);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.12);
+            --radius: 14px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            display: flex;
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            width: 255px;
+            background: var(--sidebar);
+            min-height: 100vh;
+            position: fixed;
+            left: 0; top: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+        .sidebar-logo {
+            padding: 1.4rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .sidebar-logo img {
+            width: 38px; height: 38px;
+            border-radius: 9px;
+            object-fit: cover;
+        }
+        .logo-text { color: var(--text-light); font-size: 1.05rem; font-weight: 700; }
+        .logo-badge {
+            font-size: 0.6rem;
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .sidebar-nav { padding: 1.25rem 0; flex: 1; }
+        .nav-label {
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            padding: 0.6rem 1.5rem 0.4rem;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 0.65rem 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.18s;
+            font-size: 0.92rem;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            user-select: none;
+        }
+        .nav-item:hover { background: var(--sidebar-hover); color: var(--text-light); }
+        .nav-item.active {
+            background: var(--sidebar-active-bg);
+            color: var(--sidebar-active);
+            border-left-color: var(--sidebar-active);
+            font-weight: 600;
+        }
+        .nav-item i { width: 17px; text-align: center; font-size: 0.88rem; }
+        .nav-badge {
+            margin-left: auto;
+            background: var(--primary);
+            color: white;
+            font-size: 0.68rem;
+            padding: 2px 7px;
+            border-radius: 20px;
+            font-weight: 700;
+            min-width: 20px;
+            text-align: center;
+        }
+        .nav-badge.orange { background: var(--warning); }
+        .sidebar-footer {
+            padding: 1.1rem 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.07);
+        }
+        .admin-info { display: flex; align-items: center; gap: 0.7rem; }
+        .admin-avatar {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
+        }
+        .admin-name { color: var(--text-light); font-size: 0.88rem; font-weight: 600; }
+        .admin-role { color: var(--text-muted); font-size: 0.72rem; }
+        .logout-btn {
+            margin-left: auto;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.35rem;
+            border-radius: 6px;
+            transition: color 0.2s;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .logout-btn:hover { color: var(--danger); }
+
+        /* ── Main ── */
+        .main { margin-left: 255px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* ── Topbar ── */
+        .topbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 0.9rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky; top: 0; z-index: 50;
+        }
+        .topbar-title { font-size: 1.3rem; font-weight: 800; color: #0f172a; }
+        .topbar-sub { color: var(--text-muted); font-size: 0.82rem; margin-top: 1px; }
+        .topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+        .topbar-time { color: var(--text-muted); font-size: 0.82rem; }
+        .site-btn {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 0.45rem 1rem;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            cursor: pointer;
+            color: #475569;
+            text-decoration: none;
+            display: flex; align-items: center; gap: 0.4rem;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .site-btn:hover { background: #e2e8f0; color: #1e293b; }
+
+        /* ── Content ── */
+        .content { padding: 1.75rem 2rem; flex: 1; }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* ── Stats Row ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.1rem;
+            margin-bottom: 1.75rem;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.4rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: default;
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .stat-icon {
+            width: 50px; height: 50px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .ic-blue { background: #eff6ff; color: #3b82f6; }
+        .ic-green { background: #ecfdf5; color: var(--success); }
+        .ic-orange { background: #fffbeb; color: var(--warning); }
+        .ic-purple { background: #f5f3ff; color: var(--purple); }
+        .ic-cyan { background: #ecfeff; color: var(--cyan); }
+        .ic-red { background: #fef2f2; color: var(--danger); }
+        .stat-val { font-size: 1.9rem; font-weight: 800; color: #0f172a; line-height: 1; }
+        .stat-lbl { color: var(--text-muted); font-size: 0.82rem; font-weight: 500; margin-top: 3px; }
+
+        /* ── Card ── */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .card-head {
+            padding: 1.1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card-title { font-size: 0.97rem; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 0.5rem; }
+        .card-meta { color: var(--text-muted); font-size: 0.82rem; }
+
+        /* ── Search ── */
+        .search-bar {
+            padding: 0.9rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: #fafbfc;
+        }
+        .search-input {
+            width: 100%; max-width: 340px;
+            padding: 0.5rem 1rem 0.5rem 2.2rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem;
+            outline: none;
+            background: var(--white);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 0.7rem center;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: var(--primary); }
+
+        /* ── Table ── */
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th {
+            padding: 0.7rem 1.5rem;
+            text-align: left;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+        }
+        .data-table td {
+            padding: 0.9rem 1.5rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.875rem;
+            color: #334155;
+            vertical-align: middle;
+        }
+        .data-table tbody tr:last-child td { border-bottom: none; }
+        .data-table tbody tr { transition: background 0.12s; }
+        .data-table tbody tr:hover { background: #f8fafc; }
+
+        /* ── User Cell ── */
+        .ucell { display: flex; align-items: center; gap: 0.7rem; }
+        .uavatar {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700; font-size: 0.78rem; flex-shrink: 0;
+        }
+        .uname { font-weight: 600; font-size: 0.88rem; }
+        .uemail { color: var(--text-muted); font-size: 0.78rem; }
+
+        /* ── Badges ── */
+        .badge {
+            display: inline-block;
+            padding: 0.22rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin: 1px;
+        }
+        .b-blue { background: #dbeafe; color: #1d4ed8; }
+        .b-green { background: #d1fae5; color: #065f46; }
+        .b-orange { background: #fef3c7; color: #92400e; }
+        .b-purple { background: #ede9fe; color: #5b21b6; }
+        .b-red { background: #fee2e2; color: #991b1b; }
+        .b-gray { background: #f1f5f9; color: #475569; }
+
+        /* ── Buttons ── */
+        .btn-act {
+            padding: 0.32rem 0.7rem;
+            border-radius: 6px;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .btn-del { background: #fee2e2; color: var(--danger); }
+        .btn-del:hover { background: var(--danger); color: white; }
+
+        /* ── Overview Grid ── */
+        .ov-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+        /* ── Course Cards ── */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.25rem;
+            padding: 1.25rem;
+        }
+        .admin-course-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.1rem 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 1.1rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: default;
+        }
+        .admin-course-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(99, 102, 241, 0.25);
+        }
+        .acc-icon {
+            width: 44px; height: 44px;
+            border-radius: 10px;
+            background: #ecfdf5;
+            color: var(--success);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        .acc-info {
+            flex: 1;
+        }
+        .acc-title {
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: #0f172a;
+            margin-bottom: 0.4rem;
+        }
+        .acc-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+        .acc-tutor i, .acc-enrolled i {
+            margin-right: 0.25rem;
+        }
+        .acc-enrolled {
+            color: var(--primary);
+        }
+
+        /* ── Inquiry Cards ── */
+        .inq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1.25rem;
+        }
+        .inq-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.1rem;
+            transition: box-shadow 0.2s;
+        }
+        .inq-card:hover { box-shadow: var(--shadow); }
+        .inq-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+        .inq-name { font-weight: 700; font-size: 0.92rem; color: #0f172a; }
+        .inq-date { color: var(--text-muted); font-size: 0.75rem; }
+        .inq-contact { color: var(--primary-dark); font-size: 0.82rem; margin-bottom: 0.6rem; }
+        .inq-msg { color: #475569; font-size: 0.85rem; line-height: 1.65; }
+        .inq-foot { margin-top: 0.8rem; }
+
+        /* ── Empty State ── */
+        .empty-state { text-align: center; padding: 3.5rem 2rem; color: var(--text-muted); }
+        .empty-state i { font-size: 2.8rem; margin-bottom: 0.75rem; opacity: 0.25; display: block; }
+        .empty-state p { font-size: 0.9rem; }
+
+        /* ── Spinner ── */
+        .spinner {
+            width: 22px; height: 22px;
+            border: 3px solid #e2e8f0;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.65s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spin-row td { text-align: center; padding: 2.5rem; }
+
+        /* ── Toast ── */
+        .toast-wrap {
+            position: fixed; top: 1.25rem; right: 1.25rem;
+            z-index: 9999;
+            display: flex; flex-direction: column; gap: 0.5rem;
+        }
+        .toast {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.8rem 1.1rem;
+            box-shadow: var(--shadow-md);
+            display: flex; align-items: center; gap: 0.65rem;
+            font-size: 0.88rem; font-weight: 500;
+            animation: slideIn 0.28s ease;
+            min-width: 240px;
+        }
+        .toast.ok { border-left: 4px solid var(--success); }
+        .toast.err { border-left: 4px solid var(--danger); }
+        .toast .ti { font-size: 1rem; }
+        .toast .ti.ok { color: var(--success); }
+        .toast .ti.err { color: var(--danger); }
+        @keyframes slideIn { from { transform: translateX(110%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* ── Responsive ── */
+        @media (max-width: 1100px) { .stats-row { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 860px) { .ov-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<!-- Toasts -->
+<div class="toast-wrap" id="toasts"></div>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <img src="/static/images/logo.jpeg" alt="QuickLearn Logo">
+        <div>
+            <div class="logo-text">QuickLearn</div>
+            <span class="logo-badge">Admin</span>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-label">Dashboard</div>
+        <div class="nav-item active" id="nav-overview" onclick="show('overview',this)">
+            <i class="fas fa-chart-pie"></i> Overview
+        </div>
+
+        <div class="nav-label">Management</div>
+        <div class="nav-item" id="nav-students" onclick="show('students',this)">
+            <i class="fas fa-users"></i> Students
+            <span class="nav-badge" id="nb-students">0</span>
+        </div>
+        <div class="nav-item" id="nav-courses" onclick="show('courses',this)">
+            <i class="fas fa-book-open"></i> Courses
+        </div>
+        <div class="nav-item" id="nav-enrollments" onclick="show('enrollments',this)">
+            <i class="fas fa-clipboard-list"></i> Enrollments
+            <span class="nav-badge" id="nb-enrollments">0</span>
+        </div>
+
+        <div class="nav-label">Support</div>
+        <div class="nav-item" id="nav-inquiries" onclick="show('inquiries',this)">
+            <i class="fas fa-envelope"></i> Inquiries
+            <span class="nav-badge orange" id="nb-inquiries">0</span>
+        </div>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="admin-info">
+            <div class="admin-avatar" id="av">A</div>
+            <div>
+                <div class="admin-name" id="an">Admin</div>
+                <div class="admin-role">Administrator</div>
+            </div>
+            <a href="/logout" class="logout-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </div>
+</aside>
+
+<!-- Main -->
+<div class="main">
+    <!-- Topbar -->
+    <div class="topbar">
+        <div>
+            <div class="topbar-title" id="tb-title">Overview</div>
+            <div class="topbar-sub" id="tb-sub">Welcome back to your admin panel</div>
+        </div>
+        <div class="topbar-right">
+            <div class="topbar-time" id="clock"></div>
+            <a href="/" class="site-btn" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+        <!-- ── OVERVIEW ── -->
+        <div class="section active" id="sec-overview">
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon ic-blue"><i class="fas fa-users"></i></div>
+                    <div><div class="stat-val" id="sv-students">—</div><div class="stat-lbl">Total Students</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon ic-green"><i class="fas fa-book-open"></i></div>
+                    <div><div class="stat-val" id="sv-courses">—</div><div class="stat-lbl">Courses</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon ic-orange"><i class="fas fa-clipboard-list"></i></div>
+                    <div><div class="stat-val" id="sv-enrollments">—</div><div class="stat-lbl">Enrollments</div></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon ic-purple"><i class="fas fa-envelope"></i></div>
+                    <div><div class="stat-val" id="sv-inquiries">—</div><div class="stat-lbl">Inquiries</div></div>
+                </div>
+            </div>
+
+            <div class="ov-grid">
+                <!-- Recent Students -->
+                <div class="card">
+                    <div class="card-head">
+                        <span class="card-title"><i class="fas fa-user-graduate" style="color:#3b82f6;"></i> Recent Students</span>
+                    </div>
+                    <table class="data-table" id="ov-students">
+                        <thead><tr><th>Student</th><th>Courses</th><th>Joined</th></tr></thead>
+                        <tbody><tr class="spin-row"><td colspan="3"><div class="spinner"></div></td></tr></tbody>
+                    </table>
+                </div>
+
+                <!-- Recent Inquiries -->
+                <div class="card">
+                    <div class="card-head">
+                        <span class="card-title"><i class="fas fa-envelope" style="color:#8b5cf6;"></i> Recent Inquiries</span>
+                    </div>
+                    <table class="data-table" id="ov-inquiries">
+                        <thead><tr><th>Name</th><th>Contact</th><th>Date</th></tr></thead>
+                        <tbody><tr class="spin-row"><td colspan="3"><div class="spinner"></div></td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── STUDENTS ── -->
+        <div class="section" id="sec-students">
+            <div class="card">
+                <div class="card-head">
+                    <span class="card-title"><i class="fas fa-users" style="color:#3b82f6;"></i> All Students</span>
+                    <span class="card-meta" id="st-count">Loading…</span>
+                </div>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search by name or email…" oninput="filterStudents(this.value)">
+                </div>
+                <table class="data-table" id="t-students">
+                    <thead><tr><th>Student</th><th>Enrolled Courses</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody><tr class="spin-row"><td colspan="5"><div class="spinner"></div></td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── COURSES ── -->
+        <div class="section" id="sec-courses">
+            <div class="card">
+                <div class="card-head">
+                    <span class="card-title"><i class="fas fa-book-open" style="color:#10b981;"></i> All Courses</span>
+                    <span class="card-meta" id="co-count">Loading…</span>
+                </div>
+                <div class="courses-grid" id="courses-grid">
+                    <div style="grid-column:1/-1;text-align:center;padding:3rem;"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── ENROLLMENTS ── -->
+        <div class="section" id="sec-enrollments">
+            <div class="card">
+                <div class="card-head">
+                    <span class="card-title"><i class="fas fa-clipboard-list" style="color:#f59e0b;"></i> All Enrollments</span>
+                    <span class="card-meta" id="en-count">Loading…</span>
+                </div>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search by student or course…" oninput="filterEnrollments(this.value)">
+                </div>
+                <table class="data-table" id="t-enrollments">
+                    <thead><tr><th>Student</th><th>Course</th><th>Enrolled On</th><th>Actions</th></tr></thead>
+                    <tbody><tr class="spin-row"><td colspan="4"><div class="spinner"></div></td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── INQUIRIES ── -->
+        <div class="section" id="sec-inquiries">
+            <div class="card">
+                <div class="card-head">
+                    <span class="card-title"><i class="fas fa-envelope" style="color:#8b5cf6;"></i> All Inquiries</span>
+                    <span class="card-meta" id="iq-count">Loading…</span>
+                </div>
+                <div class="inq-grid" id="inq-grid">
+                    <div style="grid-column:1/-1;text-align:center;padding:3rem;"><div class="spinner"></div></div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+    let allStudents = [];
+    let allEnrollments = [];
+
+    const sections = {
+        overview:    ['Overview',    'Welcome back to your admin panel'],
+        students:    ['Students',    'Manage all registered students'],
+        courses:     ['Courses',     'Browse all available courses'],
+        enrollments: ['Enrollments', 'Track all student course enrollments'],
+        inquiries:   ['Inquiries',   'Contact messages and support requests'],
+    };
+
+    /* ── Nav ── */
+    function show(name, el) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('sec-' + name).classList.add('active');
+        el.classList.add('active');
+        const [t, s] = sections[name];
+        document.getElementById('tb-title').textContent = t;
+        document.getElementById('tb-sub').textContent = s;
+        if (name === 'courses')     loadCourses();
+        if (name === 'enrollments') loadEnrollments();
+        if (name === 'inquiries')   loadInquiries();
+    }
+
+    /* ── Clock ── */
+    function tick() {
+        document.getElementById('clock').textContent =
+            new Date().toLocaleTimeString('en-KE', {hour:'2-digit', minute:'2-digit'});
+    }
+    tick(); setInterval(tick, 1000);
+
+    /* ── Toast ── */
+    function toast(msg, type = 'ok') {
+        const wrap = document.getElementById('toasts');
+        const t = document.createElement('div');
+        t.className = `toast ${type}`;
+        t.innerHTML = `<i class="fas ${type === 'ok' ? 'fa-check-circle ti ok' : 'fa-times-circle ti err'}"></i> ${msg}`;
+        wrap.appendChild(t);
+        setTimeout(() => t.remove(), 3800);
+    }
+
+    /* ── Helpers ── */
+    function ini(name) {
+        return (name || 'U').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    }
+    function acolor(name) {
+        const cols = ['#6366f1','#10b981','#f59e0b','#8b5cf6','#ef4444','#06b6d4','#3b82f6'];
+        let h = 0;
+        for (const c of (name || '')) h = c.charCodeAt(0) + ((h << 5) - h);
+        return cols[Math.abs(h) % cols.length];
+    }
+
+    /* ── Stats + overview ── */
+    async function loadStats() {
+        const r = await fetch('/api/admin/stats');
+        if (r.status === 403) { window.location.href = '/login?error=Access denied'; return; }
+        const d = await r.json();
+        document.getElementById('sv-students').textContent    = d.students;
+        document.getElementById('sv-courses').textContent     = d.courses;
+        document.getElementById('sv-enrollments').textContent = d.enrollments;
+        document.getElementById('sv-inquiries').textContent   = d.inquiries;
+        document.getElementById('nb-students').textContent    = d.students;
+        document.getElementById('nb-enrollments').textContent = d.enrollments;
+        document.getElementById('nb-inquiries').textContent   = d.inquiries;
+    }
+
+    async function loadMe() {
+        const r = await fetch('/api/me');
+        const d = await r.json();
+        if (!d.logged_in) { window.location.href = '/login'; return; }
+        document.getElementById('an').textContent = d.name;
+        document.getElementById('av').textContent = ini(d.name);
+    }
+
+    /* ── Students ── */
+    async function loadStudents() {
+        const r = await fetch('/api/admin/students');
+        allStudents = await r.json();
+        renderStudents(allStudents);
+        renderOvStudents(allStudents.slice(0, 6));
+        document.getElementById('st-count').textContent = `${allStudents.length} student${allStudents.length !== 1 ? 's' : ''}`;
+    }
+
+    function renderStudents(list) {
+        const tb = document.querySelector('#t-students tbody');
+        if (!list.length) {
+            tb.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fas fa-users"></i><p>No students found.</p></div></td></tr>`;
+            return;
+        }
+        tb.innerHTML = list.map(s => {
+            const col = acolor(s.name);
+            const badges = s.enrollments.length
+                ? s.enrollments.map(e => `<span class="badge b-blue">${e.course_title}</span>`).join('')
+                : '<span style="color:#94a3b8;font-size:0.78rem;">None</span>';
+            return `<tr>
+                <td>
+                    <div class="ucell">
+                        <div class="uavatar" style="background:${col};">${ini(s.name)}</div>
+                        <div><div class="uname">${s.name}</div><div class="uemail">${s.email}</div></div>
+                    </div>
+                </td>
+                <td>${badges}</td>
+                <td style="color:#64748b;font-size:0.82rem;">${s.created_at}</td>
+                <td><span class="badge ${s.is_active ? 'b-green' : 'b-red'}">${s.is_active ? 'Active' : 'Inactive'}</span></td>
+                <td>
+                    <button class="btn-act btn-del" onclick="delStudent(${s.id},'${s.name.replace(/'/g,"\\'")}')">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    function renderOvStudents(list) {
+        const tb = document.querySelector('#ov-students tbody');
+        if (!list.length) {
+            tb.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:2rem;color:#94a3b8;">No students yet.</td></tr>`;
+            return;
+        }
+        tb.innerHTML = list.map(s => {
+            const col = acolor(s.name);
+            return `<tr>
+                <td>
+                    <div class="ucell">
+                        <div class="uavatar" style="background:${col};width:28px;height:28px;font-size:0.7rem;">${ini(s.name)}</div>
+                        <div><div style="font-weight:600;font-size:0.84rem;">${s.name}</div><div style="color:#94a3b8;font-size:0.75rem;">${s.email}</div></div>
+                    </div>
+                </td>
+                <td>${s.enrollments.length}</td>
+                <td style="color:#94a3b8;font-size:0.78rem;">${s.created_at}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    function filterStudents(q) {
+        const f = allStudents.filter(s =>
+            s.name.toLowerCase().includes(q.toLowerCase()) ||
+            s.email.toLowerCase().includes(q.toLowerCase())
+        );
+        renderStudents(f);
+    }
+
+    async function delStudent(id, name) {
+        if (!confirm(`Remove student "${name}" and all their enrollments?`)) return;
+        const r = await fetch(`/api/admin/students/${id}`, { method: 'DELETE' });
+        if (r.ok) { toast(`"${name}" removed.`); await loadStudents(); await loadStats(); }
+        else toast('Failed to remove student.', 'err');
+    }
+
+    /* ── Courses ── */
+    let coursesLoaded = false;
+    async function loadCourses() {
+        if (coursesLoaded) return;
+        const [rCourses, rEnrollments] = await Promise.all([
+            fetch('/api/courses'),
+            fetch('/api/admin/enrollments')
+        ]);
+        const courses = await rCourses.json();
+        const enrollments = await rEnrollments.json();
+
+        // Count actual enrolled students per course title
+        const counts = {};
+        enrollments.forEach(e => {
+            counts[e.course_title] = (counts[e.course_title] || 0) + 1;
+        });
+
+        document.getElementById('co-count').textContent = `${courses.length} courses`;
+        const grid = document.getElementById('courses-grid');
+        grid.innerHTML = courses.map(c => {
+            const enrolledCount = counts[c.title] || 0;
+            return `
+                <div class="admin-course-card">
+                    <div class="acc-icon"><i class="fas fa-book"></i></div>
+                    <div class="acc-info">
+                        <div class="acc-title">${c.title}</div>
+                        <div class="acc-meta">
+                            <span class="acc-tutor"><i class="fas fa-chalkboard-teacher"></i> Tutor: <strong>${c.instructor}</strong></span>
+                            <span class="acc-enrolled"><i class="fas fa-user-graduate"></i> Enrolled: <strong>${enrolledCount}</strong></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        coursesLoaded = true;
+    }
+
+    /* ── Enrollments ── */
+    async function loadEnrollments() {
+        const r = await fetch('/api/admin/enrollments');
+        allEnrollments = await r.json();
+        renderEnrollments(allEnrollments);
+        document.getElementById('en-count').textContent = `${allEnrollments.length} enrollment${allEnrollments.length !== 1 ? 's' : ''}`;
+    }
+
+    function renderEnrollments(list) {
+        const tb = document.querySelector('#t-enrollments tbody');
+        if (!list.length) {
+            tb.innerHTML = `<tr><td colspan="4"><div class="empty-state"><i class="fas fa-clipboard-list"></i><p>No enrollments found.</p></div></td></tr>`;
+            return;
+        }
+        tb.innerHTML = list.map(e => {
+            const col = acolor(e.student_name);
+            return `<tr>
+                <td>
+                    <div class="ucell">
+                        <div class="uavatar" style="background:${col};width:30px;height:30px;font-size:0.75rem;">${ini(e.student_name)}</div>
+                        <div><div class="uname">${e.student_name}</div><div class="uemail">${e.student_email}</div></div>
+                    </div>
+                </td>
+                <td><span class="badge b-blue">${e.course_title}</span></td>
+                <td style="color:#64748b;font-size:0.82rem;">${e.enrolled_at}</td>
+                <td>
+                    <button class="btn-act btn-del" onclick="delEnrollment(${e.id},'${e.student_name.replace(/'/g,"\\'")}','${e.course_title.replace(/'/g,"\\'")}')">
+                        <i class="fas fa-unlink"></i> Remove
+                    </button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    function filterEnrollments(q) {
+        const f = allEnrollments.filter(e =>
+            e.student_name.toLowerCase().includes(q.toLowerCase()) ||
+            e.course_title.toLowerCase().includes(q.toLowerCase()) ||
+            e.student_email.toLowerCase().includes(q.toLowerCase())
+        );
+        renderEnrollments(f);
+    }
+
+    async function delEnrollment(id, sName, cTitle) {
+        if (!confirm(`Remove "${sName}" from "${cTitle}"?`)) return;
+        const r = await fetch(`/api/admin/enrollments/${id}`, { method: 'DELETE' });
+        if (r.ok) { toast('Enrollment removed.'); await loadEnrollments(); await loadStats(); }
+        else toast('Failed to remove enrollment.', 'err');
+    }
+
+    /* ── Inquiries ── */
+    async function loadInquiries() {
+        const r = await fetch('/api/admin/inquiries');
+        const list = await r.json();
+        document.getElementById('iq-count').textContent = `${list.length} inquir${list.length !== 1 ? 'ies' : 'y'}`;
+        const grid = document.getElementById('inq-grid');
+        if (!list.length) {
+            grid.innerHTML = `<div style="grid-column:1/-1;"><div class="empty-state"><i class="fas fa-envelope-open"></i><p>No inquiries yet.</p></div></div>`;
+            return;
+        }
+        grid.innerHTML = list.map(i => `
+            <div class="inq-card" id="inq-${i.id}">
+                <div class="inq-head">
+                    <span class="inq-name">${i.name}</span>
+                    <span class="inq-date">${i.created_at}</span>
+                </div>
+                <div class="inq-contact"><i class="fas fa-phone-alt"></i> ${i.contact}</div>
+                <div class="inq-msg">${i.message}</div>
+                <div class="inq-foot">
+                    <button class="btn-act btn-del" onclick="delInquiry(${i.id},'${i.name.replace(/'/g,"\\'")}')">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        /* Also fill overview table */
+        const tb = document.querySelector('#ov-inquiries tbody');
+        tb.innerHTML = list.slice(0, 6).map(i => `
+            <tr>
+                <td style="font-weight:600;font-size:0.84rem;">${i.name}</td>
+                <td style="color:#6366f1;font-size:0.8rem;">${i.contact}</td>
+                <td style="color:#94a3b8;font-size:0.78rem;">${i.created_at}</td>
+            </tr>
+        `).join('');
+    }
+
+    async function delInquiry(id, name) {
+        if (!confirm(`Delete inquiry from "${name}"?`)) return;
+        const r = await fetch(`/api/admin/inquiries/${id}`, { method: 'DELETE' });
+        if (r.ok) {
+            document.getElementById(`inq-${id}`)?.remove();
+            toast('Inquiry deleted.');
+            await loadStats();
+        } else toast('Failed to delete inquiry.', 'err');
+    }
+
+    /* ── Load recent inquiries for overview ── */
+    async function loadOvInquiries() {
+        const r = await fetch('/api/admin/inquiries');
+        const list = await r.json();
+        const tb = document.querySelector('#ov-inquiries tbody');
+        if (!list.length) {
+            tb.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:2rem;color:#94a3b8;">No inquiries yet.</td></tr>`;
+            return;
+        }
+        tb.innerHTML = list.slice(0, 6).map(i => `
+            <tr>
+                <td style="font-weight:600;font-size:0.84rem;">${i.name}</td>
+                <td style="color:#6366f1;font-size:0.8rem;">${i.contact}</td>
+                <td style="color:#94a3b8;font-size:0.78rem;">${i.created_at}</td>
+            </tr>
+        `).join('');
+    }
+
+    /* ── Init ── */
+    (async () => {
+        await loadMe();
+        await loadStats();
+        await loadStudents();
+        await loadOvInquiries();
+    })();
+</script>
+</body>
+</html>
