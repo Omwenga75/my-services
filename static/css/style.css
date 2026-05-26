@@ -1457,6 +1457,10 @@ footer {
     color: var(--accent);
 }
 
+.mobile-topbar, .mobile-sidebar-overlay {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .mobile-topbar {
         display: flex;
