@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const topbar = document.createElement('div');
         topbar.className = 'mobile-topbar';
         topbar.innerHTML = `
-            <button class="mobile-toggle-btn"><i class="fas fa-bars"></i></button>
             <div class="mobile-topbar-title">QuickLearn</div>
+            <button class="mobile-toggle-btn" style="margin-left: auto;"><i class="fas fa-ellipsis-v"></i></button>
         `;
         document.body.prepend(topbar);
 

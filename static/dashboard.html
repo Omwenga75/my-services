@@ -76,6 +76,14 @@
                 document.getElementById('student-name').textContent = userData.name;
                 document.getElementById('student-email').textContent = userData.email;
 
+                if (userData.is_admin) {
+                    const dashLinks = document.querySelectorAll('.nav-links a[href="/dashboard"]');
+                    dashLinks.forEach(link => {
+                        link.textContent = 'Admin';
+                        link.href = '/admin';
+                    });
+                }
+
                 // Load Enrolled Courses
                 const coursesRes = await fetch('/api/my-courses');
                 const courses = await coursesRes.json();
