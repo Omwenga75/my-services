@@ -1509,8 +1509,8 @@ footer {
         height: 100vh;
         flex-direction: column;
         align-items: flex-start;
-        padding: 2rem 1.5rem;
-        background: #0f172a;
+        padding: 0;
+        background: #0f172a !important;
         box-shadow: 4px 0 24px rgba(0,0,0,0.15);
         z-index: 1002;
         transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
