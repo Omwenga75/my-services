@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/static/css/style.css?v=4">
     <link rel="stylesheet" href="/static/css/course_details.css?v=4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preload" as="image" href="/static/images/code_placeholder.svg">
     <style>
         /* Tutor Modal */
         .tutor-modal-overlay {
@@ -211,7 +212,7 @@
                         <div class="cd-photo-badge">
                             <i class="fas fa-code"></i>
                         </div>
-                        <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Instructor" class="cd-instructor-img">
+                        <img src="/static/images/code_placeholder.svg" alt="Instructor" class="cd-instructor-img" fetchpriority="high">
                     </div>
                 </div>
             </div>

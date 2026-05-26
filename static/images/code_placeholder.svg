@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+    <rect width="400" height="400" fill="#1e2230" rx="20"/>
+    
+    <!-- Window controls -->
+    <circle cx="30" cy="30" r="6" fill="#ff5f56"/>
+    <circle cx="50" cy="30" r="6" fill="#ffbd2e"/>
+    <circle cx="70" cy="30" r="6" fill="#27c93f"/>
+
+    <!-- Code text -->
+    <g font-family="Consolas, Monaco, 'Courier New', monospace" font-size="16" font-weight="bold">
+        <!-- class Academy: -->
+        <text x="30" y="80">
+            <tspan fill="#ff7b72">class</tspan>
+            <tspan fill="#79c0ff"> Academy</tspan>
+            <tspan fill="#c9d1d9">:</tspan>
+        </text>
+
+        <!-- def __init__(self): -->
+        <text x="50" y="110">
+            <tspan fill="#ff7b72">def</tspan>
+            <tspan fill="#d2a8ff"> __init__</tspan>
+            <tspan fill="#c9d1d9">(</tspan>
+            <tspan fill="#ff7b72">self</tspan>
+            <tspan fill="#c9d1d9">):</tspan>
+        </text>
+
+        <!-- self.courses = ["Python", "Web", "Design"] -->
+        <text x="70" y="140">
+            <tspan fill="#ff7b72">self</tspan>
+            <tspan fill="#c9d1d9">.courses = [</tspan>
+            <tspan fill="#a5d6ff">"Python"</tspan>
+            <tspan fill="#c9d1d9">, </tspan>
+            <tspan fill="#a5d6ff">"Web"</tspan>
+            <tspan fill="#c9d1d9">, </tspan>
+        </text>
+        <text x="70" y="170">
+            <tspan fill="#a5d6ff">"Design"</tspan>
+            <tspan fill="#c9d1d9">]</tspan>
+        </text>
+
+        <!-- def enroll(self, student): -->
+        <text x="50" y="220">
+            <tspan fill="#ff7b72">def</tspan>
+            <tspan fill="#d2a8ff"> enroll</tspan>
+            <tspan fill="#c9d1d9">(</tspan>
+            <tspan fill="#ff7b72">self</tspan>
+            <tspan fill="#c9d1d9">, </tspan>
+            <tspan fill="#ff7b72">student</tspan>
+            <tspan fill="#c9d1d9">):</tspan>
+        </text>
+
+        <!-- return "Enrolled successfully!" -->
+        <text x="70" y="250">
+            <tspan fill="#ff7b72">return </tspan>
+            <tspan fill="#a5d6ff">"Enrolled successfully!"</tspan>
+        </text>
+
+        <!-- quick_learn = Academy() -->
+        <text x="30" y="300">
+            <tspan fill="#79c0ff">quick_learn</tspan>
+            <tspan fill="#c9d1d9"> = </tspan>
+            <tspan fill="#79c0ff">Academy</tspan>
+            <tspan fill="#c9d1d9">()</tspan>
+        </text>
+
+        <!-- print(quick_learn.enroll("You")) -->
+        <text x="30" y="330">
+            <tspan fill="#d2a8ff">print</tspan>
+            <tspan fill="#c9d1d9">(</tspan>
+            <tspan fill="#79c0ff">quick_learn</tspan>
+            <tspan fill="#c9d1d9">.enroll(</tspan>
+            <tspan fill="#a5d6ff">"You"</tspan>
+            <tspan fill="#c9d1d9">))</tspan>
+        </text>
+    </g>
+</svg>
