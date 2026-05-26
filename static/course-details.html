@@ -194,8 +194,8 @@
                     <div class="cd-action-area">
                         <button id="cd-enroll-btn" class="cd-btn-primary" onclick="enrollCourse()">Get started</button>
                         <div class="cd-price-display">
-                            <span class="cd-price-current" id="cd-price">$0.00</span>
-                            <span class="cd-price-old" id="cd-price-old" style="text-decoration: line-through; color: #94a3b8; font-size: 0.9rem; margin-left: 0.5rem;">$0.00</span>
+                            <span class="cd-price-current" id="cd-price">KES 0.00</span>
+                            <span class="cd-price-old" id="cd-price-old" style="display: none;"></span>
                         </div>
                         <div id="cd-enrollment-status" class="cd-enroll-msg" style="display: none; color: #10B981; font-weight: 600; margin-left: 1rem;">
                             Enrolled Successfully!
@@ -580,12 +580,12 @@
                     
                     const priceEl = document.getElementById('cd-price');
                     if(priceEl) {
-                        priceEl.textContent = 'FREE';
-                        priceEl.style.color = '#10B981'; // green color for FREE
-                        priceEl.style.textTransform = 'uppercase';
+                        priceEl.textContent = 'KES ' + (course.price || 0);
+                        priceEl.style.color = '#111827';
+                        priceEl.style.textTransform = 'none';
                     }
                     const oldPriceEl = document.getElementById('cd-price-old');
-                    if(oldPriceEl) oldPriceEl.textContent = 'KES ' + (course.price || 54.99);
+                    if(oldPriceEl) oldPriceEl.style.display = 'none';
 
                     const heroImage = document.querySelector('.cd-instructor-img');
                     if (heroImage && course.image_url) {
