@@ -210,6 +210,10 @@ body.course-details-page .navbar {
     .cd-hero-content {
         padding: 2.5rem;
     }
+    .cd-stats {
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
 }
 
 /* Sections */
