@@ -10,6 +10,7 @@ from passlib.context import CryptContext
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional
+from pydantic import BaseModel
 from contextlib import asynccontextmanager
 
 # Auth Configuration
@@ -105,6 +106,15 @@ course_metadata = {
         "skills": ["Networking Basics", "Routing & Switching", "Wireless", "Security"]
     }
 }
+
+class CourseIn(BaseModel):
+    title: str
+    description: str
+    price: float
+    category: str
+    instructor: str
+    rating: float = 4.8
+    image_url: str = ""
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -225,10 +235,12 @@ async def lifespan(app: FastAPI):
                     old_course.instructor = updated_course["instructor"]
                     old_course.rating = updated_course["rating"]
 
-        allowed_titles = {course["title"] for course in initial_courses}
-        extras = db.query(models.Course).filter(~models.Course.title.in_(allowed_titles)).all()
-        for extra in extras:
-            db.delete(extra)
+        # Only remove known legacy renamed course titles; preserve any admin-created courses
+        legacy_old_titles = set(legacy_updates.keys())
+        if legacy_old_titles:
+            extras = db.query(models.Course).filter(models.Course.title.in_(legacy_old_titles)).all()
+            for extra in extras:
+                db.delete(extra)
 
         db.commit()
 
@@ -399,15 +411,7 @@ async def course_details_page():
 
 @app.get("/api/courses")
 async def get_courses(db: Session = Depends(get_db), user: Optional[models.User] = Depends(get_current_user)):
-    allowed_titles = {
-        "Python Mastery Bootcamp",
-        "Graphics & UI/UX Design",
-        "Web Development",
-        "Kotlin Android App Development",
-        "Microsoft Office Productivity",
-        "Networking Fundamentals"
-    }
-    courses = db.query(models.Course).filter(models.Course.title.in_(allowed_titles)).all()
+    courses = db.query(models.Course).all()
     # Check what user is enrolled in
     enrolled_ids = []
     if user:
@@ -610,5 +614,75 @@ async def admin_delete_inquiry(inquiry_id: int, db: Session = Depends(get_db), u
     if not inquiry:
         raise HTTPException(status_code=404, detail="Inquiry not found")
     db.delete(inquiry)
+    db.commit()
+    return {"status": "deleted"}
+
+# ── Admin Course CRUD ──────────────────────────────────────────────────────────
+
+@app.post("/api/admin/courses")
+async def admin_add_course(
+    data: CourseIn,
+    db: Session = Depends(get_db),
+    user: models.User = Depends(get_current_user)
+):
+    if not is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    existing = db.query(models.Course).filter(models.Course.title == data.title).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="A course with this title already exists")
+    new_course = models.Course(
+        title=data.title,
+        description=data.description,
+        price=data.price,
+        category=data.category,
+        instructor=data.instructor,
+        rating=data.rating,
+        image_url=data.image_url or ""
+    )
+    db.add(new_course)
+    db.commit()
+    db.refresh(new_course)
+    return {"status": "created", "id": new_course.id}
+
+@app.put("/api/admin/courses/{course_id}")
+async def admin_update_course(
+    course_id: int,
+    data: CourseIn,
+    db: Session = Depends(get_db),
+    user: models.User = Depends(get_current_user)
+):
+    if not is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    course = db.query(models.Course).filter(models.Course.id == course_id).first()
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    if data.title != course.title:
+        dup = db.query(models.Course).filter(models.Course.title == data.title).first()
+        if dup:
+            raise HTTPException(status_code=400, detail="A course with this title already exists")
+    course.title = data.title
+    course.description = data.description
+    course.price = data.price
+    course.category = data.category
+    course.instructor = data.instructor
+    course.rating = data.rating
+    if data.image_url:
+        course.image_url = data.image_url
+    db.commit()
+    return {"status": "updated"}
+
+@app.delete("/api/admin/courses/{course_id}")
+async def admin_delete_course(
+    course_id: int,
+    db: Session = Depends(get_db),
+    user: models.User = Depends(get_current_user)
+):
+    if not is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    course = db.query(models.Course).filter(models.Course.id == course_id).first()
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    db.query(models.Enrollment).filter(models.Enrollment.course_id == course_id).delete()
+    db.delete(course)
     db.commit()
     return {"status": "deleted"}

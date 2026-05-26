@@ -344,7 +344,7 @@
             gap: 1.1rem;
             box-shadow: var(--shadow);
             transition: transform 0.2s, box-shadow 0.2s;
-            cursor: default;
+            cursor: pointer;
         }
         .admin-course-card:hover {
             transform: translateY(-2px);
@@ -565,6 +565,207 @@
                 display: none;
             }
         }
+
+        /* ── Add Course Button ── */
+        .btn-add-course {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 0.45rem 1.1rem;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.25);
+        }
+        .btn-add-course:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(99,102,241,0.38); }
+
+        /* ── Course card click indicator ── */
+        .acc-arrow {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            flex-shrink: 0;
+            opacity: 0.45;
+            transition: opacity 0.15s, color 0.15s;
+        }
+        .admin-course-card:hover .acc-arrow { opacity: 1; color: var(--primary); }
+
+        /* ── Modals ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.55);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-box {
+            background: var(--white);
+            border-radius: 18px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+            width: 100%;
+            max-width: 560px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.22s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.88) translateY(16px); opacity: 0; }
+            to   { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .modal-head {
+            padding: 1.3rem 1.5rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .modal-title {
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .modal-close {
+            background: none; border: none;
+            color: var(--text-muted); font-size: 1.05rem;
+            cursor: pointer; padding: 0.3rem 0.5rem;
+            border-radius: 6px; transition: all 0.15s;
+        }
+        .modal-close:hover { background: #f1f5f9; color: #0f172a; }
+        .modal-body { padding: 1.3rem 1.5rem; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+        .form-group { margin: 0; }
+        .form-group.full { grid-column: 1 / -1; }
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 0.52rem 0.85rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem;
+            color: #1e293b;
+            background: #fafbfc;
+            outline: none;
+            transition: border-color 0.18s, box-shadow 0.18s;
+        }
+        .form-input:focus, .form-textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+            background: #fff;
+        }
+        .form-textarea { resize: vertical; min-height: 88px; }
+        .modal-foot {
+            padding: 1rem 1.5rem 1.3rem;
+            display: flex;
+            gap: 0.7rem;
+            justify-content: flex-end;
+            border-top: 1px solid var(--border);
+        }
+        .btn-modal-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; border: none;
+            padding: 0.55rem 1.35rem;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem; font-weight: 700;
+            cursor: pointer; transition: all 0.18s;
+            display: inline-flex; align-items: center; gap: 0.4rem;
+        }
+        .btn-modal-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(99,102,241,0.35); }
+        .btn-modal-primary:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+        .btn-modal-secondary {
+            background: var(--bg); color: #475569;
+            border: 1px solid var(--border);
+            padding: 0.55rem 1.1rem;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.88rem; font-weight: 600;
+            cursor: pointer; transition: all 0.18s;
+        }
+        .btn-modal-secondary:hover { background: #e2e8f0; }
+
+        /* ── Action Dialog (small popup) ── */
+        .action-dialog-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.42);
+            backdrop-filter: blur(4px);
+            z-index: 900;
+            align-items: center;
+            justify-content: center;
+        }
+        .action-dialog-overlay.open { display: flex; }
+        .action-dialog {
+            background: var(--white);
+            border-radius: 18px;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+            padding: 1.7rem 1.5rem 1.4rem;
+            width: 100%; max-width: 310px;
+            text-align: center;
+            animation: modalIn 0.2s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .action-dialog-icon {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.35rem;
+            color: #3b82f6;
+        }
+        .action-dialog-course { font-weight: 800; font-size: 0.97rem; color: #0f172a; margin-bottom: 0.25rem; line-height: 1.3; }
+        .action-dialog-sub { color: var(--text-muted); font-size: 0.78rem; margin-bottom: 1.3rem; }
+        .action-dialog-btns { display: flex; flex-direction: column; gap: 0.55rem; }
+        .btn-dlg-edit {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; border: none;
+            padding: 0.65rem; border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem; font-weight: 700;
+            cursor: pointer; transition: all 0.18s;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn-dlg-edit:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(99,102,241,0.32); }
+        .btn-dlg-delete {
+            background: #fee2e2; color: var(--danger); border: none;
+            padding: 0.65rem; border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem; font-weight: 700;
+            cursor: pointer; transition: all 0.18s;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn-dlg-delete:hover { background: var(--danger); color: white; }
+        .btn-dlg-cancel {
+            background: none; color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 0.55rem; border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.84rem; font-weight: 600;
+            cursor: pointer; transition: all 0.18s;
+        }
+        .btn-dlg-cancel:hover { background: #f1f5f9; color: #334155; }
     </style>
 </head>
 <body>
@@ -713,7 +914,12 @@
             <div class="card">
                 <div class="card-head">
                     <span class="card-title"><i class="fas fa-book-open" style="color:#10b981;"></i> All Courses</span>
-                    <span class="card-meta" id="co-count">Loading…</span>
+                    <div style="display:flex;align-items:center;gap:0.75rem;">
+                        <span class="card-meta" id="co-count">Loading…</span>
+                        <button class="btn-add-course" onclick="openAddCourseModal()">
+                            <i class="fas fa-plus"></i> Add Course
+                        </button>
+                    </div>
                 </div>
                 <div class="courses-grid" id="courses-grid">
                     <div style="grid-column:1/-1;text-align:center;padding:3rem;"><div class="spinner"></div></div>
@@ -922,40 +1128,53 @@
     }
 
     /* ── Courses ── */
-    let coursesLoaded = false;
+    let coursesData = [];
+    let activeCourseId = null;
+
     async function loadCourses() {
-        if (coursesLoaded) return;
+        await reloadCoursesGrid();
+    }
+
+    async function reloadCoursesGrid() {
         const [rCourses, rEnrollments] = await Promise.all([
             fetch('/api/courses'),
             fetch('/api/admin/enrollments')
         ]);
         const courses = await rCourses.json();
         const enrollments = await rEnrollments.json();
+        coursesData = courses;
 
-        // Count actual enrolled students per course title
         const counts = {};
         enrollments.forEach(e => {
             counts[e.course_title] = (counts[e.course_title] || 0) + 1;
         });
 
-        document.getElementById('co-count').textContent = `${courses.length} courses`;
+        document.getElementById('co-count').textContent = `${courses.length} course${courses.length !== 1 ? 's' : ''}`;
         const grid = document.getElementById('courses-grid');
+
+        if (!courses.length) {
+            grid.innerHTML = `<div style="grid-column:1/-1;"><div class="empty-state"><i class="fas fa-book-open"></i><p>No courses yet. Click “Add Course” to get started!</p></div></div>`;
+            return;
+        }
+
         grid.innerHTML = courses.map(c => {
             const enrolledCount = counts[c.title] || 0;
+            const price = parseFloat(c.price || 0).toLocaleString('en-KE', {minimumFractionDigits:2, maximumFractionDigits:2});
             return `
-                <div class="admin-course-card">
+                <div class="admin-course-card" onclick="openCourseActionDialog(${c.id})" title="Click to edit or delete">
                     <div class="acc-icon"><i class="fas fa-book"></i></div>
                     <div class="acc-info">
                         <div class="acc-title">${c.title}</div>
                         <div class="acc-meta">
-                            <span class="acc-tutor"><i class="fas fa-chalkboard-teacher"></i> Tutor: <strong>${c.instructor}</strong></span>
-                            <span class="acc-enrolled"><i class="fas fa-user-graduate"></i> Enrolled: <strong>${enrolledCount}</strong></span>
+                            <span class="acc-tutor"><i class="fas fa-chalkboard-teacher"></i> ${c.instructor}</span>
+                            <span class="acc-enrolled"><i class="fas fa-user-graduate"></i> ${enrolledCount} enrolled</span>
+                            <span style="color:#f59e0b;"><i class="fas fa-tag"></i> KES ${price}</span>
                         </div>
                     </div>
+                    <div class="acc-arrow"><i class="fas fa-ellipsis-v"></i></div>
                 </div>
             `;
         }).join('');
-        coursesLoaded = true;
     }
 
     /* ── Enrollments ── */
@@ -1080,6 +1299,247 @@
         await loadStudents();
         await loadOvInquiries();
     })();
+    /* ── Course Action Dialog ── */
+    function openCourseActionDialog(courseId) {
+        const course = coursesData.find(c => c.id === courseId);
+        if (!course) return;
+        activeCourseId = courseId;
+        document.getElementById('cad-title').textContent = course.title;
+        document.getElementById('course-action-overlay').classList.add('open');
+    }
+    function closeCourseActionDialog() {
+        document.getElementById('course-action-overlay').classList.remove('open');
+    }
+
+    /* ── Add Course Modal ── */
+    function openAddCourseModal() {
+        ['ac-title','ac-desc','ac-category','ac-instructor','ac-price','ac-image'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('ac-rating').value = '4.8';
+        document.getElementById('add-course-overlay').classList.add('open');
+    }
+    function closeAddCourseModal() {
+        document.getElementById('add-course-overlay').classList.remove('open');
+    }
+
+    /* ── Edit Course Modal ── */
+    function openEditCourseModal() {
+        const course = coursesData.find(c => c.id === activeCourseId);
+        if (!course) return;
+        closeCourseActionDialog();
+        document.getElementById('ec-title').value      = course.title       || '';
+        document.getElementById('ec-desc').value       = course.description || '';
+        document.getElementById('ec-category').value   = course.category    || '';
+        document.getElementById('ec-instructor').value = course.instructor  || '';
+        document.getElementById('ec-price').value      = course.price       || '';
+        document.getElementById('ec-rating').value     = course.rating      || '4.8';
+        document.getElementById('ec-image').value      = course.image_url   || '';
+        document.getElementById('edit-course-overlay').classList.add('open');
+    }
+    function closeEditCourseModal() {
+        document.getElementById('edit-course-overlay').classList.remove('open');
+    }
+
+    /* ── Submit Add Course ── */
+    async function submitAddCourse() {
+        const title       = document.getElementById('ac-title').value.trim();
+        const description = document.getElementById('ac-desc').value.trim();
+        const category    = document.getElementById('ac-category').value.trim();
+        const instructor  = document.getElementById('ac-instructor').value.trim();
+        const price       = parseFloat(document.getElementById('ac-price').value);
+        const rating      = parseFloat(document.getElementById('ac-rating').value) || 4.8;
+        const image_url   = document.getElementById('ac-image').value.trim();
+
+        if (!title || !description || !category || !instructor || isNaN(price)) {
+            toast('Please fill in all required fields.', 'err'); return;
+        }
+        const btn = document.querySelector('#add-course-overlay .btn-modal-primary');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding…';
+        try {
+            const r = await fetch('/api/admin/courses', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description, price, category, instructor, rating, image_url })
+            });
+            if (r.ok) {
+                closeAddCourseModal();
+                toast(`“${title}” added successfully!`);
+                await reloadCoursesGrid();
+                await loadStats();
+            } else {
+                const err = await r.json();
+                toast(err.detail || 'Failed to add course.', 'err');
+            }
+        } catch(e) { toast('Error adding course.', 'err'); }
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-plus"></i> Add Course';
+    }
+
+    /* ── Submit Edit Course ── */
+    async function submitEditCourse() {
+        const title       = document.getElementById('ec-title').value.trim();
+        const description = document.getElementById('ec-desc').value.trim();
+        const category    = document.getElementById('ec-category').value.trim();
+        const instructor  = document.getElementById('ec-instructor').value.trim();
+        const price       = parseFloat(document.getElementById('ec-price').value);
+        const rating      = parseFloat(document.getElementById('ec-rating').value) || 4.8;
+        const image_url   = document.getElementById('ec-image').value.trim();
+
+        if (!title || !description || !category || !instructor || isNaN(price)) {
+            toast('Please fill in all required fields.', 'err'); return;
+        }
+        const btn = document.querySelector('#edit-course-overlay .btn-modal-primary');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+        try {
+            const r = await fetch(`/api/admin/courses/${activeCourseId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description, price, category, instructor, rating, image_url })
+            });
+            if (r.ok) {
+                closeEditCourseModal();
+                toast(`“${title}” updated!`);
+                await reloadCoursesGrid();
+                await loadStats();
+            } else {
+                const err = await r.json();
+                toast(err.detail || 'Failed to update course.', 'err');
+            }
+        } catch(e) { toast('Error updating course.', 'err'); }
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+    }
+
+    /* ── Delete Course ── */
+    async function confirmDeleteCourse() {
+        const course = coursesData.find(c => c.id === activeCourseId);
+        if (!course) return;
+        closeCourseActionDialog();
+        if (!confirm(`Delete “${course.title}”?\nThis will also remove all student enrollments for this course.`)) return;
+        const r = await fetch(`/api/admin/courses/${activeCourseId}`, { method: 'DELETE' });
+        if (r.ok) {
+            toast(`“${course.title}” deleted.`);
+            await reloadCoursesGrid();
+            await loadStats();
+        } else toast('Failed to delete course.', 'err');
+    }
+
 </script>
+
+<!-- ── Course Action Dialog (small popup) ── -->
+<div class="action-dialog-overlay" id="course-action-overlay" onclick="closeCourseActionDialog()">
+    <div class="action-dialog" onclick="event.stopPropagation()">
+        <div class="action-dialog-icon"><i class="fas fa-book"></i></div>
+        <div class="action-dialog-course" id="cad-title">Course Title</div>
+        <div class="action-dialog-sub">What would you like to do?</div>
+        <div class="action-dialog-btns">
+            <button class="btn-dlg-edit" onclick="openEditCourseModal()">
+                <i class="fas fa-pen"></i> Edit Course
+            </button>
+            <button class="btn-dlg-delete" onclick="confirmDeleteCourse()">
+                <i class="fas fa-trash"></i> Delete Course
+            </button>
+            <button class="btn-dlg-cancel" onclick="closeCourseActionDialog()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Add Course Modal ── -->
+<div class="modal-overlay" id="add-course-overlay" onclick="closeAddCourseModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-head">
+            <span class="modal-title"><i class="fas fa-plus-circle" style="color:var(--primary);"></i> Add New Course</span>
+            <button class="modal-close" onclick="closeAddCourseModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label class="form-label">Course Title *</label>
+                    <input type="text" id="ac-title" class="form-input" placeholder="e.g. Advanced JavaScript">
+                </div>
+                <div class="form-group full">
+                    <label class="form-label">Description *</label>
+                    <textarea id="ac-desc" class="form-textarea" placeholder="What students will learn in this course…"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category *</label>
+                    <input type="text" id="ac-category" class="form-input" placeholder="e.g. Web Development">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Instructor *</label>
+                    <input type="text" id="ac-instructor" class="form-input" placeholder="Full name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Price (KES) *</label>
+                    <input type="number" id="ac-price" class="form-input" placeholder="e.g. 4999" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Rating (0–5)</label>
+                    <input type="number" id="ac-rating" class="form-input" placeholder="4.8" min="0" max="5" step="0.1" value="4.8">
+                </div>
+                <div class="form-group full">
+                    <label class="form-label">Cover Image URL <span style="font-weight:400;text-transform:none;">(optional)</span></label>
+                    <input type="url" id="ac-image" class="form-input" placeholder="https://images.unsplash.com/…">
+                </div>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn-modal-secondary" onclick="closeAddCourseModal()">Cancel</button>
+            <button class="btn-modal-primary" onclick="submitAddCourse()">
+                <i class="fas fa-plus"></i> Add Course
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Edit Course Modal ── -->
+<div class="modal-overlay" id="edit-course-overlay" onclick="closeEditCourseModal()">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-head">
+            <span class="modal-title"><i class="fas fa-pen" style="color:var(--primary);"></i> Edit Course</span>
+            <button class="modal-close" onclick="closeEditCourseModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label class="form-label">Course Title *</label>
+                    <input type="text" id="ec-title" class="form-input" placeholder="e.g. Advanced JavaScript">
+                </div>
+                <div class="form-group full">
+                    <label class="form-label">Description *</label>
+                    <textarea id="ec-desc" class="form-textarea" placeholder="What students will learn…"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category *</label>
+                    <input type="text" id="ec-category" class="form-input" placeholder="e.g. Web Development">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Instructor *</label>
+                    <input type="text" id="ec-instructor" class="form-input" placeholder="Full name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Price (KES) *</label>
+                    <input type="number" id="ec-price" class="form-input" placeholder="e.g. 4999" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Rating (0–5)</label>
+                    <input type="number" id="ec-rating" class="form-input" placeholder="4.8" min="0" max="5" step="0.1">
+                </div>
+                <div class="form-group full">
+                    <label class="form-label">Cover Image URL <span style="font-weight:400;text-transform:none;">(optional)</span></label>
+                    <input type="url" id="ec-image" class="form-input" placeholder="https://…">
+                </div>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn-modal-secondary" onclick="closeEditCourseModal()">Cancel</button>
+            <button class="btn-modal-primary" onclick="submitEditCourse()">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
