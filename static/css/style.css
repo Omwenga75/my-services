@@ -1275,6 +1275,13 @@ footer {
     max-width: 1200px;
     margin: 0 auto 1.5rem;
     text-align: left;
+    justify-items: start;
+    align-items: start;
+}
+
+.footer-brand,
+.footer-links {
+    text-align: left;
 }
 
 .footer-brand h3,
@@ -1472,7 +1479,8 @@ footer {
     .mobile-topbar {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
+        gap: 0.5rem;
         padding: 0.75rem 1rem;
         background: var(--white);
         border-bottom: 1px solid var(--border, #e2e8f0);
