@@ -192,10 +192,16 @@ body.course-details-page .navbar {
 @media (max-width: 900px) {
     .cd-hero-card {
         flex-direction: column;
+        overflow: visible;
+    }
+    .cd-hero-content {
+        min-width: unset;
+        width: 100%;
+        padding: 2rem 1.5rem;
     }
     .cd-hero-image-wrapper {
-        margin: 0 2rem 2rem 2rem;
-        height: 350px;
+        margin: 0 1.5rem 1.5rem 1.5rem;
+        height: 280px;
     }
     .cd-photo-badge {
         left: 20px;
@@ -205,11 +211,11 @@ body.course-details-page .navbar {
         height: 80px;
         font-size: 2.5rem;
     }
-    .cd-hero-content {
-        padding: 2.5rem;
-    }
     .cd-stats {
         gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+    .cd-action-area {
         flex-wrap: wrap;
     }
 }

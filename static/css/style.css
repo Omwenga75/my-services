@@ -1509,12 +1509,16 @@ footer {
         height: 100vh;
         flex-direction: column;
         align-items: flex-start;
+        justify-content: flex-start !important;
         padding: 0;
         background: #0f172a !important;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
         box-shadow: 4px 0 24px rgba(0,0,0,0.15);
         z-index: 1002;
         transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border-bottom: none;
+        overflow-y: auto;
     }
     .navbar.open {
         left: 0;
