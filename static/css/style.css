@@ -1479,8 +1479,7 @@ footer {
     .mobile-topbar {
         display: flex;
         align-items: center;
-        justify-content: flex-start;
-        gap: 0.5rem;
+        justify-content: space-between;
         padding: 0.75rem 1rem;
         background: var(--white);
         border-bottom: 1px solid var(--border, #e2e8f0);
@@ -1512,7 +1511,6 @@ footer {
         font-size: 1.25rem;
         font-weight: 800;
         color: #0f172a;
-        margin-left: 0.75rem;
     }
 
     .navbar {
