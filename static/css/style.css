@@ -1472,6 +1472,7 @@ footer {
     .mobile-topbar {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         padding: 0.75rem 1rem;
         background: var(--white);
         border-bottom: 1px solid var(--border, #e2e8f0);
@@ -1488,11 +1489,16 @@ footer {
         font-size: 1.4rem;
         color: #1e293b;
         cursor: pointer;
-        padding: 0.4rem;
+        padding: 0.5rem;
         border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
+        min-width: 40px;
+        min-height: 40px;
+    }
+    .mobile-toggle-btn:active {
+        background: rgba(0,0,0,0.06);
     }
     .mobile-topbar-title {
         font-size: 1.25rem;
