@@ -67,20 +67,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Build a base nav with all primary links so they remain visible on all pages
             let baseNav = `
-                <a href="/">Home</a>
-                <a href="/courses">Courses</a>
-                <a href="/about">About Us</a>
-                <a href="/contact">Contact Us</a>
+                <a href="/"><i class="fas fa-home"></i> Home</a>
+                <a href="/courses"><i class="fas fa-book-open"></i> Courses</a>
+                <a href="/about"><i class="fas fa-building"></i> About Us</a>
+                <a href="/contact"><i class="fas fa-envelope"></i> Contact Us</a>
             `;
 
             if (data.logged_in) {
                 const dashboardUrl = data.is_admin ? "/admin" : "/dashboard";
                 baseNav += `
-                    <a href="${dashboardUrl}">Dashboard</a>
-                    <a href="/logout" style="color: #ef4444;"><i class="fas fa-sign-out-alt"></i></a>
+                    <a href="${dashboardUrl}"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    <a href="/logout" style="color: #ef4444;"><i class="fas fa-sign-out-alt" style="display:inline-block !important;"></i> Logout</a>
                 `;
             } else {
-                baseNav += `<a href="/login" class="btn-auth-nav">Login</a>`;
+                baseNav += `<a href="/login" class="btn-auth-nav"><i class="fas fa-sign-in-alt"></i> Login</a>`;
             }
 
             nav.innerHTML = baseNav;
