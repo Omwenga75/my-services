@@ -211,14 +211,8 @@ async def lifespan(app: FastAPI):
 
         for course_data in initial_courses:
             existing = db.query(models.Course).filter(models.Course.title == course_data["title"]).first()
-            if existing:
-                existing.description = course_data["description"]
-                existing.price = course_data["price"]
-                existing.category = course_data["category"]
-                existing.image_url = course_data["image_url"]
-                existing.instructor = course_data["instructor"]
-                existing.rating = course_data["rating"]
-            else:
+            if not existing:
+                # Only seed if this course does not exist yet — never overwrite admin edits
                 db.add(models.Course(**course_data))
 
         # Update legacy course titles if older records exist
