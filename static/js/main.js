@@ -75,8 +75,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (data.logged_in) {
                 const dashboardUrl = data.is_admin ? "/admin" : "/dashboard";
+                const dashboardText = data.is_admin ? "Admin" : "Dashboard";
                 baseNav += `
-                    <a href="${dashboardUrl}"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    <a href="${dashboardUrl}"><i class="fas fa-chart-line"></i> ${dashboardText}</a>
                     <a href="/logout" style="color: #ef4444;"><i class="fas fa-sign-out-alt" style="display:inline-block !important;"></i> Logout</a>
                 `;
             } else {
