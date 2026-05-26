@@ -1,4 +1,31 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Add Mobile Navbar Logic
+    const navbar = document.querySelector('.navbar');
+    if (navbar && !document.querySelector('.mobile-topbar')) {
+        const topbar = document.createElement('div');
+        topbar.className = 'mobile-topbar';
+        topbar.innerHTML = `
+            <button class="mobile-toggle-btn"><i class="fas fa-bars"></i></button>
+            <div class="mobile-topbar-title">QuickLearn</div>
+        `;
+        document.body.prepend(topbar);
+
+        const overlay = document.createElement('div');
+        overlay.className = 'mobile-sidebar-overlay';
+        document.body.appendChild(overlay);
+
+        const toggleBtn = topbar.querySelector('.mobile-toggle-btn');
+        toggleBtn.addEventListener('click', () => {
+            navbar.classList.add('open');
+            overlay.classList.add('open');
+        });
+
+        overlay.addEventListener('click', () => {
+            navbar.classList.remove('open');
+            overlay.classList.remove('open');
+        });
+    }
+
     // Check for success URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success') === 'true') {
