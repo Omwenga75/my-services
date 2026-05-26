@@ -220,6 +220,15 @@ body.course-details-page .navbar {
     }
 }
 
+@media (max-width: 768px) {
+    .page-container {
+        padding-top: 1rem;
+    }
+    .cd-hero-card {
+        margin-top: 0;
+    }
+}
+
 /* Sections */
 .cd-section {
     margin-bottom: 4rem;
