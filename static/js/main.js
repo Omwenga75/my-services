@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const topbar = document.createElement('div');
         topbar.className = 'mobile-topbar';
         topbar.innerHTML = `
-            <div class="mobile-topbar-title">QuickLearn</div>
             <button class="mobile-toggle-btn" aria-label="Open menu">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
                     <line x1="3" y1="6" x2="21" y2="6"/>
@@ -13,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <line x1="3" y1="18" x2="21" y2="18"/>
                 </svg>
             </button>
+            <div class="mobile-topbar-title">QuickLearn</div>
         `;
         document.body.prepend(topbar);
 
