@@ -1550,32 +1550,7 @@ footer {
     }
 
     .logo-image {
-        padding: 1.4rem 1.5rem;
-        border-bottom: 1px solid rgba(255,255,255,0.07);
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        margin: 0;
-        width: 100%;
-        text-decoration: none;
-    }
-
-    .logo-image img {
-        width: 38px;
-        height: 38px;
-        max-height: none;
-        transform: none;
-        border-radius: 9px;
-        object-fit: cover;
-        filter: none;
-    }
-
-    .logo-image::after {
-        content: "QuickLearn";
-        color: #f1f5f9;
-        font-size: 1.15rem;
-        font-weight: 800;
-        letter-spacing: 0.5px;
+        display: none !important;
     }
 
     .nav-links {
@@ -1730,19 +1705,7 @@ footer {
         gap: 0.4rem;
     }
 
-    .logo-image {
-        min-width: 230px;
-        height: 48px;
-        justify-content: flex-start;
-        margin: 0;
-        flex-shrink: 0;
-    }
 
-    .logo-image img {
-        max-height: 40px;
-        transform: scale(2.0);
-        transform-origin: center left;
-    }
 
     .nav-links {
         gap: 0.4rem 0.6rem;
