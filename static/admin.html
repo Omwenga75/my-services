@@ -992,13 +992,23 @@
         if (name === 'courses')     loadCourses();
         if (name === 'enrollments') loadEnrollments();
         if (name === 'inquiries')   loadInquiries();
-        
+        // Persist active section in URL hash so page refresh stays on same tab
+        history.replaceState(null, '', '#' + name);
         // Auto-close sidebar on mobile after navigating
         const sidebar = document.querySelector('.sidebar');
         const overlay = document.querySelector('.sidebar-overlay');
         if (sidebar && sidebar.classList.contains('open')) {
             sidebar.classList.remove('open');
             overlay.classList.remove('open');
+        }
+    }
+
+    /* ── Restore section from URL hash ── */
+    function restoreSection() {
+        const hash = window.location.hash.replace('#', '');
+        if (hash && sections[hash]) {
+            const navItem = document.getElementById('nav-' + hash);
+            if (navItem) show(hash, navItem);
         }
     }
 
@@ -1298,6 +1308,8 @@
         await loadStats();
         await loadStudents();
         await loadOvInquiries();
+        // Restore the section the admin was on before refresh
+        restoreSection();
     })();
     /* ── Course Action Dialog ── */
     function openCourseActionDialog(courseId) {
@@ -1364,7 +1376,10 @@
             if (r.ok) {
                 closeAddCourseModal();
                 toast(`“${title}” added successfully!`);
-                await reloadCoursesGrid();
+                // Navigate to Courses section so new course is immediately visible
+                const coursesNav = document.getElementById('nav-courses');
+                if (coursesNav) show('courses', coursesNav);
+                else await reloadCoursesGrid();
                 await loadStats();
             } else {
                 const err = await r.json();
