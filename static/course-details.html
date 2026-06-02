@@ -173,7 +173,7 @@
         <div class="container">
             
             <!-- Hero Section -->
-            <div class="cd-hero-card">
+            <div class="cd-hero-card loading">
                 <div class="cd-hero-content">
                     <h1 id="cd-title" class="cd-title">Loading Course...</h1>
                     <p id="cd-description" class="cd-desc">Please wait while we fetch the course details.</p>
@@ -209,9 +209,6 @@
                 
                 <div class="cd-hero-image-wrapper">
                     <div class="cd-instructor-photo-container">
-                        <div class="cd-photo-badge">
-                            <i class="fas fa-code"></i>
-                        </div>
                         <img src="/static/images/code_placeholder.svg" alt="Instructor" class="cd-instructor-img" fetchpriority="high">
                     </div>
                 </div>
@@ -1347,6 +1344,11 @@
                 }
             } catch (e) {
                 console.error("Error loading course details:", e);
+            } finally {
+                const heroCard = document.querySelector('.cd-hero-card');
+                if (heroCard) {
+                    heroCard.classList.remove('loading');
+                }
             }
         }
 
