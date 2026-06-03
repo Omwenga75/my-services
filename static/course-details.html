@@ -1243,30 +1243,31 @@
             if (controls) controls.style.display = 'none';
 
             accordion.innerHTML = `
-                <div class="cd-notes-slider" style="background: #ffffff; border: 1px solid #ede9fe; border-radius: 16px; box-shadow: 0 4px 20px rgba(109, 40, 217, 0.05); overflow: hidden; position: relative; display: flex; flex-direction: column;">
-                    <div class="cd-notes-slides-track" id="main-notes-track" style="display: flex; transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
-                        ${modules.map((mod, idx) => `
-                            <div class="cd-notes-slide" style="min-width: 100%; box-sizing: border-box; padding: 2rem;">
-                                <div style="margin-bottom: 1.5rem; border-bottom: 1.5px solid #faf8ff; padding-bottom: 1rem; display: flex; flex-direction: column; align-items: flex-start;">
-                                    <span style="font-size: 0.72rem; font-weight: 700; color: #8B5CF6; background: #faf8ff; border: 1px solid #ede9fe; padding: 0.25rem 0.75rem; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">
-                                        Module ${idx + 1} &bull; ${mod.badge}
-                                    </span>
-                                    <h3 style="font-size: 1.35rem; font-weight: 800; color: #1F2937; margin: 0;">${mod.title}</h3>
+                <div class="cd-notes-slider" style="background: #ffffff; border: 1px solid #ede9fe; border-radius: 16px; box-shadow: 0 4px 20px rgba(109, 40, 217, 0.05); position: relative; display: flex; flex-direction: column;">
+                    <div style="overflow: hidden;">
+                        <div class="cd-notes-slides-track" id="main-notes-track" style="display: flex; transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
+                            ${modules.map((mod, idx) => `
+                                <div class="cd-notes-slide" style="min-width: 100%; box-sizing: border-box; padding: 2rem;">
+                                    <div style="margin-bottom: 1.5rem; border-bottom: 1.5px solid #faf8ff; padding-bottom: 1rem; display: flex; flex-direction: column; align-items: flex-start;">
+                                        <span style="font-size: 0.72rem; font-weight: 700; color: #8B5CF6; background: #faf8ff; border: 1px solid #ede9fe; padding: 0.25rem 0.75rem; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">
+                                            Module ${idx + 1} &bull; ${mod.badge}
+                                        </span>
+                                        <h3 style="font-size: 1.35rem; font-weight: 800; color: #1F2937; margin: 0;">${mod.title}</h3>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+                                        ${mod.notes.map(note => `
+                                            <div class="cd-note-item" style="border-bottom: none; padding: 0; display: flex; align-items: flex-start; gap: 0.85rem;">
+                                                <div class="cd-note-bullet"></div>
+                                                <div class="cd-note-text">${note}</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                    <div class="cd-quiz-section" id="quiz-section-${idx}" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed #ede9fe;"></div>
                                 </div>
-                                <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
-                                    ${mod.notes.map(note => `
-                                        <div class="cd-note-item" style="border-bottom: none; padding: 0; display: flex; align-items: flex-start; gap: 0.85rem;">
-                                            <div class="cd-note-bullet"></div>
-                                            <div class="cd-note-text">${note}</div>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                                <div class="cd-quiz-section" id="quiz-section-${idx}" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed #ede9fe;"></div>
-                            </div>
-                        `).join('')}
+                            `).join('')}
+                        </div>
                     </div>
-                    
-                    <div class="cd-notes-slider-nav" style="padding: 1rem 1.5rem; border-top: 1px solid #ede9fe; display: flex; align-items: center; justify-content: space-between; background: #ffffff; z-index: 5; position: sticky; bottom: 0; border-radius: 0 0 16px 16px;">
+                    <div class="cd-notes-slider-nav" style="padding: 1rem 1.5rem; border-top: 1px solid #ede9fe; display: flex; align-items: center; justify-content: space-between; background: #ffffff; border-radius: 0 0 16px 16px;">
                         <span class="cd-slider-counter" id="main-slider-counter" style="font-size: 0.85rem; color: #6D28D9; font-weight: 700;">1 / ${modules.length}</span>
                         <div class="cd-slider-dots" id="main-slider-dots">
                             ${modules.map((_, idx) => `

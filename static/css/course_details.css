@@ -672,9 +672,10 @@ body.course-details-page .navbar {
 
 .cd-notes-slider {
     position: relative;
-    overflow: hidden;
     border-radius: 14px;
     margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .cd-notes-slides-track {
@@ -699,12 +700,9 @@ body.course-details-page .navbar {
     justify-content: space-between;
     gap: 1rem;
     padding: 1rem 1.5rem;
-    position: sticky;
-    bottom: 0;
     background: #ffffff;
     border-top: 1px solid #ede9fe;
     border-radius: 0 0 16px 16px;
-    z-index: 5;
 }
 
 .cd-slider-arrows {
