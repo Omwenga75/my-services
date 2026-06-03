@@ -1243,7 +1243,7 @@
             if (controls) controls.style.display = 'none';
 
             accordion.innerHTML = `
-                <div class="cd-notes-slider" style="background: #ffffff; border: 1px solid #ede9fe; border-radius: 16px; box-shadow: 0 4px 20px rgba(109, 40, 217, 0.05); overflow: hidden; position: relative;">
+                <div class="cd-notes-slider" style="background: #ffffff; border: 1px solid #ede9fe; border-radius: 16px; box-shadow: 0 4px 20px rgba(109, 40, 217, 0.05); overflow: hidden; position: relative; display: flex; flex-direction: column;">
                     <div class="cd-notes-slides-track" id="main-notes-track" style="display: flex; transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
                         ${modules.map((mod, idx) => `
                             <div class="cd-notes-slide" style="min-width: 100%; box-sizing: border-box; padding: 2rem;">
@@ -1265,22 +1265,22 @@
                             </div>
                         `).join('')}
                     </div>
-                </div>
-                
-                <div class="cd-notes-slider-nav" style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
-                    <span class="cd-slider-counter" id="main-slider-counter" style="font-size: 0.85rem; color: #6D28D9; font-weight: 700;">1 / ${modules.length}</span>
-                    <div class="cd-slider-dots" id="main-slider-dots">
-                        ${modules.map((_, idx) => `
-                            <button class="cd-slider-dot${idx === 0 ? ' active' : ''}" onclick="goToMainSlide(${idx})"></button>
-                        `).join('')}
-                    </div>
-                    <div class="cd-slider-arrows" style="display: flex; gap: 0.5rem;">
-                        <button class="cd-slider-btn" id="main-slider-prev" onclick="prevMainSlide()" disabled>
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <button class="cd-slider-btn" id="main-slider-next" onclick="nextMainSlide()" ${modules.length <= 1 ? 'disabled' : ''}>
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+                    
+                    <div class="cd-notes-slider-nav" style="padding: 1rem 1.5rem; border-top: 1px solid #ede9fe; display: flex; align-items: center; justify-content: space-between; background: #ffffff; z-index: 5; position: sticky; bottom: 0; border-radius: 0 0 16px 16px;">
+                        <span class="cd-slider-counter" id="main-slider-counter" style="font-size: 0.85rem; color: #6D28D9; font-weight: 700;">1 / ${modules.length}</span>
+                        <div class="cd-slider-dots" id="main-slider-dots">
+                            ${modules.map((_, idx) => `
+                                <button class="cd-slider-dot${idx === 0 ? ' active' : ''}" onclick="goToMainSlide(${idx})"></button>
+                            `).join('')}
+                        </div>
+                        <div class="cd-slider-arrows" style="display: flex; gap: 0.5rem;">
+                            <button class="cd-slider-btn" id="main-slider-prev" onclick="prevMainSlide()" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="cd-slider-btn" id="main-slider-next" onclick="nextMainSlide()" ${modules.length <= 1 ? 'disabled' : ''}>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
