@@ -1209,6 +1209,19 @@
                 container.style.transition = 'height 0.3s ease-out';
             }
 
+            // Always show the top part of the notes when moving between slides
+            const section = document.getElementById('cd-notes-section');
+            if (section) {
+                section.scrollTop = 0; // Reset scroll for Focus Mode overlay
+            }
+            if (container) {
+                container.scrollTop = 0; // Reset scroll for internal slider container
+            }
+            // For normal mode, scroll the viewport smoothly to the top of the notes section
+            if (section && !section.classList.contains('fullscreen-focus')) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
             const counter = document.getElementById('main-slider-counter');
             if (counter) {
                 counter.textContent = `${currentMainSlideIndex + 1} / ${totalMainSlides}`;
