@@ -1182,6 +1182,15 @@
             if (!track) return;
             track.style.transform = `translateX(-${currentMainSlideIndex * 100}%)`;
 
+            // Adjust height dynamically to the active slide to reduce whitespace
+            const slides = track.querySelectorAll('.cd-notes-slide');
+            const activeSlide = slides[currentMainSlideIndex];
+            const container = track.parentElement;
+            if (activeSlide && container) {
+                container.style.height = activeSlide.offsetHeight + 'px';
+                container.style.transition = 'height 0.3s ease-out';
+            }
+
             const counter = document.getElementById('main-slider-counter');
             if (counter) {
                 counter.textContent = `${currentMainSlideIndex + 1} / ${totalMainSlides}`;
@@ -1245,7 +1254,7 @@
             accordion.innerHTML = `
                 <div class="cd-notes-slider" style="background: #ffffff; border: 1px solid #ede9fe; border-radius: 16px; box-shadow: 0 4px 20px rgba(109, 40, 217, 0.05); position: relative; display: flex; flex-direction: column;">
                     <div style="overflow: hidden;">
-                        <div class="cd-notes-slides-track" id="main-notes-track" style="display: flex; transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
+                        <div class="cd-notes-slides-track" id="main-notes-track" style="display: flex; align-items: flex-start; transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
                             ${modules.map((mod, idx) => `
                                 <div class="cd-notes-slide" style="min-width: 100%; box-sizing: border-box; padding: 2rem;">
                                     <div style="margin-bottom: 1.5rem; border-bottom: 1.5px solid #faf8ff; padding-bottom: 1rem; display: flex; flex-direction: column; align-items: flex-start;">
