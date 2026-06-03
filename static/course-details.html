@@ -346,9 +346,9 @@
     <div id="toast" class="toast"></div>
 
     <script src="/static/js/main.js?v=3"></script>
-    <script src="/static/js/quiz_data_1.js"></script>
-    <script src="/static/js/quiz_data_2.js"></script>
-    <script src="/static/js/quiz_data_3.js"></script>
+    <script src="/static/js/quiz_data_1.js?v=2"></script>
+    <script src="/static/js/quiz_data_2.js?v=2"></script>
+    <script src="/static/js/quiz_data_3.js?v=2"></script>
     <script>
         let currentCourseId = null;
 
@@ -813,72 +813,90 @@
                         title: "Kotlin Intro, Syntax & Variables",
                         badge: "Foundation",
                         notes: [
-                            "<strong>Kotlin Intro:</strong> Kotlin is a modern, cross-platform, statically typed language developed by JetBrains. It is fully compatible with Java and is Google's preferred language for Android development.",
-                            "<strong>Syntax & Output:</strong> The <code>main()</code> function is the entry point: <code>fun main() { println(\"Hello World\") }</code>. Use <code>println()</code> to print text with a new line, and <code>print()</code> to print without a new line.",
-                            "<strong>Comments:</strong> Use double slashes <code>//</code> for single-line comments and slash-star <code>/* ... */</code> for multi-line comments to explain code or prevent execution.",
-                            "<strong>Variables:</strong> Declared with <code>val</code> (read-only, immutable) or <code>var</code> (mutable). Example: <code>val birthYear = 1995</code> and <code>var age = 30</code>.",
-                            "<strong>Type Inference:</strong> Kotlin automatically infers the data type from the assigned value, but you can also specify it explicitly: <code>val score: Int = 100</code>.",
-                            "<strong>Variable Names:</strong> Names are case-sensitive and should start with a letter or underscore, typically using camelCase (e.g., <code>userName</code>). Can contain numbers but cannot start with them."
+                            "<strong>Kotlin Intro:</strong> Kotlin is a modern, cross-platform, statically typed language developed by JetBrains. It runs on the JVM, is fully compatible with Java, and is Google's preferred language for Android development since 2017.",
+                            "<strong>Entry Point:</strong> Every Kotlin application must have a <code>main</code> function as its starting entry point: <code>fun main() { println(\"Hello World\") }</code>. Parameters <code>args: Array<String></code> are optional since Kotlin 1.3.",
+                            "<strong>Outputting Text:</strong> Use <code>println()</code> to print message and append a new line. Use <code>print()</code> to print a message without moving to a new line (subsequent prints will appear on the same line).",
+                            "<strong>Comments:</strong> Use single-line comments starting with <code>//</code> to document code. Use block/multi-line comments starting with <code>/*</code> and ending with <code>*/</code> to document larger sections or temporarily disable blocks.",
+                            "<strong>Declaring Variables:</strong> Use <code>val</code> to declare read-only (immutable) variables that cannot be reassigned. Use <code>var</code> to declare mutable variables that can be modified later: <code>val pi = 3.14</code> and <code>var score = 0</code>.",
+                            "<strong>Type Inference:</strong> Kotlin can automatically infer variable types from the assigned value: <code>val name = \"Alice\"</code> (inferred as String). Explicitly specify type if initialized later: <code>val age: Int</code>.",
+                            "<strong>Variable Naming:</strong> Names are case-sensitive (<code>myVar</code> is distinct from <code>myvar</code>). Must start with a letter or underscore, and camelCase is the standard convention (e.g., <code>userAccountBalance</code>). Reserved keywords cannot be used.",
+                            "<strong>Variables Reassignment:</strong> Reassigning a <code>val</code> variable generates a compilation error: <code>val x = 10; x = 20 // Val cannot be reassigned</code>. Reassigning a <code>var</code> is fully supported: <code>var y = 10; y = 20</code>."
                         ]
                     },
                     {
                         title: "Kotlin Data Types & Operators",
                         badge: "Data Types",
                         notes: [
-                            "<strong>Data Types:</strong> Basic categories include Numbers, Characters, Booleans, Strings, and Arrays. Types are objects and have built-in helper functions.",
-                            "<strong>Numeric Types:</strong> Divided into Integer types (<code>Byte</code>, <code>Short</code>, <code>Int</code>, <code>Long</code> - suffixed with L) and Floating-point types (<code>Float</code> - suffixed with F, <code>Double</code>).",
-                            "<strong>Characters & Booleans:</strong> Use <code>Char</code> for single characters in single quotes: <code>val grade = 'A'</code>. Use <code>Boolean</code> for true/false values: <code>val isKotlinFun = true</code>.",
-                            "<strong>Type Conversion:</strong> Numeric conversion must be done explicitly using functions like <code>toByte()</code>, <code>toInt()</code>, <code>toFloat()</code>, <code>toDouble()</code>, etc.",
-                            "<strong>Arithmetic Operators:</strong> Standard math operators include addition (<code>+</code>), subtraction (<code>-</code>), multiplication (<code>*</code>), division (<code>/</code>), and modulus (<code>%</code>).",
-                            "<strong>Assignment & Logical:</strong> Operators include standard assignment (<code>=</code>, <code>+=</code>, etc.), comparison (<code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>), and logical (<code>&&</code>, <code>||</code>, <code>!</code>)."
+                            "<strong>Data Types Overview:</strong> All types in Kotlin are treated as objects, which means they have member properties and functions. The basic types are Numbers, Characters, Booleans, Strings, and Arrays.",
+                            "<strong>Integer Types:</strong> Kotlin provides <code>Byte</code> (8-bit, -128 to 127), <code>Short</code> (16-bit, -32768 to 32767), <code>Int</code> (32-bit, default for integers), and <code>Long</code> (64-bit, suffix with L: <code>150L</code>).",
+                            "<strong>Floating-Point Types:</strong> Numbers with decimals are represented using <code>Float</code> (32-bit single-precision, suffixed with F: <code>5.75F</code>) or <code>Double</code> (64-bit double-precision, default for decimals: <code>19.99</code>).",
+                            "<strong>Explicit Type Conversion:</strong> Implicit widening conversions (e.g., Int to Long) are NOT supported in Kotlin. You must explicitly convert using: <code>toInt()</code>, <code>toLong()</code>, <code>toFloat()</code>, <code>toDouble()</code>, etc.",
+                            "<strong>Booleans and Characters:</strong> <code>Boolean</code> holds <code>true</code> or <code>false</code>. <code>Char</code> holds a single character in single quotes (e.g., <code>'A'</code>). Unlike Java, Char cannot be directly compared to numeric values.",
+                            "<strong>Arithmetic Operators:</strong> Performs standard math: addition (<code>+</code>), subtraction (<code>-</code>), multiplication (<code>*</code>), division (<code>/</code>), modulus (<code>%</code> - returns division remainder), increment (<code>++</code>), and decrement (<code>--</code>).",
+                            "<strong>Assignment & Compound Operators:</strong> Assign values using <code>=</code>. Compound operators combine math and assignment: <code>+=</code> (adds and assigns), <code>-=</code>, <code>*=</code>, <code>/=</code>, and <code>%=</code>.",
+                            "<strong>Comparison Operators:</strong> Used in boolean testing and conditional execution: equal to (<code>==</code>), not equal to (<code>!=</code>), greater than (<code>&gt;</code>), less than (<code>&lt;</code>), greater/equal (<code>&gt;=</code>), and less/equal (<code>&lt;=</code>).",
+                            "<strong>Logical Operators:</strong> Combine conditions: Logical AND (<code>&&</code> - true if both are true), Logical OR (<code>||</code> - true if either is true), and Logical NOT (<code>!</code> - reverses boolean state: <code>!true == false</code>)."
                         ]
                     },
                     {
                         title: "Kotlin Strings & Control Flow",
                         badge: "Control Flow",
                         notes: [
-                            "<strong>Strings:</strong> A sequence of characters in double quotes: <code>var greeting = \"Hello\"</code>. Raw strings are enclosed in triple quotes <code>\"\"\"</code>.",
-                            "<strong>String Operations:</strong> Access characters by index: <code>greeting[0]</code>. Find length with <code>greeting.length</code>, and change case with <code>uppercase()</code> and <code>lowercase()</code>.",
-                            "<strong>String Templates:</strong> Embed variables directly inside strings using the <code>$</code> symbol: <code>val message = \"Name: $name\"</code>, or expressions using <code>${}</code>.",
-                            "<strong>If...Else Expression:</strong> In Kotlin, <code>if</code> is an expression that returns a value: <code>val max = if (a > b) a else b</code> (replacing the ternary operator).",
-                            "<strong>When Expression:</strong> Replaces switch-case. Evaluates an expression against multiple branches: <code>when(x) { 1 -> print(\"1\"); 2 -> print(\"2\"); else -> print(\"other\") }</code>.",
-                            "<strong>Ranges with When:</strong> Check if a value lies within a range using the <code>in</code> keyword: <code>when(x) { in 1..10 -> print(\"1 to 10\"); !in 10..20 -> print(\"not in range\") }</code>."
+                            "<strong>Strings creation:</strong> Define standard strings in double quotes: <code>val s = \"Hello\"</code>. Multi-line or formatted strings are created using raw strings enclosed in triple double quotes: <code>\"\"\"line 1\\nline 2\"\"\"</code>.",
+                            "<strong>String Properties & Operations:</strong> Access length using <code>s.length</code>. Find first character using index: <code>s[0]</code>. Change casing using helper functions <code>s.uppercase()</code> and <code>s.lowercase()</code>.",
+                            "<strong>String Templates:</strong> Embed variables directly inside strings using the <code>$</code> prefix: <code>\"Hello, $name\"</code>. Evaluate expressions within brackets: <code>\"Length is ${name.length}\"</code>.",
+                            "<strong>If...Else Expression:</strong> In Kotlin, <code>if</code> is an expression that returns a value: <code>val result = if (a > b) a else b</code>. The ternary operator <code>? :</code> is not used because of this.",
+                            "<strong>If...Else Blocks:</strong> When a branch has multiple statements, the last line evaluates as the return value: <code>val max = if (a > b) { println(\"A is max\"); a } else { b }</code>.",
+                            "<strong>When Expression:</strong> Replaces switch-case. Matches an expression sequentially: <code>when (x) { 1 -> println(\"one\"); 2 -> println(\"two\"); else -> println(\"other\") }</code>.",
+                            "<strong>Multiple Match & Ranges in When:</strong> Group multiple options separated by commas: <code>0, 1 -> println(\"binary\")</code>. Use <code>in</code> to check ranges: <code>in 10..20 -> println(\"in range\")</code>.",
+                            "<strong>When Without Arguments:</strong> Can act as an alternative to long if-else chains: <code>when { x > 0 -> print(\"positive\"); x < 0 -> print(\"negative\"); else -> print(\"zero\") }</code>."
                         ]
                     },
                     {
                         title: "Kotlin Loops & Arrays",
                         badge: "Loops",
                         notes: [
-                            "<strong>While & Do...While:</strong> <code>while (condition) { ... }</code> runs as long as the condition is true. <code>do { ... } while (condition)</code> guarantees at least one execution.",
-                            "<strong>For Loop & Ranges:</strong> Iterates through ranges, arrays, or collections: <code>for (i in 1..5) { println(i) }</code>. Ranges are inclusive of both start and end.",
-                            "<strong>Range Modifiers:</strong> Use <code>step</code> to change step size: <code>1..10 step 2</code>. Use <code>downTo</code> for reverse loops: <code>10 downTo 1</code>. Use <code>until</code> to exclude the end element: <code>1 until 10</code>.",
-                            "<strong>Break & Continue:</strong> Use <code>break</code> to immediately terminate a loop, and <code>continue</code> to skip the current iteration and proceed to the next.",
-                            "<strong>Arrays:</strong> Create arrays using <code>arrayOf()</code>: <code>val cars = arrayOf(\"Volvo\", \"BMW\", \"Ford\")</code>. Access elements with <code>cars[index]</code>.",
-                            "<strong>Array Size & Check:</strong> Get array size using <code>cars.size</code>. Check if an element exists using the <code>in</code> keyword: <code>if (\"Volvo\" in cars) { ... }</code>."
+                            "<strong>While & Do...While Loops:</strong> <code>while (cond) { ... }</code> runs repeatedly as long as the condition evaluates to true. <code>do { ... } while (cond)</code> always runs at least once before checking condition.",
+                            "<strong>For Loops:</strong> Iterates through ranges, arrays, or collections: <code>for (item in items) { println(item) }</code>. The loop variable is implicitly read-only (immutable).",
+                            "<strong>Iterating Ranges:</strong> Create inclusive ranges using <code>..</code>: <code>for (i in 1..5)</code> loops 1, 2, 3, 4, 5. Use <code>until</code> to exclude the end value: <code>for (i in 1 until 5)</code> loops 1, 2, 3, 4.",
+                            "<strong>Step & Reverse Ranges:</strong> Use <code>step</code> to configure custom increments: <code>for (i in 1..10 step 2)</code>. Use <code>downTo</code> to iterate backwards in reverse order: <code>for (i in 10 downTo 1)</code>.",
+                            "<strong>Break & Continue:</strong> Use <code>break</code> to immediately exit the current loop. Use <code>continue</code> to skip execution of remaining statements in the block and proceed to next iteration.",
+                            "<strong>Creating Arrays:</strong> Use the <code>arrayOf()</code> helper function to instantiate arrays: <code>val cars = arrayOf(\"Volvo\", \"BMW\", \"Ford\")</code>. Types can be inferred or explicitly specified.",
+                            "<strong>Accessing and Modifying Arrays:</strong> Read elements using index: <code>val car = cars[0]</code>. Reassign values: <code>cars[0] = \"Tesla\"</code>. Check array size using the <code>size</code> property.",
+                            "<strong>Array Membership & Loop:</strong> Check if an item exists using <code>in</code> or <code>!in</code>: <code>if (\"BMW\" in cars)</code>. Loop through elements directly: <code>for (car in cars) { println(car) }</code>."
                         ]
                     },
                     {
                         title: "Kotlin Functions & Null Safety",
                         badge: "Functions",
                         notes: [
-                            "<strong>Declaring Functions:</strong> Functions are declared using the <code>fun</code> keyword: <code>fun myFunction(name: String): Unit { println(name) }</code>.",
-                            "<strong>Parameters & Arguments:</strong> Parameters must specify explicit types: <code>fun add(x: Int, y: Int): Int { return x + y }</code>.",
-                            "<strong>Single-Expression Functions:</strong> If a function returns a single expression, omit braces and specify the body after <code>=</code>: <code>fun double(x: Int) = x * 2</code>.",
-                            "<strong>Default Arguments:</strong> You can assign default values to parameters: <code>fun greet(msg: String = \"Hello\")</code>. If omitted in call, the default is used.",
-                            "<strong>Null Safety Basics:</strong> Kotlin variables cannot hold null values by default. Declare a nullable type using a question mark: <code>var name: String? = null</code>.",
-                            "<strong>Handling Nulls:</strong> Use safe call <code>name?.length</code> to return null if the object is null. Use Elvis operator <code>name ?: \"Guest\"</code> to provide a default fallback."
+                            "<strong>Declaring Functions:</strong> Functions are declared using the <code>fun</code> keyword, specifying parameters with explicit types, and an optional return type: <code>fun add(x: Int, y: Int): Int</code>.",
+                            "<strong>Return Types:</strong> If a function does not return any value, its return type is <code>Unit</code> (which is optional to declare). Return values explicitly using the <code>return</code> keyword.",
+                            "<strong>Default Parameter Arguments:</strong> Assign default values to parameters: <code>fun greet(name: String, msg: String = \"Hello\")</code>. If omitted in call, the default is used automatically.",
+                            "<strong>Named Arguments:</strong> Specify parameter names when calling functions to improve clarity and change the argument order: <code>greet(msg = \"Welcome\", name = \"John\")</code>.",
+                            "<strong>Single-Expression Functions:</strong> If a function body returns a single expression, omit curly braces and specify the body after <code>=</code>: <code>fun double(x: Int): Int = x * 2</code>.",
+                            "<strong>Null Safety Principle:</strong> Kotlin prevents NullPointerExceptions by separating nullable from non-nullable types. Variables cannot hold null values by default: <code>var s: String = null // Error</code>.",
+                            "<strong>Nullable Types:</strong> Mark a variable as nullable by adding a question mark <code>?</code> to its data type declaration: <code>var nullableString: String? = null</code>.",
+                            "<strong>Safe Call Operator:</strong> Access properties on nullable objects using <code>?.</code>. It returns the value if the object is non-null, or returns null instead of crashing: <code>nullableString?.length</code>.",
+                            "<strong>Elvis Operator:</strong> Use the Elvis operator <code>?:</code> to provide a default fallback value if the expression on the left is null: <code>val len = nullableString?.length ?: 0</code>.",
+                            "<strong>Non-Null Assertion:</strong> Use the double exclamation <code>!!</code> operator to convert a nullable value to a non-null type. Throws a NullPointerException if value is null (use with extreme caution)."
                         ]
                     },
                     {
                         title: "Kotlin OOP (Classes & Objects)",
                         badge: "OOP",
                         notes: [
-                            "<strong>Classes & Objects:</strong> Define a class blueprint using the <code>class</code> keyword: <code>class Car { var brand = \"\" }</code>. Instantiate objects: <code>val myCar = Car()</code>.",
-                            "<strong>Constructors:</strong> Define properties directly in the class header (primary constructor): <code>class Person(val firstName: String, var age: Int)</code>.",
-                            "<strong>Class Methods:</strong> Define behaviors inside the class: <code>class Dog { fun bark() { println(\"Woof!\") } }</code>. Call using dot notation: <code>myDog.bark()</code>.",
-                            "<strong>Inheritance:</strong> Classes are final by default. To make a class inheritable, mark it with the <code>open</code> keyword: <code>open class ParentClass</code>.",
-                            "<strong>Inheritance Syntax:</strong> Subclasses inherit using a colon: <code>class ChildClass : ParentClass()</code>. Overridden methods must be marked with the <code>override</code> keyword.",
-                            "<strong>Interfaces:</strong> Define abstract contracts with the <code>interface</code> keyword. Interfaces can contain both abstract declarations and method implementations."
+                            "<strong>Classes & Objects:</strong> Define a blueprint using the <code>class</code> keyword: <code>class Car { var brand = \"\" }</code>. Create instances without the <code>new</code> keyword: <code>val myCar = Car()</code>.",
+                            "<strong>Properties & Dot Notation:</strong> Access class attributes and functions using dot syntax: <code>myCar.brand = \"Tesla\"</code>. Variables in class represent fields, auto-generating getters and setters.",
+                            "<strong>Primary Constructors:</strong> Declare class properties directly in the header constructor: <code>class Person(val name: String, var age: Int)</code>. Properties are auto-initialized upon instantiation.",
+                            "<strong>Initializer Block:</strong> The <code>init</code> block runs immediately when an object is created. Use it for validation or initialization logic since primary constructors cannot contain code.",
+                            "<strong>Class Methods:</strong> Functions declared inside a class block define object behavior: <code>class Dog(val name: String) { fun bark() { println(\"$name says Woof!\") } }</code>.",
+                            "<strong>Inheritance:</strong> Classes are final (non-inheritable) by default in Kotlin. To permit inheritance, mark the parent class with the <code>open</code> keyword: <code>open class Parent</code>.",
+                            "<strong>Inheritance Syntax:</strong> Subclasses inherit using a colon <code>:</code> followed by parent class constructor call: <code>class Child(name: String) : Parent(name)</code>.",
+                            "<strong>Overriding Methods:</strong> Functions must be explicitly marked as <code>open</code> in the parent class to be overridden. Subclasses must use the <code>override</code> keyword to modify behaviors.",
+                            "<strong>Abstract Classes:</strong> Declared with the <code>abstract</code> keyword, abstract classes cannot be instantiated. Subclasses must implement all abstract functions and properties.",
+                            "<strong>Interfaces:</strong> Define contracts using the <code>interface</code> keyword. Interfaces can contain abstract methods as well as concrete method implementations, but cannot store state.",
+                            "<strong>Data Classes:</strong> Specially used for classes holding data. Mark with <code>data</code>: <code>data class User(val id: Int, val email: String)</code>. Automatically generates equals, toString, and copy methods."
                         ]
                     }
                 ]
