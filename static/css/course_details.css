@@ -666,6 +666,268 @@ body.course-details-page .navbar {
     font-weight: 700;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   Notes Slider Carousel
+   ══════════════════════════════════════════════════════════════ */
+
+.cd-notes-slider {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    margin-bottom: 1.25rem;
+}
+
+.cd-notes-slides-track {
+    display: flex;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cd-notes-slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 1.25rem 0.5rem;
+}
+
+.cd-notes-slide .cd-note-item {
+    border-bottom: none;
+    padding: 0;
+}
+
+.cd-notes-slider-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 0.25rem;
+}
+
+.cd-slider-arrows {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cd-slider-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.cd-slider-btn:hover {
+    background: #6D28D9;
+    color: #fff;
+    border-color: #6D28D9;
+}
+
+.cd-slider-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    background: #f8fafc;
+    color: #cbd5e1;
+    border-color: #e2e8f0;
+}
+
+.cd-slider-dots {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.cd-slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    padding: 0;
+}
+
+.cd-slider-dot.active {
+    background: #6D28D9;
+    width: 22px;
+    border-radius: 100px;
+}
+
+.cd-slider-counter {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Practice Quiz Cards
+   ══════════════════════════════════════════════════════════════ */
+
+.cd-quiz-section {
+    margin-top: 0.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed #ede9fe;
+}
+
+.cd-quiz-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #6D28D9;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+}
+
+.cd-quiz-section-title i {
+    font-size: 0.9rem;
+}
+
+.cd-quiz-card {
+    background: #faf8ff;
+    border: 1px solid #ede9fe;
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.cd-quiz-card:last-child {
+    margin-bottom: 0;
+}
+
+.cd-quiz-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #8B5CF6;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.cd-quiz-question {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1F2937;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.cd-quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cd-quiz-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1rem;
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.88rem;
+    color: #374151;
+    text-align: left;
+    width: 100%;
+    line-height: 1.5;
+}
+
+.cd-quiz-option:hover:not(.disabled) {
+    border-color: #8B5CF6;
+    background: #f5f3ff;
+}
+
+.cd-quiz-option .opt-letter {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.cd-quiz-option.correct {
+    border-color: #10B981;
+    background: #ecfdf5;
+}
+
+.cd-quiz-option.correct .opt-letter {
+    background: #10B981;
+    color: #fff;
+}
+
+.cd-quiz-option.incorrect {
+    border-color: #EF4444;
+    background: #fef2f2;
+}
+
+.cd-quiz-option.incorrect .opt-letter {
+    background: #EF4444;
+    color: #fff;
+}
+
+.cd-quiz-option.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.cd-quiz-option.correct.disabled,
+.cd-quiz-option.incorrect.disabled {
+    opacity: 1;
+}
+
+.cd-quiz-feedback {
+    margin-top: 0.85rem;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #1F2937;
+    display: none;
+    animation: fadeInUpLocked 0.3s ease;
+}
+
+.cd-quiz-feedback.show {
+    display: block;
+}
+
+.cd-quiz-feedback.correct-fb {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    border: 1px solid #a7f3d0;
+}
+
+.cd-quiz-feedback.incorrect-fb {
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    border: 1px solid #fecaca;
+}
+
+.cd-quiz-feedback strong {
+    font-weight: 700;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .cd-notes-header {
@@ -684,11 +946,24 @@ body.course-details-page .navbar {
     .cd-notes-title-group h2 {
         font-size: 1.4rem;
     }
+    .cd-slider-dots {
+        gap: 4px;
+    }
+    .cd-slider-dot {
+        width: 6px;
+        height: 6px;
+    }
+    .cd-slider-dot.active {
+        width: 16px;
+    }
+    .cd-quiz-card {
+        padding: 1rem 1.15rem;
+    }
 }
 
 /* Print styles */
 @media print {
-    .cd-notes-controls {
+    .cd-notes-controls, .cd-notes-slider-nav, .cd-quiz-section {
         display: none;
     }
     .cd-note-module-body {
@@ -698,6 +973,13 @@ body.course-details-page .navbar {
         break-inside: avoid;
         border: 1px solid #ccc;
         box-shadow: none;
+    }
+    .cd-notes-slides-track {
+        flex-wrap: wrap;
+    }
+    .cd-notes-slide {
+        min-width: auto;
+        width: 100%;
     }
 }
 

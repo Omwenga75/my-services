@@ -346,6 +346,9 @@
     <div id="toast" class="toast"></div>
 
     <script src="/static/js/main.js?v=3"></script>
+    <script src="/static/js/quiz_data_1.js"></script>
+    <script src="/static/js/quiz_data_2.js"></script>
+    <script src="/static/js/quiz_data_3.js"></script>
     <script>
         let currentCourseId = null;
 
@@ -1034,6 +1037,151 @@
             }
         };
 
+        const moduleSlideStates = {};
+
+        function updateSlider(moduleIdx) {
+            const track = document.getElementById(`slider-track-${moduleIdx}`);
+            const index = moduleSlideStates[moduleIdx];
+            if (!track) return;
+            track.style.transform = `translateX(-${index * 100}%)`;
+
+            const total = track.children.length;
+            const counter = document.getElementById(`slider-counter-${moduleIdx}`);
+            if (counter) {
+                counter.textContent = `${index + 1} / ${total}`;
+            }
+
+            const dotsContainer = document.getElementById(`slider-dots-${moduleIdx}`);
+            if (dotsContainer) {
+                Array.from(dotsContainer.children).forEach((dot, dotIdx) => {
+                    if (dotIdx === index) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+
+            const prevBtn = document.getElementById(`slider-prev-${moduleIdx}`);
+            const nextBtn = document.getElementById(`slider-next-${moduleIdx}`);
+            if (prevBtn) prevBtn.disabled = index === 0;
+            if (nextBtn) nextBtn.disabled = index === total - 1;
+        }
+
+        function prevSlide(moduleIdx) {
+            if (moduleSlideStates[moduleIdx] > 0) {
+                moduleSlideStates[moduleIdx]--;
+                updateSlider(moduleIdx);
+            }
+        }
+
+        function nextSlide(moduleIdx) {
+            const track = document.getElementById(`slider-track-${moduleIdx}`);
+            if (track && moduleSlideStates[moduleIdx] < track.children.length - 1) {
+                moduleSlideStates[moduleIdx]++;
+                updateSlider(moduleIdx);
+            }
+        }
+
+        function goToSlide(moduleIdx, slideIdx) {
+            moduleSlideStates[moduleIdx] = slideIdx;
+            updateSlider(moduleIdx);
+        }
+
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function formatQuestionText(text) {
+            let escaped = escapeHtml(text);
+            return escaped.replace(/\n/g, '<br>').replace(/  /g, '&nbsp;&nbsp;');
+        }
+
+        function renderModuleQuiz(courseTitle, moduleTitle, moduleIdx) {
+            const quizData = { ...(window.quizData1 || {}), ...(window.quizData2 || {}), ...(window.quizData3 || {}) };
+            const courseQuizzes = quizData[courseTitle];
+            const questions = courseQuizzes ? courseQuizzes[moduleTitle] : null;
+            const container = document.getElementById(`quiz-section-${moduleIdx}`);
+            if (!container) return;
+
+            if (!questions || questions.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+
+            if (!window.quizExplanations) {
+                window.quizExplanations = {};
+            }
+            if (!window.quizExplanations[moduleIdx]) {
+                window.quizExplanations[moduleIdx] = {};
+            }
+
+            container.innerHTML = `
+                <div class="cd-quiz-section-title">
+                    <i class="fas fa-tasks"></i> Practice Quiz
+                </div>
+                ${questions.map((q, qIdx) => {
+                    window.quizExplanations[moduleIdx][qIdx] = q.explanation;
+                    return `
+                        <div class="cd-quiz-card" id="quiz-card-${moduleIdx}-${qIdx}">
+                            <div class="cd-quiz-label">Question ${qIdx + 1} of ${questions.length}</div>
+                            <div class="cd-quiz-question">${formatQuestionText(q.question)}</div>
+                            <div class="cd-quiz-options">
+                                ${q.options.map((opt, optIdx) => `
+                                    <button class="cd-quiz-option" onclick="handleQuizAnswer(this, ${moduleIdx}, ${qIdx}, ${optIdx}, ${q.correct})">
+                                        <span class="opt-letter">${String.fromCharCode(65 + optIdx)}</span>
+                                        <span>${escapeHtml(opt)}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <div class="cd-quiz-feedback" id="feedback-${moduleIdx}-${qIdx}"></div>
+                        </div>
+                    `;
+                }).join('')}
+            `;
+        }
+
+        function handleQuizAnswer(btn, moduleIdx, qIdx, selectedIdx, correctIdx) {
+            const card = document.getElementById(`quiz-card-${moduleIdx}-${qIdx}`);
+            if (!card) return;
+
+            const options = card.querySelectorAll('.cd-quiz-option');
+            options.forEach(opt => {
+                opt.classList.add('disabled');
+                opt.disabled = true;
+            });
+
+            const feedback = document.getElementById(`feedback-${moduleIdx}-${qIdx}`);
+            const isCorrect = selectedIdx === correctIdx;
+            const explanation = window.quizExplanations[moduleIdx]?.[qIdx] || '';
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedback.className = 'cd-quiz-feedback correct-fb show';
+                feedback.innerHTML = `<strong><i class="fas fa-check-circle"></i> Correct!</strong> ${escapeHtml(explanation)}`;
+            } else {
+                btn.classList.add('incorrect');
+                if (options[correctIdx]) {
+                    options[correctIdx].classList.add('correct');
+                }
+                feedback.className = 'cd-quiz-feedback incorrect-fb show';
+                feedback.innerHTML = `<strong><i class="fas fa-times-circle"></i> Incorrect.</strong> ${escapeHtml(explanation)}`;
+            }
+        }
+
+        function chunkArray(array, size) {
+            const chunked = [];
+            for (let i = 0; i < array.length; i += size) {
+                chunked.push(array.slice(i, i + size));
+            }
+            return chunked;
+        }
+
         function renderCourseNotes(courseTitle) {
             const notesData = courseNotesMap[courseTitle];
             const section = document.getElementById('cd-notes-section');
@@ -1050,6 +1198,11 @@
             accordion.innerHTML = '';
             modules.forEach((mod, idx) => {
                 const isFirst = idx === 0;
+                moduleSlideStates[idx] = 0;
+                
+                // Chunk notes into pages of 3
+                const notePages = chunkArray(mod.notes, 3);
+                
                 const moduleEl = document.createElement('div');
                 moduleEl.className = 'cd-note-module' + (isFirst ? ' active' : '');
                 moduleEl.innerHTML = `
@@ -1061,16 +1214,42 @@
                     </div>
                     <div class="cd-note-module-body">
                         <div class="cd-note-module-content">
-                            ${mod.notes.map(note => `
-                                <div class="cd-note-item">
-                                    <div class="cd-note-bullet"></div>
-                                    <div class="cd-note-text">${note}</div>
+                            <div class="cd-notes-slider">
+                                <div class="cd-notes-slides-track" id="slider-track-${idx}">
+                                    ${notePages.map(pageNotes => `
+                                        <div class="cd-notes-slide" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                            ${pageNotes.map(note => `
+                                                <div class="cd-note-item" style="border-bottom: none; padding: 0;">
+                                                    <div class="cd-note-bullet"></div>
+                                                    <div class="cd-note-text">${note}</div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    `).join('')}
                                 </div>
-                            `).join('')}
+                            </div>
+                            <div class="cd-notes-slider-nav">
+                                <span class="cd-slider-counter" id="slider-counter-${idx}">1 / ${notePages.length}</span>
+                                <div class="cd-slider-dots" id="slider-dots-${idx}">
+                                    ${notePages.map((_, noteIdx) => `
+                                        <button class="cd-slider-dot${noteIdx === 0 ? ' active' : ''}" onclick="goToSlide(${idx}, ${noteIdx})"></button>
+                                    `).join('')}
+                                </div>
+                                <div class="cd-slider-arrows">
+                                    <button class="cd-slider-btn" id="slider-prev-${idx}" onclick="prevSlide(${idx})" disabled>
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <button class="cd-slider-btn" id="slider-next-${idx}" onclick="nextSlide(${idx})" ${notePages.length <= 1 ? 'disabled' : ''}>
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="cd-quiz-section" id="quiz-section-${idx}"></div>
                         </div>
                     </div>
                 `;
                 accordion.appendChild(moduleEl);
+                renderModuleQuiz(courseTitle, mod.title, idx);
             });
 
             // Ensure container wrapper is unlocked
