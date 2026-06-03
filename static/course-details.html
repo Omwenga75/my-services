@@ -1258,9 +1258,6 @@
                             ${modules.map((mod, idx) => `
                                 <div class="cd-notes-slide" style="min-width: 100%; box-sizing: border-box; padding: 2rem;">
                                     <div style="margin-bottom: 1.5rem; border-bottom: 1.5px solid #faf8ff; padding-bottom: 1rem; display: flex; flex-direction: column; align-items: flex-start;">
-                                        <span style="font-size: 0.72rem; font-weight: 700; color: #8B5CF6; background: #faf8ff; border: 1px solid #ede9fe; padding: 0.25rem 0.75rem; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">
-                                            Module ${idx + 1} &bull; ${mod.badge}
-                                        </span>
                                         <h3 style="font-size: 1.35rem; font-weight: 800; color: #1F2937; margin: 0;">${mod.title}</h3>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
@@ -1341,7 +1338,6 @@
                     <div class="cd-note-module-header" style="cursor: not-allowed;">
                         <div class="cd-note-module-num">${idx + 1}</div>
                         <div class="cd-note-module-title">${mod.title}</div>
-                        <span class="cd-note-module-badge">${mod.badge}</span>
                         <i class="fas fa-lock cd-note-module-chevron" style="color: #cbd5e1; font-size: 0.9rem;"></i>
                     </div>
                 `;
