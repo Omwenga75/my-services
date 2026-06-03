@@ -1231,10 +1231,21 @@
             if (nextBtn) nextBtn.disabled = currentMainSlideIndex === totalMainSlides - 1;
         }
 
+        function scrollToNotesTop() {
+            const notesSection = document.getElementById('cd-notes-section');
+            if (notesSection) {
+                const rect = notesSection.getBoundingClientRect();
+                if (rect.top < 60) {
+                    notesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        }
+
         function prevMainSlide() {
             if (currentMainSlideIndex > 0) {
                 currentMainSlideIndex--;
                 updateMainSlider();
+                scrollToNotesTop();
             }
         }
 
@@ -1242,6 +1253,7 @@
             if (currentMainSlideIndex < totalMainSlides - 1) {
                 currentMainSlideIndex++;
                 updateMainSlider();
+                scrollToNotesTop();
             }
         }
 
