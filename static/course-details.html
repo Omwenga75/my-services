@@ -1174,12 +1174,53 @@
             }
         }
 
-        function chunkArray(array, size) {
-            const chunked = [];
-            for (let i = 0; i < array.length; i += size) {
-                chunked.push(array.slice(i, i + size));
+        let currentMainSlideIndex = 0;
+        let totalMainSlides = 0;
+
+        function updateMainSlider() {
+            const track = document.getElementById('main-notes-track');
+            if (!track) return;
+            track.style.transform = `translateX(-${currentMainSlideIndex * 100}%)`;
+
+            const counter = document.getElementById('main-slider-counter');
+            if (counter) {
+                counter.textContent = `${currentMainSlideIndex + 1} / ${totalMainSlides}`;
             }
-            return chunked;
+
+            const dotsContainer = document.getElementById('main-slider-dots');
+            if (dotsContainer) {
+                Array.from(dotsContainer.children).forEach((dot, dotIdx) => {
+                    if (dotIdx === currentMainSlideIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+
+            const prevBtn = document.getElementById('main-slider-prev');
+            const nextBtn = document.getElementById('main-slider-next');
+            if (prevBtn) prevBtn.disabled = currentMainSlideIndex === 0;
+            if (nextBtn) nextBtn.disabled = currentMainSlideIndex === totalMainSlides - 1;
+        }
+
+        function prevMainSlide() {
+            if (currentMainSlideIndex > 0) {
+                currentMainSlideIndex--;
+                updateMainSlider();
+            }
+        }
+
+        function nextMainSlide() {
+            if (currentMainSlideIndex < totalMainSlides - 1) {
+                currentMainSlideIndex++;
+                updateMainSlider();
+            }
+        }
+
+        function goToMainSlide(slideIdx) {
+            currentMainSlideIndex = slideIdx;
+            updateMainSlider();
         }
 
         function renderCourseNotes(courseTitle) {
@@ -1189,70 +1230,65 @@
             if (!notesData || !section || !accordion) return;
 
             const modules = notesData.modules;
+            totalMainSlides = modules.length;
+            currentMainSlideIndex = 0;
+
             const totalNotes = modules.reduce((sum, m) => sum + m.notes.length, 0);
             const readTime = Math.max(5, Math.round(totalNotes * 0.4));
 
             document.getElementById('cd-notes-module-count').textContent = modules.length + ' modules';
             document.getElementById('cd-notes-read-time').textContent = '~' + readTime + ' min read';
 
-            accordion.innerHTML = '';
-            modules.forEach((mod, idx) => {
-                const isFirst = idx === 0;
-                moduleSlideStates[idx] = 0;
-                
-                // Chunk notes into pages of 3
-                const notePages = chunkArray(mod.notes, 3);
-                
-                const moduleEl = document.createElement('div');
-                moduleEl.className = 'cd-note-module' + (isFirst ? ' active' : '');
-                moduleEl.innerHTML = `
-                    <div class="cd-note-module-header" onclick="toggleNoteModule(this)">
-                        <div class="cd-note-module-num">${idx + 1}</div>
-                        <div class="cd-note-module-title">${mod.title}</div>
-                        <span class="cd-note-module-badge">${mod.badge}</span>
-                        <i class="fas fa-chevron-down cd-note-module-chevron"></i>
-                    </div>
-                    <div class="cd-note-module-body">
-                        <div class="cd-note-module-content">
-                            <div class="cd-notes-slider">
-                                <div class="cd-notes-slides-track" id="slider-track-${idx}">
-                                    ${notePages.map(pageNotes => `
-                                        <div class="cd-notes-slide" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                                            ${pageNotes.map(note => `
-                                                <div class="cd-note-item" style="border-bottom: none; padding: 0;">
-                                                    <div class="cd-note-bullet"></div>
-                                                    <div class="cd-note-text">${note}</div>
-                                                </div>
-                                            `).join('')}
+            const controls = section.querySelector('.cd-notes-controls');
+            if (controls) controls.style.display = 'none';
+
+            accordion.innerHTML = `
+                <div class="cd-notes-slider" style="background: #ffffff; border: 1px solid #ede9fe; border-radius: 16px; box-shadow: 0 4px 20px rgba(109, 40, 217, 0.05); overflow: hidden; position: relative;">
+                    <div class="cd-notes-slides-track" id="main-notes-track" style="display: flex; transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
+                        ${modules.map((mod, idx) => `
+                            <div class="cd-notes-slide" style="min-width: 100%; box-sizing: border-box; padding: 2rem;">
+                                <div style="margin-bottom: 1.5rem; border-bottom: 1.5px solid #faf8ff; padding-bottom: 1rem; display: flex; flex-direction: column; align-items: flex-start;">
+                                    <span style="font-size: 0.72rem; font-weight: 700; color: #8B5CF6; background: #faf8ff; border: 1px solid #ede9fe; padding: 0.25rem 0.75rem; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">
+                                        Module ${idx + 1} &bull; ${mod.badge}
+                                    </span>
+                                    <h3 style="font-size: 1.35rem; font-weight: 800; color: #1F2937; margin: 0;">${mod.title}</h3>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+                                    ${mod.notes.map(note => `
+                                        <div class="cd-note-item" style="border-bottom: none; padding: 0; display: flex; align-items: flex-start; gap: 0.85rem;">
+                                            <div class="cd-note-bullet"></div>
+                                            <div class="cd-note-text">${note}</div>
                                         </div>
                                     `).join('')}
                                 </div>
+                                <div class="cd-quiz-section" id="quiz-section-${idx}" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed #ede9fe;"></div>
                             </div>
-                            <div class="cd-notes-slider-nav">
-                                <span class="cd-slider-counter" id="slider-counter-${idx}">1 / ${notePages.length}</span>
-                                <div class="cd-slider-dots" id="slider-dots-${idx}">
-                                    ${notePages.map((_, noteIdx) => `
-                                        <button class="cd-slider-dot${noteIdx === 0 ? ' active' : ''}" onclick="goToSlide(${idx}, ${noteIdx})"></button>
-                                    `).join('')}
-                                </div>
-                                <div class="cd-slider-arrows">
-                                    <button class="cd-slider-btn" id="slider-prev-${idx}" onclick="prevSlide(${idx})" disabled>
-                                        <i class="fas fa-chevron-left"></i>
-                                    </button>
-                                    <button class="cd-slider-btn" id="slider-next-${idx}" onclick="nextSlide(${idx})" ${notePages.length <= 1 ? 'disabled' : ''}>
-                                        <i class="fas fa-chevron-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="cd-quiz-section" id="quiz-section-${idx}"></div>
-                        </div>
+                        `).join('')}
                     </div>
-                `;
-                accordion.appendChild(moduleEl);
+                </div>
+                
+                <div class="cd-notes-slider-nav" style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+                    <span class="cd-slider-counter" id="main-slider-counter" style="font-size: 0.85rem; color: #6D28D9; font-weight: 700;">1 / ${modules.length}</span>
+                    <div class="cd-slider-dots" id="main-slider-dots">
+                        ${modules.map((_, idx) => `
+                            <button class="cd-slider-dot${idx === 0 ? ' active' : ''}" onclick="goToMainSlide(${idx})"></button>
+                        `).join('')}
+                    </div>
+                    <div class="cd-slider-arrows" style="display: flex; gap: 0.5rem;">
+                        <button class="cd-slider-btn" id="main-slider-prev" onclick="prevMainSlide()" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="cd-slider-btn" id="main-slider-next" onclick="nextMainSlide()" ${modules.length <= 1 ? 'disabled' : ''}>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            modules.forEach((mod, idx) => {
                 renderModuleQuiz(courseTitle, mod.title, idx);
             });
 
-            // Ensure container wrapper is unlocked
             let wrapper = document.getElementById('cd-notes-wrapper');
             if (!wrapper) {
                 wrapper = document.createElement('div');
@@ -1267,8 +1303,8 @@
             }
 
             section.style.display = '';
+            updateMainSlider();
 
-            // Animate progress bar
             setTimeout(() => {
                 document.getElementById('cd-notes-progress-bar').style.width = '100%';
             }, 300);

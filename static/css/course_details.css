@@ -708,33 +708,35 @@ body.course-details-page .navbar {
 }
 
 .cd-slider-btn {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    border: 1px solid #e2e8f0;
-    background: #fff;
-    color: #64748b;
+    border: 1px solid #6D28D9;
+    background: #6D28D9;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s ease;
     flex-shrink: 0;
+    box-shadow: 0 2px 5px rgba(109, 40, 217, 0.25);
 }
 
-.cd-slider-btn:hover {
-    background: #6D28D9;
-    color: #fff;
-    border-color: #6D28D9;
+.cd-slider-btn:hover:not(:disabled) {
+    background: #5B21B6;
+    border-color: #5B21B6;
+    transform: scale(1.05);
 }
 
 .cd-slider-btn:disabled {
-    opacity: 0.35;
+    opacity: 0.4;
     cursor: not-allowed;
-    background: #f8fafc;
-    color: #cbd5e1;
-    border-color: #e2e8f0;
+    background: #e2e8f0;
+    color: #94a3b8;
+    border-color: #cbd5e1;
+    box-shadow: none;
 }
 
 .cd-slider-dots {
@@ -749,7 +751,7 @@ body.course-details-page .navbar {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #e2e8f0;
+    background: #ddd6fe;
     border: none;
     cursor: pointer;
     transition: all 0.25s ease;
