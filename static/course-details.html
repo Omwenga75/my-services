@@ -810,75 +810,75 @@
             "Kotlin Android App Development": {
                 modules: [
                     {
-                        title: "Kotlin Language Essentials",
+                        title: "Kotlin Intro, Syntax & Variables",
                         badge: "Foundation",
                         notes: [
-                            "<strong>Variables:</strong> <code>val</code> (immutable, preferred) vs <code>var</code> (mutable). Kotlin has type inference: <code>val name = \"John\"</code> automatically infers String.",
-                            "<strong>Null safety:</strong> types are non-null by default. Use <code>String?</code> for nullable. Safe call: <code>name?.length</code>. Elvis operator: <code>name ?: \"default\"</code>.",
-                            "<strong>Functions:</strong> <code>fun greet(name: String): String = \"Hello, $name\"</code>. Single-expression functions skip braces. Default params: <code>fun log(msg: String, level: Int = 0)</code>.",
-                            "<strong>When expression</strong> replaces switch: <code>when(x) { 1 -> \"one\"; in 2..10 -> \"many\"; else -> \"other\" }</code>. Can also be used without argument for if-else chains.",
-                            "<strong>Data classes:</strong> <code>data class User(val name: String, val age: Int)</code> auto-generates <code>equals()</code>, <code>hashCode()</code>, <code>toString()</code>, and <code>copy()</code>.",
-                            "<strong>Collections:</strong> <code>listOf()</code> (immutable), <code>mutableListOf()</code> (mutable). Chain operations: <code>list.filter { it > 5 }.map { it * 2 }.sorted()</code>."
+                            "<strong>Kotlin Intro:</strong> Kotlin is a modern, cross-platform, statically typed language developed by JetBrains. It is fully compatible with Java and is Google's preferred language for Android development.",
+                            "<strong>Syntax & Output:</strong> The <code>main()</code> function is the entry point: <code>fun main() { println(\"Hello World\") }</code>. Use <code>println()</code> to print text with a new line, and <code>print()</code> to print without a new line.",
+                            "<strong>Comments:</strong> Use double slashes <code>//</code> for single-line comments and slash-star <code>/* ... */</code> for multi-line comments to explain code or prevent execution.",
+                            "<strong>Variables:</strong> Declared with <code>val</code> (read-only, immutable) or <code>var</code> (mutable). Example: <code>val birthYear = 1995</code> and <code>var age = 30</code>.",
+                            "<strong>Type Inference:</strong> Kotlin automatically infers the data type from the assigned value, but you can also specify it explicitly: <code>val score: Int = 100</code>.",
+                            "<strong>Variable Names:</strong> Names are case-sensitive and should start with a letter or underscore, typically using camelCase (e.g., <code>userName</code>). Can contain numbers but cannot start with them."
                         ]
                     },
                     {
-                        title: "Android App Fundamentals",
-                        badge: "Platform",
+                        title: "Kotlin Data Types & Operators",
+                        badge: "Data Types",
                         notes: [
-                            "<strong>Activity</strong> is a single screen. <strong>Fragment</strong> is a reusable UI portion within an activity. Modern apps use single-activity with multiple fragments.",
-                            "<strong>AndroidManifest.xml</strong> declares app components, permissions, and metadata. Every activity must be registered: <code>&lt;activity android:name=\".MainActivity\"&gt;</code>.",
-                            "<strong>Gradle build system:</strong> <code>build.gradle.kts</code> manages dependencies. Add libraries: <code>implementation(\"androidx.core:core-ktx:1.12.0\")</code>.",
-                            "<strong>App Lifecycle:</strong> onCreate → onStart → onResume → onPause → onStop → onDestroy. Save state in <code>onSaveInstanceState()</code> for configuration changes.",
-                            "<strong>Resources:</strong> store strings in <code>res/values/strings.xml</code>, images in <code>res/drawable/</code>, layouts in <code>res/layout/</code>. Access via <code>R.string.app_name</code>.",
-                            "<strong>Permissions:</strong> declare in Manifest and request at runtime for dangerous permissions (camera, location): <code>ActivityCompat.requestPermissions()</code>."
+                            "<strong>Data Types:</strong> Basic categories include Numbers, Characters, Booleans, Strings, and Arrays. Types are objects and have built-in helper functions.",
+                            "<strong>Numeric Types:</strong> Divided into Integer types (<code>Byte</code>, <code>Short</code>, <code>Int</code>, <code>Long</code> - suffixed with L) and Floating-point types (<code>Float</code> - suffixed with F, <code>Double</code>).",
+                            "<strong>Characters & Booleans:</strong> Use <code>Char</code> for single characters in single quotes: <code>val grade = 'A'</code>. Use <code>Boolean</code> for true/false values: <code>val isKotlinFun = true</code>.",
+                            "<strong>Type Conversion:</strong> Numeric conversion must be done explicitly using functions like <code>toByte()</code>, <code>toInt()</code>, <code>toFloat()</code>, <code>toDouble()</code>, etc.",
+                            "<strong>Arithmetic Operators:</strong> Standard math operators include addition (<code>+</code>), subtraction (<code>-</code>), multiplication (<code>*</code>), division (<code>/</code>), and modulus (<code>%</code>).",
+                            "<strong>Assignment & Logical:</strong> Operators include standard assignment (<code>=</code>, <code>+=</code>, etc.), comparison (<code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>), and logical (<code>&&</code>, <code>||</code>, <code>!</code>)."
                         ]
                     },
                     {
-                        title: "Jetpack Compose UI",
-                        badge: "Modern UI",
+                        title: "Kotlin Strings & Control Flow",
+                        badge: "Control Flow",
                         notes: [
-                            "<strong>Composable functions</strong> build UI: <code>@Composable fun Greeting(name: String) { Text(\"Hello $name\") }</code>. UI is a function of state, not a template.",
-                            "<strong>Layout composables:</strong> <code>Column</code> (vertical), <code>Row</code> (horizontal), <code>Box</code> (stacked). Use <code>Modifier</code> for size, padding, background, and click handling.",
-                            "<strong>State in Compose:</strong> <code>var count by remember { mutableStateOf(0) }</code>. When state changes, only affected composables recompose (re-render).",
-                            "<strong>Material 3 components:</strong> <code>Button</code>, <code>TextField</code>, <code>Card</code>, <code>TopAppBar</code>, <code>NavigationBar</code>, <code>FloatingActionButton</code>.",
-                            "<strong>Lists:</strong> <code>LazyColumn { items(users) { user -> UserCard(user) } }</code> — efficiently renders only visible items, similar to RecyclerView.",
-                            "<strong>Theming:</strong> <code>MaterialTheme(colorScheme, typography, shapes) { Content() }</code>. Define custom themes in <code>Theme.kt</code> for consistent app styling."
+                            "<strong>Strings:</strong> A sequence of characters in double quotes: <code>var greeting = \"Hello\"</code>. Raw strings are enclosed in triple quotes <code>\"\"\"</code>.",
+                            "<strong>String Operations:</strong> Access characters by index: <code>greeting[0]</code>. Find length with <code>greeting.length</code>, and change case with <code>uppercase()</code> and <code>lowercase()</code>.",
+                            "<strong>String Templates:</strong> Embed variables directly inside strings using the <code>$</code> symbol: <code>val message = \"Name: $name\"</code>, or expressions using <code>${}</code>.",
+                            "<strong>If...Else Expression:</strong> In Kotlin, <code>if</code> is an expression that returns a value: <code>val max = if (a > b) a else b</code> (replacing the ternary operator).",
+                            "<strong>When Expression:</strong> Replaces switch-case. Evaluates an expression against multiple branches: <code>when(x) { 1 -> print(\"1\"); 2 -> print(\"2\"); else -> print(\"other\") }</code>.",
+                            "<strong>Ranges with When:</strong> Check if a value lies within a range using the <code>in</code> keyword: <code>when(x) { in 1..10 -> print(\"1 to 10\"); !in 10..20 -> print(\"not in range\") }</code>."
                         ]
                     },
                     {
-                        title: "Navigation & State Management",
-                        badge: "Architecture",
+                        title: "Kotlin Loops & Arrays",
+                        badge: "Loops",
                         notes: [
-                            "<strong>Navigation Compose:</strong> <code>NavHost(navController, startDestination = \"home\") { composable(\"home\") { HomeScreen() } }</code>.",
-                            "Pass arguments: <code>composable(\"detail/{id}\") { backStackEntry -> DetailScreen(backStackEntry.arguments?.getString(\"id\")) }</code>.",
-                            "<strong>ViewModel</strong> survives configuration changes: <code>class MainViewModel : ViewModel() { val uiState = MutableStateFlow(UiState()) }</code>.",
-                            "<strong>State hoisting:</strong> move state up to the caller. Composable receives state + event callbacks: <code>fun Counter(count: Int, onIncrement: () -> Unit)</code>.",
-                            "<strong>StateFlow</strong> for reactive state: <code>val state = viewModel.uiState.collectAsState()</code>. Prefer <code>StateFlow</code> over <code>LiveData</code> in Compose.",
-                            "Use <strong>sealed classes</strong> for UI state: <code>sealed class UiState { object Loading; data class Success(val data: List); data class Error(val msg: String) }</code>."
+                            "<strong>While & Do...While:</strong> <code>while (condition) { ... }</code> runs as long as the condition is true. <code>do { ... } while (condition)</code> guarantees at least one execution.",
+                            "<strong>For Loop & Ranges:</strong> Iterates through ranges, arrays, or collections: <code>for (i in 1..5) { println(i) }</code>. Ranges are inclusive of both start and end.",
+                            "<strong>Range Modifiers:</strong> Use <code>step</code> to change step size: <code>1..10 step 2</code>. Use <code>downTo</code> for reverse loops: <code>10 downTo 1</code>. Use <code>until</code> to exclude the end element: <code>1 until 10</code>.",
+                            "<strong>Break & Continue:</strong> Use <code>break</code> to immediately terminate a loop, and <code>continue</code> to skip the current iteration and proceed to the next.",
+                            "<strong>Arrays:</strong> Create arrays using <code>arrayOf()</code>: <code>val cars = arrayOf(\"Volvo\", \"BMW\", \"Ford\")</code>. Access elements with <code>cars[index]</code>.",
+                            "<strong>Array Size & Check:</strong> Get array size using <code>cars.size</code>. Check if an element exists using the <code>in</code> keyword: <code>if (\"Volvo\" in cars) { ... }</code>."
                         ]
                     },
                     {
-                        title: "APIs, Networking & Data",
-                        badge: "Backend",
+                        title: "Kotlin Functions & Null Safety",
+                        badge: "Functions",
                         notes: [
-                            "<strong>Retrofit</strong> is the standard HTTP client: define API interface with <code>@GET</code>, <code>@POST</code> annotations. Use <code>suspend</code> functions for coroutine support.",
-                            "<strong>Kotlin Coroutines</strong> for async work: <code>viewModelScope.launch { val data = repository.fetchUsers() }</code>. Use <code>Dispatchers.IO</code> for network/disk calls.",
-                            "<strong>Room Database</strong> for local storage: <code>@Entity</code> defines tables, <code>@Dao</code> defines queries, <code>@Database</code> creates the database instance.",
-                            "<strong>Gson/Moshi</strong> for JSON parsing: <code>@SerializedName(\"user_name\") val name: String</code>. Retrofit automatically converts JSON responses to Kotlin objects.",
-                            "<strong>Repository pattern:</strong> single source of truth that abstracts data sources. ViewModel calls Repository, which decides between API and local database.",
-                            "<strong>DataStore</strong> replaces SharedPreferences: <code>dataStore.edit { prefs -> prefs[KEY] = value }</code>. Type-safe and coroutine-based for preferences storage."
+                            "<strong>Declaring Functions:</strong> Functions are declared using the <code>fun</code> keyword: <code>fun myFunction(name: String): Unit { println(name) }</code>.",
+                            "<strong>Parameters & Arguments:</strong> Parameters must specify explicit types: <code>fun add(x: Int, y: Int): Int { return x + y }</code>.",
+                            "<strong>Single-Expression Functions:</strong> If a function returns a single expression, omit braces and specify the body after <code>=</code>: <code>fun double(x: Int) = x * 2</code>.",
+                            "<strong>Default Arguments:</strong> You can assign default values to parameters: <code>fun greet(msg: String = \"Hello\")</code>. If omitted in call, the default is used.",
+                            "<strong>Null Safety Basics:</strong> Kotlin variables cannot hold null values by default. Declare a nullable type using a question mark: <code>var name: String? = null</code>.",
+                            "<strong>Handling Nulls:</strong> Use safe call <code>name?.length</code> to return null if the object is null. Use Elvis operator <code>name ?: \"Guest\"</code> to provide a default fallback."
                         ]
                     },
                     {
-                        title: "App Architecture & Publishing",
-                        badge: "Production",
+                        title: "Kotlin OOP (Classes & Objects)",
+                        badge: "OOP",
                         notes: [
-                            "<strong>MVVM architecture:</strong> Model (data layer) → ViewModel (business logic) → View (Compose UI). Separation of concerns makes testing and maintenance easier.",
-                            "<strong>Dependency Injection</strong> with Hilt: <code>@HiltViewModel class MainViewModel @Inject constructor(private val repo: UserRepo)</code>. Reduces boilerplate and improves testability.",
-                            "<strong>Testing:</strong> Unit tests with JUnit: <code>@Test fun addition_isCorrect() { assertEquals(4, 2 + 2) }</code>. UI tests with Compose Testing: <code>composeTestRule.onNodeWithText(\"Hello\")</code>.",
-                            "<strong>ProGuard/R8</strong> minifies and obfuscates release builds. Configure in <code>proguard-rules.pro</code>. Enable in <code>build.gradle</code>: <code>minifyEnabled = true</code>.",
-                            "<strong>Signing:</strong> generate a keystore for release builds: <code>keytool -genkey -v -keystore release-key.jks</code>. Never lose your keystore — you can't update the app without it.",
-                            "<strong>Google Play Console:</strong> upload AAB (Android App Bundle), write store listing, add screenshots (phone + tablet), set content rating, and submit for review."
+                            "<strong>Classes & Objects:</strong> Define a class blueprint using the <code>class</code> keyword: <code>class Car { var brand = \"\" }</code>. Instantiate objects: <code>val myCar = Car()</code>.",
+                            "<strong>Constructors:</strong> Define properties directly in the class header (primary constructor): <code>class Person(val firstName: String, var age: Int)</code>.",
+                            "<strong>Class Methods:</strong> Define behaviors inside the class: <code>class Dog { fun bark() { println(\"Woof!\") } }</code>. Call using dot notation: <code>myDog.bark()</code>.",
+                            "<strong>Inheritance:</strong> Classes are final by default. To make a class inheritable, mark it with the <code>open</code> keyword: <code>open class ParentClass</code>.",
+                            "<strong>Inheritance Syntax:</strong> Subclasses inherit using a colon: <code>class ChildClass : ParentClass()</code>. Overridden methods must be marked with the <code>override</code> keyword.",
+                            "<strong>Interfaces:</strong> Define abstract contracts with the <code>interface</code> keyword. Interfaces can contain both abstract declarations and method implementations."
                         ]
                     }
                 ]

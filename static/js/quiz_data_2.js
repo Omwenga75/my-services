@@ -170,148 +170,148 @@ const quizData2 = {
     ]
   },
   "Kotlin Android App Development": {
-    "Kotlin Language Essentials": [
+    "Kotlin Intro, Syntax & Variables": [
       {
-        question: "What is the result of the following Kotlin code?\n\nval name: String? = null\nprintln(name?.length ?: \"No name\")",
+        question: "What is the entry point of every Kotlin program?",
         options: [
-          "null",
-          "0",
-          "No name",
-          "A NullPointerException is thrown"
+          "fun main()",
+          "fun entry()",
+          "fun start()",
+          "fun init()"
         ],
-        correct: 2,
-        explanation: "The safe call operator (?.) returns null when name is null, and the Elvis operator (?:) then provides the fallback value \"No name\" since the left side evaluated to null."
+        correct: 0,
+        explanation: "The main() function is the starting point of every Kotlin program and is required to execute any code."
       },
       {
-        question: "Which Kotlin construct is most appropriate for replacing a complex if-else chain that checks a variable against multiple possible values?",
+        question: "What is the key difference between declaring a variable with 'val' vs 'var' in Kotlin?",
         options: [
-          "A for loop with break statements",
-          "A when expression",
-          "A try-catch block",
-          "A data class with default values"
+          "val is mutable, var is immutable",
+          "val is read-only (immutable), var is mutable",
+          "val can only store integers, var can store any type",
+          "There is no difference; they are interchangeable"
         ],
         correct: 1,
-        explanation: "The 'when' expression in Kotlin is a powerful replacement for switch/case and complex if-else chains, supporting pattern matching, ranges, type checks, and arbitrary conditions with cleaner syntax."
+        explanation: "val creates a read-only (immutable) variable whose value cannot be reassigned, whereas var creates a mutable variable that can be changed later."
       }
     ],
-    "Android App Fundamentals": [
+    "Kotlin Data Types & Operators": [
       {
-        question: "During the Android Activity lifecycle, which callback method is called when the activity becomes visible to the user but is not yet interactive?",
+        question: "How does Kotlin handle type conversion between numeric types (e.g. Int to Double)?",
         options: [
-          "onCreate()",
-          "onStart()",
-          "onResume()",
-          "onPause()"
+          "It is automatically converted by the compiler (implicit conversion)",
+          "It must be done explicitly using conversion functions like toDouble()",
+          "It requires using the 'as' casting operator",
+          "Kotlin does not allow conversion between different numeric types"
         ],
         correct: 1,
-        explanation: "onStart() is called when the activity becomes visible to the user. The activity becomes fully interactive only after onResume() is called, completing the foreground transition."
+        explanation: "Kotlin does not support implicit widening conversions for numbers. You must explicitly call helper functions like toDouble(), toInt(), or toByte()."
       },
       {
-        question: "What is the primary purpose of the AndroidManifest.xml file in an Android project?",
+        question: "What is the result of the modulus operator expression '5 % 2' in Kotlin?",
         options: [
-          "To define the app\'s UI layout and styling",
-          "To declare app components, permissions, and essential metadata to the Android system",
-          "To manage third-party library dependencies",
-          "To store the app\'s database schema"
-        ],
-        correct: 1,
-        explanation: "AndroidManifest.xml declares all app components (activities, services, receivers), required permissions, hardware features, and other metadata that the Android system needs before it can run the app."
-      }
-    ],
-    "Jetpack Compose UI": [
-      {
-        question: "In Jetpack Compose, what is the purpose of using remember { mutableStateOf(...) } when declaring a variable inside a composable function?",
-        options: [
-          "It makes the variable accessible from other composable functions",
-          "It persists the value across configuration changes like screen rotation",
-          "It preserves the state value across recompositions so it is not reset each time the composable re-executes",
-          "It automatically saves the value to a local database"
+          "2.5",
+          "2",
+          "1",
+          "0"
         ],
         correct: 2,
-        explanation: "remember caches the value across recompositions, and mutableStateOf makes it observable so Compose knows to recompose when the value changes. Without remember, the state would reset on every recomposition."
-      },
-      {
-        question: "Which Compose layout composable should you use to display a large scrollable list of items efficiently?",
-        options: [
-          "Column with verticalScroll modifier",
-          "LazyColumn",
-          "Box with scroll state",
-          "Row with horizontalArrangement"
-        ],
-        correct: 1,
-        explanation: "LazyColumn only composes and renders items currently visible on screen (similar to RecyclerView), making it efficient for large lists. A regular Column with scroll composes all items upfront, wasting resources."
+        explanation: "The modulus operator (%) returns the remainder of the division of two numbers. 5 divided by 2 is 2 with a remainder of 1."
       }
     ],
-    "Navigation & State Management": [
+    "Kotlin Strings & Control Flow": [
       {
-        question: "Why is it recommended to use a ViewModel to hold UI state instead of storing it directly inside a composable with remember?",
+        question: "What makes the 'if' construct in Kotlin different from Java or JavaScript?",
         options: [
-          "ViewModel makes the code compile faster",
-          "ViewModel state survives configuration changes like screen rotations, while remember does not",
-          "ViewModel is required for Compose to render any UI",
-          "ViewModel automatically encrypts all stored data"
+          "It does not support else-if branches",
+          "It is an expression that returns a value, meaning it can be assigned directly to a variable",
+          "It cannot evaluate boolean conditions",
+          "It is replaced entirely by the 'when' expression and is deprecated"
         ],
         correct: 1,
-        explanation: "A ViewModel survives configuration changes (like rotation) because it is scoped to the navigation graph or activity lifecycle, whereas remember only survives recompositions within the same composition instance."
+        explanation: "In Kotlin, if is an expression rather than just a statement. It returns a value from the branch that gets executed, eliminating the need for a ternary operator."
       },
       {
-        question: "In a Jetpack Compose navigation setup, how do you pass a userId argument when navigating to a detail screen defined as \"detail/{userId}\"?",
+        question: "Which branch is used as the default fallback in a Kotlin 'when' expression?",
         options: [
-          "navController.navigate(\"detail\", userId)",
-          "navController.navigate(\"detail/{userId}\")",
-          "navController.navigate(\"detail/$userId\")",
-          "navController.navigateWithArgs(\"detail\", userId)"
+          "default ->",
+          "otherwise ->",
+          "else ->",
+          "fallback ->"
         ],
         correct: 2,
-        explanation: "Compose Navigation uses URL-style routing, so you embed the argument directly into the route string using Kotlin string interpolation: \"detail/$userId\", which replaces the placeholder with the actual value."
+        explanation: "The 'else' branch is the default condition that executes when none of the other specified conditions in a 'when' expression match."
       }
     ],
-    "APIs, Networking & Data": [
+    "Kotlin Loops & Arrays": [
       {
-        question: "Why should network requests in an Android app using Retrofit be dispatched on Dispatchers.IO instead of Dispatchers.Main?",
+        question: "Which range expression is used to iterate backwards from 10 down to 1 in a for loop?",
         options: [
-          "Dispatchers.IO encrypts network traffic automatically",
-          "Dispatchers.Main does not support coroutines",
-          "Network calls are blocking I/O operations that would freeze the UI if run on the main thread",
-          "Dispatchers.IO is faster because it compresses HTTP requests"
-        ],
-        correct: 2,
-        explanation: "The main thread handles UI rendering and user interaction. Running blocking I/O operations on it causes the UI to freeze (ANR errors). Dispatchers.IO uses a thread pool optimized for such blocking operations."
-      },
-      {
-        question: "What is the main benefit of implementing the repository pattern between a ViewModel and data sources like Retrofit and Room?",
-        options: [
-          "It eliminates the need for error handling in the app",
-          "It provides a single source of truth and abstracts data-fetching logic so the ViewModel doesn\'t know where data comes from",
-          "It forces all data to be fetched from the network only",
-          "It replaces the need for coroutines entirely"
+          "for (i in 10..1)",
+          "for (i in 10 downTo 1)",
+          "for (i in 10 until 1)",
+          "for (i in 10 step -1)"
         ],
         correct: 1,
-        explanation: "The repository pattern abstracts data sources behind a clean API, allowing the ViewModel to request data without knowing if it comes from a local database, network, or cache, and enabling easier testing and maintenance."
+        explanation: "The 'downTo' keyword is used to define a range that progresses in reverse (decrementing) order, inclusive of both endpoints."
+      },
+      {
+        question: "Which helper function is used to create an array with initial values in Kotlin?",
+        options: [
+          "arrayOf()",
+          "createArray()",
+          "array()",
+          "listOf()"
+        ],
+        correct: 0,
+        explanation: "arrayOf() is the standard utility function in Kotlin to instantiate an Array with the specified values (e.g. arrayOf('A', 'B'))."
       }
     ],
-    "App Architecture & Publishing": [
+    "Kotlin Functions & Null Safety": [
       {
-        question: "In the MVVM architecture pattern for Android, which layer is responsible for holding and preparing UI state, and should NOT hold references to Views or Context?",
+        question: "What is the syntax for a single-expression function that returns the square of a number?",
         options: [
-          "Model",
-          "View",
-          "ViewModel",
-          "Repository"
+          "fun square(x: Int) = x * x",
+          "fun square(x: Int) { return x * x }",
+          "fun square(x: Int) -> x * x",
+          "fun square(x: Int) : x * x"
         ],
-        correct: 2,
-        explanation: "The ViewModel holds UI-related state and business logic. It must not reference Views, Activities, or Context directly to avoid memory leaks, since the ViewModel outlives configuration changes."
+        correct: 0,
+        explanation: "If a function returns a single expression, the curly braces and return keyword can be omitted by using an equals (=) symbol."
       },
       {
-        question: "Before uploading an Android app to the Google Play Console for production release, which of the following is a required step?",
+        question: "Which operator is the Elvis operator, used to provide a default fallback value if an expression is null?",
         options: [
-          "Enabling developer mode on the publishing computer",
-          "Signing the release APK/AAB with a keystore and running code shrinking with R8",
-          "Converting the project from Kotlin to Java",
-          "Removing all Gradle dependencies from the project"
+          "?.",
+          "!!",
+          "?:",
+          "?"
+        ],
+        correct: 2,
+        explanation: "The Elvis operator (?:) evaluates the expression to its left; if it is not null, it returns it. Otherwise, it returns the fallback value to its right."
+      }
+    ],
+    "Kotlin OOP (Classes & Objects)": [
+      {
+        question: "Are classes in Kotlin open for inheritance by default?",
+        options: [
+          "Yes, all classes can be inherited by default",
+          "No, classes are final by default and require the 'open' keyword to be inheritable",
+          "Only classes inside interfaces can be inherited",
+          "Classes can only be inherited if they are declared inside a data class"
         ],
         correct: 1,
-        explanation: "Production apps must be signed with a private keystore for identity verification. R8 (which replaces ProGuard) shrinks, obfuscates, and optimizes the code to reduce APK size and protect against reverse engineering."
+        explanation: "By default, all classes in Kotlin are final (non-inheritable). You must explicitly mark a class with the 'open' keyword to allow other classes to inherit from it."
+      },
+      {
+        question: "Which keyword must be used in a subclass to override a method from a parent class?",
+        options: [
+          "super",
+          "extends",
+          "override",
+          "open"
+        ],
+        correct: 2,
+        explanation: "Kotlin enforces safe method overriding by requiring the 'override' keyword on any member that overrides a superclass function or property."
       }
     ]
   }
