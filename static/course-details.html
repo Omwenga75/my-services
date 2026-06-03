@@ -1267,7 +1267,14 @@
             document.getElementById('cd-notes-read-time').textContent = '~' + readTime + ' min read';
 
             const controls = section.querySelector('.cd-notes-controls');
-            if (controls) controls.style.display = 'none';
+            if (controls) {
+                controls.style.display = 'flex';
+                controls.innerHTML = `
+                    <button class="cd-notes-ctrl-btn" id="cd-notes-focus-btn" onclick="toggleFocusMode()">
+                        <i class="fas fa-expand"></i> Focus Mode
+                    </button>
+                `;
+            }
 
             accordion.innerHTML = `
                 <div class="cd-notes-slider" style="background: #ffffff; border: 1px solid #ede9fe; border-radius: 16px; box-shadow: 0 4px 20px rgba(109, 40, 217, 0.05); position: relative; display: flex; flex-direction: column;">
@@ -1420,6 +1427,25 @@
 
         function collapseAllNotes() {
             document.querySelectorAll('.cd-note-module').forEach(m => m.classList.remove('active'));
+        }
+
+        function toggleFocusMode() {
+            const section = document.getElementById('cd-notes-section');
+            const btn = document.getElementById('cd-notes-focus-btn');
+            if (!section) return;
+
+            section.classList.toggle('fullscreen-focus');
+            
+            if (section.classList.contains('fullscreen-focus')) {
+                btn.innerHTML = `<i class="fas fa-compress"></i> Exit Focus`;
+                document.body.style.overflow = 'hidden';
+            } else {
+                btn.innerHTML = `<i class="fas fa-expand"></i> Focus Mode`;
+                document.body.style.overflow = '';
+            }
+            
+            // Recalculate layout heights
+            setTimeout(updateMainSlider, 50);
         }
 
         let isAdmin = false;

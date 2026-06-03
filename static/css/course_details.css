@@ -1117,3 +1117,57 @@ body.course-details-page .navbar {
     }
 }
 
+/* Fullscreen Focus Mode */
+.cd-notes-section.fullscreen-focus {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #EAEFF4;
+    z-index: 9999;
+    margin: 0;
+    padding: 2.5rem 5% 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.cd-notes-section.fullscreen-focus .cd-notes-header {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto 1.5rem;
+}
+
+.cd-notes-section.fullscreen-focus .cd-notes-progress {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto 1.5rem;
+}
+
+.cd-notes-section.fullscreen-focus .cd-notes-accordion {
+    flex: 1;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.cd-notes-section.fullscreen-focus .cd-notes-slider {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.cd-notes-section.fullscreen-focus .cd-notes-slider > div {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.cd-notes-section.fullscreen-focus .cd-notes-slide {
+    padding: 2.5rem;
+}
+
