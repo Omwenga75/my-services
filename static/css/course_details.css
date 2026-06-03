@@ -154,6 +154,7 @@ body.course-details-page .navbar {
     flex: 0.75;
     min-width: 240px;
     max-width: 340px;
+    height: 260px;
     background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
     position: relative;
     display: flex;
