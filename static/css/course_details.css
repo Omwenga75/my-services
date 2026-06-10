@@ -1156,7 +1156,7 @@ body.course-details-page .navbar {
     transition: all 0.2s ease;
     font-family: 'Outfit', sans-serif;
     font-size: 0.88rem;
-    color: #374151;
+    color: #000000 !important;
     text-align: left;
     width: 100%;
     line-height: 1.5;
