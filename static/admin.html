@@ -779,62 +779,100 @@
 
         /* Notes and Quizzes Content Manager Styles */
         .manage-content-layout {
-            display: flex; gap: 1.5rem; min-height: 500px;
+            display: flex; gap: 1.5rem; min-height: 560px;
         }
         .mcl-sidebar {
-            width: 240px; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding-right: 1.25rem;
+            width: 260px; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding-right: 1.25rem; flex-shrink: 0;
         }
         .mcl-sidebar-title {
             font-weight: 700; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; letter-spacing: 0.05em;
+            display: flex; align-items: center; justify-content: space-between;
         }
         .mcl-sidebar-list {
-            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.45rem;
+            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; max-height: 460px;
         }
         .mcl-chapter-item {
-            padding: 0.7rem 0.85rem; border-radius: 8px; border: 1px solid var(--border); background: #f8fafc; font-size: 0.84rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: space-between; gap: 0.4rem;
+            padding: 0.65rem 0.85rem; border-radius: 10px; border: 1px solid var(--border); background: #f8fafc;
+            font-size: 0.84rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s;
+            display: flex; flex-direction: column; gap: 0.3rem;
         }
-        .mcl-chapter-item:hover { background: #f1f5f9; border-color: #cbd5e1; color: #1e293b; }
-        .mcl-chapter-item.active { background: #f5f3ff; color: #6d28d9; border-color: rgba(109, 40, 217, 0.3); }
+        .mcl-chapter-item:hover { background: #f1f5f9; border-color: #cbd5e1; color: #1e293b; transform: translateX(2px); }
+        .mcl-chapter-item.active { background: linear-gradient(135deg, #f5f3ff, #ede9fe); color: #6d28d9; border-color: rgba(109, 40, 217, 0.35); box-shadow: 0 2px 8px rgba(109,40,217,0.1); }
+        .mcl-chapter-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.84rem; font-weight: 600; }
+        .mcl-chapter-stats {
+            display: flex; gap: 0.4rem; align-items: center;
+        }
+        .mcl-stat-pill {
+            font-size: 0.68rem; font-weight: 600; padding: 0.1rem 0.45rem; border-radius: 999px; background: rgba(100,116,139,0.1); color: #64748b;
+        }
+        .mcl-chapter-item.active .mcl-stat-pill { background: rgba(109,40,217,0.12); color: #7c3aed; }
         .mcl-btn-add-module {
-            background: #f5f3ff; color: #6d28d9; border: 1px dashed rgba(109, 40, 217, 0.3); padding: 0.65rem; border-radius: 8px; font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s; margin-top: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+            background: #f5f3ff; color: #6d28d9; border: 1.5px dashed rgba(109, 40, 217, 0.35); padding: 0.65rem; border-radius: 10px;
+            font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s; margin-top: 0.75rem;
+            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
         }
-        .mcl-btn-add-module:hover { background: #ede9fe; border-color: #6d28d9; }
+        .mcl-btn-add-module:hover { background: #ede9fe; border-color: #6d28d9; transform: scale(1.01); }
         .mcl-main {
-            flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding-left: 0.25rem;
+            flex: 1; display: flex; flex-direction: column; overflow: hidden; padding-left: 0.25rem; min-width: 0;
         }
         .mcl-module-header {
-            display: grid; grid-template-columns: 2fr 1fr auto; gap: 0.75rem; margin-bottom: 1.25rem; align-items: end;
+            display: grid; grid-template-columns: 2fr 1fr auto; gap: 0.75rem; margin-bottom: 1rem; align-items: end;
         }
+        .mcl-content-summary {
+            display: flex; gap: 0.75rem; align-items: center; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border: 1px solid #bae6fd;
+            border-radius: 10px; padding: 0.6rem 0.9rem; margin-bottom: 1rem; flex-wrap: wrap;
+        }
+        .mcl-summary-stat {
+            display: flex; align-items: center; gap: 0.35rem; font-size: 0.8rem; font-weight: 700; color: #0369a1;
+        }
+        .mcl-summary-stat i { color: #0284c7; font-size: 0.78rem; }
+        .mcl-summary-divider { width: 1px; height: 14px; background: #93c5fd; }
         .mcl-tabs {
             display: flex; gap: 0.5rem; border-bottom: 2px solid var(--border); margin-bottom: 1rem;
         }
         .mcl-tab-btn {
-            background: none; border: none; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.86rem; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s;
+            background: none; border: none; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.86rem;
+            color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s;
+            display: flex; align-items: center; gap: 0.4rem;
         }
         .mcl-tab-btn:hover { color: #334155; }
         .mcl-tab-btn.active { color: #6d28d9; border-bottom-color: #6d28d9; }
+        .mcl-tab-count {
+            font-size: 0.7rem; background: #ede9fe; color: #6d28d9; padding: 0.1rem 0.4rem; border-radius: 999px; font-weight: 800;
+        }
+        .mcl-tab-btn:not(.active) .mcl-tab-count { background: #f1f5f9; color: #94a3b8; }
         .mcl-tab-content {
-            display: none; flex-direction: column; flex: 1;
+            display: none; flex-direction: column; flex: 1; overflow: hidden;
         }
         .mcl-tab-content.active { display: flex; }
         .mcl-empty {
             flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--text-muted); padding: 3rem;
         }
         .mcl-notes-list {
-            display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; overflow-y: auto; max-height: 280px; padding-right: 0.25rem;
+            display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 0.75rem; overflow-y: auto; flex: 1;
+            padding-right: 0.25rem; max-height: 320px;
         }
         .mcl-note-item {
-            display: flex; gap: 0.5rem; align-items: start; background: #fafafa; border: 1px solid var(--border); border-radius: 8px; padding: 0.65rem 0.75rem;
+            display: flex; gap: 0.5rem; align-items: start; background: #fff; border: 1px solid var(--border);
+            border-radius: 8px; padding: 0.6rem 0.75rem; transition: border-color 0.2s;
+        }
+        .mcl-note-item:hover { border-color: #c4b5fd; }
+        .mcl-note-num {
+            font-size: 0.7rem; font-weight: 800; color: #8b5cf6; background: #f5f3ff; border-radius: 5px;
+            padding: 0.15rem 0.4rem; margin-top: 0.1rem; flex-shrink: 0; min-width: 22px; text-align: center;
         }
         .mcl-note-textarea {
-            flex: 1; border: none; background: transparent; font-family: inherit; font-size: 0.86rem; color: #334155; resize: vertical; line-height: 1.4; outline: none;
+            flex: 1; border: none; background: transparent; font-family: inherit; font-size: 0.85rem;
+            color: #334155; resize: vertical; line-height: 1.5; outline: none; min-height: 38px;
         }
         .mcl-quiz-list {
-            display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; overflow-y: auto; max-height: 280px; padding-right: 0.25rem;
+            display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 0.75rem; overflow-y: auto;
+            flex: 1; padding-right: 0.25rem; max-height: 320px;
         }
         .mcl-quiz-item {
-            background: #fafafa; border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem;
+            background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem; transition: border-color 0.2s;
         }
+        .mcl-quiz-item:hover { border-color: #a5b4fc; }
         .mcl-quiz-item-header {
             display: flex; justify-content: space-between; align-items: start; gap: 0.5rem; margin-bottom: 0.5rem;
         }
@@ -842,10 +880,12 @@
             font-weight: 700; font-size: 0.86rem; color: #1e293b; line-height: 1.4;
         }
         .mcl-quiz-details {
-            font-size: 0.78rem; color: #475569; display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem 1rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border);
+            font-size: 0.78rem; color: #475569; display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem 1rem;
+            margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border);
         }
         .mcl-add-note-box {
-            display: flex; gap: 0.5rem; align-items: end; background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border);
+            display: flex; gap: 0.5rem; align-items: end; background: #f8fafc; padding: 0.75rem;
+            border-radius: 10px; border: 1px solid var(--border); flex-shrink: 0;
         }
     </style>
 </head>
@@ -1568,18 +1608,26 @@
 
     function renderChaptersSidebar() {
         const listContainer = document.getElementById('mcl-modules-list');
+        // Update total chapter count in sidebar title
+        const totalEl = document.getElementById('mcl-total-chapters');
+        if (totalEl) totalEl.textContent = currentCourseContent.length;
+
         if (!currentCourseContent.length) {
-            listContainer.innerHTML = '<div style="color:#94a3b8;font-size:0.8rem;text-align:center;padding:1rem;">No chapters. Add one below!</div>';
+            listContainer.innerHTML = '<div style="color:#94a3b8;font-size:0.8rem;text-align:center;padding:1.5rem 0.5rem;"><i class="fas fa-layer-group" style="font-size:1.5rem;margin-bottom:0.5rem;display:block;opacity:0.4"></i>No chapters yet.<br>Click "Add Chapter" below!</div>';
             return;
         }
         listContainer.innerHTML = currentCourseContent.map((m, idx) => {
             const isActive = idx === selectedModuleIdx;
+            const noteCount = (m.notes || []).length;
+            const quizCount = (m.questions || []).length;
             return `
                 <div class="mcl-chapter-item ${isActive ? 'active' : ''}" onclick="selectModuleAdmin(${idx})">
-                    <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px;">
-                        ${idx + 1}. ${m.title}
-                    </span>
-                    <span class="badge ${isActive ? 'b-blue' : 'b-gray'}" style="font-size:0.68rem;padding:0.15rem 0.4rem;">${m.badge || 'Topic'}</span>
+                    <div class="mcl-chapter-name" title="${m.title}">${idx + 1}. ${m.title}</div>
+                    <div class="mcl-chapter-stats">
+                        <span class="mcl-stat-pill"><i class="fas fa-file-alt" style="font-size:0.6rem;"></i> ${noteCount} note${noteCount !== 1 ? 's' : ''}</span>
+                        <span class="mcl-stat-pill"><i class="fas fa-question-circle" style="font-size:0.6rem;"></i> ${quizCount} Q</span>
+                        <span class="badge ${isActive ? 'b-blue' : 'b-gray'}" style="font-size:0.66rem;padding:0.1rem 0.35rem;">${m.badge || 'Topic'}</span>
+                    </div>
                 </div>
             `;
         }).join('');
@@ -1597,9 +1645,32 @@
         document.getElementById('mcl-edit-badge').value = mod.badge || '';
         
         closeQuestionForm();
+        renderContentSummary();
         switchMclTab(activeMclTab);
         renderNotesList();
         renderQuizQuestionsList();
+    }
+
+    function renderContentSummary() {
+        const mod = currentCourseContent[selectedModuleIdx];
+        if (!mod) return;
+        const noteCount = (mod.notes || []).length;
+        const quizCount = (mod.questions || []).length;
+        const summaryEl = document.getElementById('mcl-content-summary');
+        if (summaryEl) {
+            summaryEl.innerHTML = `
+                <div class="mcl-summary-stat"><i class="fas fa-file-alt"></i> ${noteCount} study note${noteCount !== 1 ? 's' : ''}</div>
+                <div class="mcl-summary-divider"></div>
+                <div class="mcl-summary-stat"><i class="fas fa-question-circle"></i> ${quizCount} quiz question${quizCount !== 1 ? 's' : ''}</div>
+                <div class="mcl-summary-divider"></div>
+                <div class="mcl-summary-stat" style="color:#64748b;"><i class="fas fa-layer-group" style="color:#64748b;"></i> Chapter ${selectedModuleIdx + 1} of ${currentCourseContent.length}</div>
+            `;
+        }
+        // update tab count badges
+        const notesTabCount = document.getElementById('mcl-notes-tab-count');
+        const quizTabCount = document.getElementById('mcl-quiz-tab-count');
+        if (notesTabCount) notesTabCount.textContent = noteCount;
+        if (quizTabCount) quizTabCount.textContent = quizCount;
     }
 
     function updateSelectedModuleMeta() {
@@ -1658,11 +1729,13 @@
             return;
         }
         list.innerHTML = mod.notes.map((note, idx) => {
+            // Escape for HTML attribute
+            const escapedNote = note.replace(/`/g, '\\`').replace(/\$/g, '\\$');
             return `
                 <div class="mcl-note-item">
-                    <span style="font-weight:700;color:var(--primary);margin-top:0.15rem;font-size:0.84rem;">&bull;</span>
+                    <span class="mcl-note-num">${idx + 1}</span>
                     <textarea class="mcl-note-textarea" oninput="updateNoteInModule(${idx}, this.value)">${note}</textarea>
-                    <button class="btn-act btn-del" onclick="deleteNoteFromModule(${idx})" style="padding:0.25rem 0.4rem;font-size:0.75rem;margin-top:0;">
+                    <button class="btn-act btn-del" onclick="deleteNoteFromModule(${idx})" style="padding:0.25rem 0.4rem;font-size:0.75rem;margin-top:0;flex-shrink:0;" title="Delete this note">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -1680,6 +1753,11 @@
         currentCourseContent[selectedModuleIdx].notes.push(text);
         txtInput.value = '';
         renderNotesList();
+        renderContentSummary();
+        renderChaptersSidebar();
+        // Scroll to bottom of notes list
+        const notesList = document.getElementById('mcl-notes-list');
+        if (notesList) notesList.scrollTop = notesList.scrollHeight;
     }
 
     function updateNoteInModule(noteIdx, val) {
@@ -1690,6 +1768,8 @@
     function deleteNoteFromModule(noteIdx) {
         currentCourseContent[selectedModuleIdx].notes.splice(noteIdx, 1);
         renderNotesList();
+        renderContentSummary();
+        renderChaptersSidebar();
     }
 
     function renderQuizQuestionsList() {
@@ -1799,12 +1879,16 @@
         
         closeQuestionForm();
         renderQuizQuestionsList();
+        renderContentSummary();
+        renderChaptersSidebar();
     }
 
     function deleteQuestion(qIdx) {
         if (!confirm(`Delete this question?`)) return;
         currentCourseContent[selectedModuleIdx].questions.splice(qIdx, 1);
         renderQuizQuestionsList();
+        renderContentSummary();
+        renderChaptersSidebar();
     }
 
     async function saveNotesQuizzesContent() {
@@ -1959,10 +2043,13 @@
             <button class="modal-close" onclick="closeManageNotesQuizzesModal()"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body" style="padding: 1.25rem;">
-            <div class="manage-content-layout" style="height: auto; min-height: 520px;">
+            <div class="manage-content-layout" style="height: auto; min-height: 560px;">
                 <!-- Sidebar of chapters -->
                 <div class="mcl-sidebar">
-                    <div class="mcl-sidebar-title">Chapters / Modules</div>
+                    <div class="mcl-sidebar-title">
+                        <span>Chapters</span>
+                        <span id="mcl-total-chapters" style="background:#ede9fe;color:#6d28d9;font-size:0.72rem;font-weight:800;padding:0.1rem 0.5rem;border-radius:999px;">0</span>
+                    </div>
                     <div class="mcl-sidebar-list" id="mcl-modules-list">
                         <!-- Loaded dynamically -->
                     </div>
@@ -1973,6 +2060,12 @@
                 
                 <!-- Main detail view -->
                 <div class="mcl-main" id="mcl-module-details" style="display:none;">
+                    <!-- Content Summary Banner -->
+                    <div class="mcl-content-summary" id="mcl-content-summary">
+                        <div class="mcl-summary-stat"><i class="fas fa-file-alt"></i> 0 study notes</div>
+                        <div class="mcl-summary-divider"></div>
+                        <div class="mcl-summary-stat"><i class="fas fa-question-circle"></i> 0 quiz questions</div>
+                    </div>
                     <div class="mcl-module-header">
                         <div class="form-group" style="margin-bottom:0;">
                             <label class="form-label" style="font-size:0.75rem;">Chapter Title</label>
@@ -1989,8 +2082,14 @@
                     
                     <!-- Tab Switchers -->
                     <div class="mcl-tabs">
-                        <button class="mcl-tab-btn active" id="mcl-btn-tab-notes" onclick="switchMclTab('notes')">Study Notes</button>
-                        <button class="mcl-tab-btn" id="mcl-btn-tab-quiz" onclick="switchMclTab('quiz')">Quiz Questions</button>
+                        <button class="mcl-tab-btn active" id="mcl-btn-tab-notes" onclick="switchMclTab('notes')">
+                            <i class="fas fa-file-alt" style="font-size:0.78rem;"></i> Study Notes
+                            <span class="mcl-tab-count" id="mcl-notes-tab-count">0</span>
+                        </button>
+                        <button class="mcl-tab-btn" id="mcl-btn-tab-quiz" onclick="switchMclTab('quiz')">
+                            <i class="fas fa-question-circle" style="font-size:0.78rem;"></i> Quiz Questions
+                            <span class="mcl-tab-count" id="mcl-quiz-tab-count">0</span>
+                        </button>
                     </div>
                     
                     <!-- Notes Content Pane -->
