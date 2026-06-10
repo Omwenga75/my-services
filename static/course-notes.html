@@ -510,6 +510,11 @@
 
             currentCourseNotes = notesData;
 
+            // Track completion state per module
+            if (!window.moduleCompletionState) {
+                window.moduleCompletionState = {};
+            }
+
             const modules = notesData.modules;
             const totalNotes = modules.reduce((sum, m) => sum + m.notes.length, 0);
             const readTime = Math.max(5, Math.round(totalNotes * 0.4));
@@ -538,30 +543,55 @@
                 <!-- Mobile Horizontal Sticky Tabs Bar -->
                 <div class="cd-mobile-notes-tabs" id="cd-mobile-notes-tabs-list" style="position: sticky; top: 0; z-index: 10;">
                     ${modules.map((mod, idx) => `
-                        <button class="cd-mobile-tab-btn${idx === 0 ? ' active' : ''}" id="mobile-tab-${idx}" onclick="scrollToModule(${idx})">
-                            ${idx + 1}. ${mod.title}
+                        <button class="cd-mobile-tab-btn${idx === 0 ? ' active' : ''}" id="mobile-tab-${idx}" onclick="handleSidebarClick(${idx})" style="${idx > 0 ? 'opacity:0.45; pointer-events:none;' : ''}">
+                            ${idx > 0 ? '<i class=\\"fas fa-lock\\" style=\\"font-size:0.6rem;margin-right:3px;\\"></i>' : ''}${idx + 1}. ${mod.title}
                         </button>
                     `).join('')}
                 </div>
 
                 <div class="cd-notes-layout-container" style="display: flex; gap: 2rem;">
-                    <!-- Left Sidebar Index -->
+                    <!-- Left Sidebar (Admin Style) -->
                     <aside class="cd-notes-sidebar" style="position: sticky; top: 20px; max-height: calc(100vh - 120px); overflow-y: auto;">
-                        <div class="cd-notes-sidebar-title">Course Modules</div>
-                        <div id="cd-notes-sidebar-list">
-                            ${modules.map((mod, idx) => `
-                                <div class="cd-sidebar-nav-item${idx === 0 ? ' active' : ''}" id="sidebar-nav-${idx}" onclick="scrollToModule(${idx})">
+                        <!-- Sidebar Header -->
+                        <div class="cd-notes-sidebar-header">
+                            <div class="cd-notes-sidebar-header-icon">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div>
+                                <div style="color: #f1f5f9; font-size: 0.88rem; font-weight: 700; line-height: 1.2;">Course Modules</div>
+                                <div style="color: #64748b; font-size: 0.7rem; margin-top: 2px;">${modules.length} chapters</div>
+                            </div>
+                        </div>
+                        <!-- Nav Label -->
+                        <div class="cd-notes-sidebar-title">Chapters</div>
+                        <!-- Nav Items -->
+                        <div class="cd-notes-sidebar-nav" id="cd-notes-sidebar-list">
+                            ${modules.map((mod, idx) => {
+                                const isFirst = idx === 0;
+                                const isLocked = !isFirst;
+                                return `
+                                <div class="cd-sidebar-nav-item${isFirst ? ' active' : ''}${isLocked ? ' locked' : ''}" 
+                                     id="sidebar-nav-${idx}" 
+                                     onclick="handleSidebarClick(${idx})">
                                     <span class="nav-item-num">${idx + 1}</span>
                                     <span class="nav-item-title" title="${mod.title}">${mod.title}</span>
-                                </div>
-                            `).join('')}
+                                    ${isFirst ? '' : `<i class="fas fa-lock nav-item-lock-icon" id="sidebar-lock-${idx}"></i>`}
+                                </div>`;
+                            }).join('')}
+                        </div>
+                        <!-- Sidebar Footer -->
+                        <div style="padding: 1rem 1.25rem; border-top: 1px solid rgba(255,255,255,0.07); margin-top: auto;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fas fa-check-circle" style="color: #10b981; font-size: 0.82rem;"></i>
+                                <span style="color: #94a3b8; font-size: 0.78rem;">Answer correctly to unlock next</span>
+                            </div>
                         </div>
                     </aside>
 
                     <!-- Right Notes Main Stream -->
                     <main class="cd-notes-main" id="cd-notes-main" style="flex: 1; min-height: 400px;">
                         ${modules.map((mod, idx) => `
-                            <div class="cd-module-card" id="module-card-${idx}">
+                            <div class="cd-module-card" id="module-card-${idx}" style="${idx > 0 ? 'display: none;' : ''}">
                                 <div class="cd-module-card-header">
                                     <div class="cd-module-card-num">${idx + 1}</div>
                                     <div class="cd-module-card-title-group">
@@ -600,6 +630,15 @@
                 const progressBar = document.getElementById('cd-notes-progress-bar');
                 if (progressBar) progressBar.style.width = `${(1 / modules.length) * 100}%`;
             }, 100);
+        }
+
+        function handleSidebarClick(idx) {
+            const item = document.getElementById(`sidebar-nav-${idx}`);
+            if (item && item.classList.contains('locked')) {
+                showToast('⚠️ Answer the current chapter quiz correctly to unlock this chapter.');
+                return;
+            }
+            scrollToModule(idx);
         }
 
         function scrollToModule(idx) {
@@ -694,12 +733,16 @@
             let firstVisibleIdx = null;
 
             modules.forEach((mod, idx) => {
-                const titleMatch = mod.title.toLowerCase().includes(cleanQuery);
-                const notesMatch = mod.notes.some(note => note.toLowerCase().includes(cleanQuery));
-
                 const card = document.getElementById(`module-card-${idx}`);
                 const sidebarItem = document.getElementById(`sidebar-nav-${idx}`);
                 const mobileTab = document.getElementById(`mobile-tab-${idx}`);
+
+                // Skip locked/hidden modules from search
+                const isModuleLocked = sidebarItem && sidebarItem.classList.contains('locked');
+                if (isModuleLocked) return;
+
+                const titleMatch = mod.title.toLowerCase().includes(cleanQuery);
+                const notesMatch = mod.notes.some(note => note.toLowerCase().includes(cleanQuery));
 
                 if (titleMatch || notesMatch) {
                     if (card) card.style.display = '';
@@ -724,7 +767,7 @@
                     });
                 } else {
                     if (card) card.style.display = 'none';
-                    if (sidebarItem) sidebarItem.style.display = 'none';
+                    if (sidebarItem) sidebarItem.style.display = '';  // Keep sidebar items visible
                     if (mobileTab) mobileTab.style.display = 'none';
                 }
             });
@@ -800,6 +843,11 @@
 
             if (!questions || questions.length === 0) {
                 container.style.display = 'none';
+                // No quiz for this module — auto-unlock next chapter (only if this module is currently visible/unlocked)
+                const sidebarItem = document.getElementById(`sidebar-nav-${moduleIdx}`);
+                if (!sidebarItem || !sidebarItem.classList.contains('locked')) {
+                    unlockNextModule(moduleIdx);
+                }
                 return;
             }
 
@@ -852,14 +900,97 @@
             if (isCorrect) {
                 btn.classList.add('correct');
                 feedback.className = 'cd-quiz-feedback correct-fb show';
-                feedback.innerHTML = `<strong><i class="fas fa-check-circle"></i> Correct!</strong> ${escapeHtml(explanation)}`;
+                feedback.innerHTML = `
+                    <strong><i class="fas fa-check-circle"></i> Correct!</strong>
+                    <span class="fb-explanation">${escapeHtml(explanation)}</span>
+                `;
+                // Mark question as correctly answered
+                if (!window.moduleCorrectAnswers) window.moduleCorrectAnswers = {};
+                if (!window.moduleCorrectAnswers[moduleIdx]) window.moduleCorrectAnswers[moduleIdx] = new Set();
+                window.moduleCorrectAnswers[moduleIdx].add(qIdx);
+
+                // Check if all questions in this module are answered correctly
+                const totalQuestionsInModule = document.querySelectorAll(`[id^="quiz-card-${moduleIdx}-"]`).length;
+                if (window.moduleCorrectAnswers[moduleIdx].size >= totalQuestionsInModule) {
+                    unlockNextModule(moduleIdx);
+                }
             } else {
                 btn.classList.add('incorrect');
                 if (options[correctIdx]) {
                     options[correctIdx].classList.add('correct');
                 }
                 feedback.className = 'cd-quiz-feedback incorrect-fb show';
-                feedback.innerHTML = `<strong><i class="fas fa-times-circle"></i> Incorrect.</strong> ${escapeHtml(explanation)}`;
+                feedback.innerHTML = `
+                    <strong><i class="fas fa-times-circle"></i> Incorrect</strong>
+                    <span class="fb-explanation">${escapeHtml(explanation)}</span>
+                `;
+            }
+        }
+
+        function unlockNextModule(completedModuleIdx) {
+            const nextIdx = completedModuleIdx + 1;
+            if (!currentCourseNotes || !currentCourseNotes.modules) return;
+            if (nextIdx >= currentCourseNotes.modules.length) {
+                // All modules completed!
+                showToast('🎉 Congratulations! You\'ve completed all chapters!');
+                // Mark current as completed
+                const currentSidebar = document.getElementById(`sidebar-nav-${completedModuleIdx}`);
+                if (currentSidebar) {
+                    currentSidebar.classList.add('completed');
+                    currentSidebar.classList.remove('active');
+                    const lockIcon = document.getElementById(`sidebar-lock-${completedModuleIdx}`);
+                    if (lockIcon) { lockIcon.className = 'fas fa-check-circle nav-item-check-icon'; lockIcon.id = ''; }
+                    const numBadge = currentSidebar.querySelector('.nav-item-num');
+                    if (numBadge) numBadge.innerHTML = '<i class="fas fa-check" style="font-size:0.65rem;"></i>';
+                }
+                return;
+            }
+
+            // Mark current module as completed in sidebar
+            const currentSidebar = document.getElementById(`sidebar-nav-${completedModuleIdx}`);
+            if (currentSidebar) {
+                currentSidebar.classList.add('completed');
+                currentSidebar.classList.remove('active');
+                const lockIcon = document.getElementById(`sidebar-lock-${completedModuleIdx}`);
+                if (lockIcon) { lockIcon.className = 'fas fa-check-circle nav-item-check-icon'; lockIcon.id = ''; }
+                const numBadge = currentSidebar.querySelector('.nav-item-num');
+                if (numBadge) numBadge.innerHTML = '<i class="fas fa-check" style="font-size:0.65rem;"></i>';
+            }
+
+            // Unlock next module in sidebar
+            const nextSidebar = document.getElementById(`sidebar-nav-${nextIdx}`);
+            if (nextSidebar) {
+                nextSidebar.classList.remove('locked');
+                nextSidebar.classList.add('active');
+                const lockIcon = document.getElementById(`sidebar-lock-${nextIdx}`);
+                if (lockIcon) lockIcon.remove();
+            }
+
+            // Unlock next module in main content
+            const nextCard = document.getElementById(`module-card-${nextIdx}`);
+            if (nextCard) {
+                nextCard.style.display = '';
+                // Smooth scroll to next module after a brief delay
+                setTimeout(() => {
+                    scrollToModule(nextIdx);
+                    showToast(`✅ Chapter ${nextIdx + 1} unlocked! Great work!`);
+                }, 400);
+            }
+
+            // Update mobile tab — re-enable and remove lock icon
+            const nextMobileTab = document.getElementById(`mobile-tab-${nextIdx}`);
+            if (nextMobileTab) {
+                nextMobileTab.style.opacity = '1';
+                nextMobileTab.style.pointerEvents = '';
+                nextMobileTab.textContent = `${nextIdx + 1}. ${currentCourseNotes.modules[nextIdx].title}`;
+            }
+
+            // Update progress bar
+            if (currentCourseNotes && currentCourseNotes.modules) {
+                const total = currentCourseNotes.modules.length;
+                const progress = ((nextIdx) / total) * 100;
+                const progressBar = document.getElementById('cd-notes-progress-bar');
+                if (progressBar) progressBar.style.width = `${progress}%`;
             }
         }
 
