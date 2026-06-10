@@ -29,6 +29,7 @@ const mergedQuizzes = {
     ...(typeof quizData3 !== 'undefined' ? quizData3 : (global.quizData3 || {}))
 };
 
+const finalData = {};
 const finalNotesMap = typeof courseNotesMap !== 'undefined' ? courseNotesMap : global.courseNotesMap;
 for (const courseTitle of Object.keys(finalNotesMap)) {
     const courseData = finalNotesMap[courseTitle];

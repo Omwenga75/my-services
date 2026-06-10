@@ -1,0 +1,1376 @@
+{
+  "Python Mastery Bootcamp": {
+    "modules": [
+      {
+        "title": "Python Basics & Data Types",
+        "badge": "Foundation",
+        "notes": [
+          "Variables are created by assignment: <code>x = 10</code>. Python is dynamically typed — no need to declare types explicitly.",
+          "<strong>Core data types:</strong> <code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>, <code>list</code>, <code>tuple</code>, <code>dict</code>, <code>set</code>. Use <code>type()</code> to inspect any object's type at runtime.",
+          "Strings support f-string formatting: <code>f\"Hello {name}\"</code>. Use <code>.strip()</code>, <code>.split()</code>, <code>.replace()</code>, and <code>.join()</code> for common string operations.",
+          "<strong>Lists</strong> are mutable and ordered: <code>my_list.append(item)</code>. <strong>Tuples</strong> are immutable. <strong>Dicts</strong> store key-value pairs: <code>data['key']</code>.",
+          "Use <code>len()</code>, <code>range()</code>, <code>enumerate()</code>, and <code>zip()</code> as essential built-in functions for everyday coding.",
+          "List comprehensions provide concise syntax: <code>[x**2 for x in range(10) if x % 2 == 0]</code> creates a filtered, transformed list in one line."
+        ],
+        "questions": [
+          {
+            "question": "What is the output of the following code?\n\nx = [1, 2, 3]\ny = x\ny.append(4)\nprint(len(x))",
+            "options": [
+              "3",
+              "4",
+              "Error",
+              "None"
+            ],
+            "correct": 1,
+            "explanation": "Lists are mutable and assigned by reference. Since y points to the same list object as x, appending to y also modifies x, making its length 4."
+          },
+          {
+            "question": "Which of the following correctly creates a list of squares for even numbers from 0 to 9 using a list comprehension?",
+            "options": [
+              "[x**2 for x in range(10) if x % 2 == 0]",
+              "[x**2 if x % 2 == 0 for x in range(10)]",
+              "[for x in range(10) if x % 2 == 0: x**2]",
+              "(x**2 for x in range(10) if x % 2 == 0)"
+            ],
+            "correct": 0,
+            "explanation": "In a list comprehension the filter condition (if clause) comes after the for clause. The last option would create a generator expression, not a list."
+          }
+        ]
+      },
+      {
+        "title": "Control Flow & Functions",
+        "badge": "Logic",
+        "notes": [
+          "Conditional statements: <code>if</code>, <code>elif</code>, <code>else</code>. Python uses indentation (4 spaces) instead of braces to define code blocks.",
+          "<strong>Loops:</strong> <code>for item in iterable:</code> iterates over sequences. <code>while condition:</code> runs until the condition is false. Use <code>break</code> to exit and <code>continue</code> to skip.",
+          "Functions are defined with <code>def func_name(params):</code>. Use <code>return</code> to send values back. Functions are first-class objects in Python.",
+          "<strong>Default & keyword arguments:</strong> <code>def greet(name, greeting='Hello'):</code>. Use <code>*args</code> for variable positional args and <code>**kwargs</code> for keyword args.",
+          "Lambda functions are anonymous: <code>square = lambda x: x**2</code>. Use with <code>map()</code>, <code>filter()</code>, and <code>sorted()</code> for functional-style programming.",
+          "Scope follows the <strong>LEGB rule:</strong> Local → Enclosing → Global → Built-in. Use <code>global</code> or <code>nonlocal</code> keywords to modify outer-scope variables."
+        ],
+        "questions": [
+          {
+            "question": "What will the following function call print?\n\ndef greet(name, greeting=\"Hello\"):\n    print(f\"{greeting}, {name}!\")\n\ngreet(greeting=\"Hey\", name=\"Alice\")",
+            "options": [
+              "Hello, Alice!",
+              "Hey, Alice!",
+              "Error: positional argument follows keyword argument",
+              "Hey, Hey!"
+            ],
+            "correct": 1,
+            "explanation": "Keyword arguments can be passed in any order. Here greeting is explicitly set to 'Hey' and name to 'Alice', overriding the default value of greeting."
+          },
+          {
+            "question": "In Python’s LEGB scope resolution, if a variable is defined both inside a function and at the module level, which value does the function use?",
+            "options": [
+              "The module-level (global) value",
+              "The local value defined inside the function",
+              "It raises a NameError",
+              "It depends on the order of definition"
+            ],
+            "correct": 1,
+            "explanation": "LEGB stands for Local, Enclosing, Global, Built-in. Python searches scopes in that order, so a locally defined variable is found first and used instead of the global one."
+          }
+        ]
+      },
+      {
+        "title": "Object-Oriented Programming",
+        "badge": "OOP",
+        "notes": [
+          "Classes are blueprints: <code>class Dog:</code>. The <code>__init__</code> method is the constructor. <code>self</code> refers to the current instance.",
+          "<strong>Encapsulation:</strong> prefix with <code>_</code> for protected and <code>__</code> for private (name-mangled). Use <code>@property</code> decorators for getter/setter patterns.",
+          "<strong>Inheritance:</strong> <code>class Puppy(Dog):</code> inherits all methods. Use <code>super().__init__()</code> to call the parent constructor. Python supports multiple inheritance.",
+          "<strong>Polymorphism:</strong> different classes can implement the same method name. Python uses duck typing — if it walks and quacks like a duck, it's a duck.",
+          "<strong>Magic methods:</strong> <code>__str__</code> for string representation, <code>__len__</code> for length, <code>__eq__</code> for equality comparison, <code>__repr__</code> for debugging output.",
+          "Use <code>@staticmethod</code> for utility methods that don't need instance access, and <code>@classmethod</code> for factory methods that receive the class as first argument."
+        ],
+        "questions": [
+          {
+            "question": "A class Dog inherits from Animal and both define a speak() method. When you call Dog().speak(), which version runs?",
+            "options": [
+              "Animal’s speak() because it is the parent",
+              "Dog’s speak() due to polymorphism",
+              "Both methods run sequentially",
+              "Python raises an ambiguity error"
+            ],
+            "correct": 1,
+            "explanation": "Polymorphism allows a subclass to override a parent’s method. Python’s method resolution order (MRO) finds Dog’s speak() first, so that version executes."
+          },
+          {
+            "question": "What is the purpose of the __repr__ magic method in a Python class?",
+            "options": [
+              "It defines how the object is deleted from memory",
+              "It returns an unambiguous string representation of the object, mainly for debugging",
+              "It controls attribute access on the object",
+              "It initializes the object’s attributes"
+            ],
+            "correct": 1,
+            "explanation": "__repr__ should return a developer-friendly string that ideally could recreate the object. It is called by repr() and is the fallback when __str__ is not defined."
+          }
+        ]
+      },
+      {
+        "title": "File I/O & Error Handling",
+        "badge": "Reliability",
+        "notes": [
+          "Open files with context managers: <code>with open('file.txt', 'r') as f:</code> — this guarantees the file is properly closed, even if an error occurs.",
+          "<strong>File modes:</strong> <code>'r'</code> read, <code>'w'</code> write (overwrites), <code>'a'</code> append, <code>'rb'</code>/<code>'wb'</code> for binary. Use <code>f.read()</code>, <code>f.readline()</code>, or <code>f.readlines()</code>.",
+          "<strong>Exception handling:</strong> <code>try: ... except TypeError as e: ... finally:</code>. Always catch specific exceptions rather than bare <code>except:</code>.",
+          "Common exceptions: <code>ValueError</code>, <code>TypeError</code>, <code>KeyError</code>, <code>IndexError</code>, <code>FileNotFoundError</code>. Raise custom exceptions with <code>raise</code>.",
+          "Use the <code>json</code> module for structured data: <code>json.load(f)</code> reads from file, <code>json.dumps(data, indent=2)</code> serializes to a formatted string.",
+          "The <code>os</code> and <code>pathlib</code> modules handle file paths cross-platform: <code>Path('data') / 'file.csv'</code> builds paths safely."
+        ],
+        "questions": [
+          {
+            "question": "Why is using a context manager (with statement) preferred over manually calling file.open() and file.close()?",
+            "options": [
+              "It makes the code run faster",
+              "It automatically closes the file even if an exception occurs",
+              "It allows reading and writing at the same time",
+              "It encrypts the file contents automatically"
+            ],
+            "correct": 1,
+            "explanation": "A context manager guarantees that the file is properly closed when the block exits, even if an error is raised inside it. This prevents resource leaks."
+          },
+          {
+            "question": "You need to read a JSON config file and handle the case where the file might not exist. Which approach is correct?",
+            "options": [
+              "try:\n    with open('config.json') as f:\n        data = json.load(f)\nexcept FileNotFoundError:\n    data = {}",
+              "data = json.load('config.json') or {}",
+              "with open('config.json') as f:\n    data = json.loads(f)",
+              "data = json.read('config.json', default={})"
+            ],
+            "correct": 0,
+            "explanation": "Wrapping the file open in a try/except for FileNotFoundError is the Pythonic way to handle missing files. json.load() takes a file object, not a string path, and there is no json.read() function."
+          }
+        ]
+      },
+      {
+        "title": "Web APIs & Automation",
+        "badge": "Integration",
+        "notes": [
+          "The <code>requests</code> library makes HTTP calls: <code>requests.get(url)</code>, <code>requests.post(url, json=data)</code>. Always check <code>response.status_code</code> before parsing.",
+          "<strong>REST API pattern:</strong> GET (read), POST (create), PUT (update), DELETE (remove). APIs return JSON — parse with <code>response.json()</code>.",
+          "Use <strong>API keys</strong> for authentication. Store secrets in environment variables: <code>os.environ.get('API_KEY')</code> — never hardcode credentials.",
+          "<strong>Automation with Python:</strong> schedule scripts with <code>schedule</code> library, automate browser tasks with <code>selenium</code>, and send emails with <code>smtplib</code>.",
+          "Web scraping with <code>BeautifulSoup</code>: <code>soup.find_all('div', class_='item')</code> extracts elements. Always respect <code>robots.txt</code> and rate-limit your requests.",
+          "<strong>Error handling in APIs:</strong> implement retries with exponential backoff. Use <code>try/except</code> around network calls and set <code>timeout</code> parameters."
+        ],
+        "questions": [
+          {
+            "question": "When making a GET request to a REST API using the requests library, which method should you use to safely check for HTTP errors before processing the response?",
+            "options": [
+              "response.validate()",
+              "response.raise_for_status()",
+              "response.check_error()",
+              "requests.verify(response)"
+            ],
+            "correct": 1,
+            "explanation": "response.raise_for_status() raises an HTTPError for 4xx/5xx status codes. This is the standard way to detect failed requests before attempting to parse the response body."
+          },
+          {
+            "question": "You are scraping a webpage with BeautifulSoup and want to extract all <a> tags that have a class of 'nav-link'. Which call is correct?",
+            "options": [
+              "soup.find_all('a', class_='nav-link')",
+              "soup.select_all('a.nav-link')",
+              "soup.get('a', class='nav-link')",
+              "soup.find('a', className='nav-link')"
+            ],
+            "correct": 0,
+            "explanation": "find_all() is the correct BeautifulSoup method, and class_ (with underscore) is used because class is a reserved word in Python. select() uses CSS selectors but the method is select(), not select_all()."
+          }
+        ]
+      },
+      {
+        "title": "Data Analysis with Python",
+        "badge": "Analytics",
+        "notes": [
+          "<strong>Pandas</strong> is the core library: <code>import pandas as pd</code>. Load data with <code>pd.read_csv('data.csv')</code>. A DataFrame is a 2D labeled data structure.",
+          "Key operations: <code>df.head()</code>, <code>df.describe()</code>, <code>df.info()</code> for exploration. Filter rows: <code>df[df['age'] > 25]</code>. Select columns: <code>df[['name', 'age']]</code>.",
+          "Handle missing data: <code>df.dropna()</code> removes rows, <code>df.fillna(0)</code> replaces. Use <code>df.isnull().sum()</code> to count missing values per column.",
+          "<strong>GroupBy</strong> for aggregation: <code>df.groupby('category')['price'].mean()</code>. Chain operations: <code>.sort_values()</code>, <code>.reset_index()</code>.",
+          "<strong>Matplotlib</strong> for plotting: <code>plt.plot(x, y)</code>, <code>plt.bar()</code>, <code>plt.scatter()</code>. Use <code>plt.title()</code>, <code>plt.xlabel()</code> to label charts.",
+          "Export results: <code>df.to_csv('output.csv', index=False)</code>. For Excel: <code>df.to_excel('output.xlsx')</code>. Combine with <code>pd.merge()</code> or <code>pd.concat()</code>."
+        ],
+        "questions": [
+          {
+            "question": "You have a pandas DataFrame df with a column 'sales'. Which expression correctly returns a new DataFrame containing only rows where sales exceed 1000?",
+            "options": [
+              "df.filter(sales > 1000)",
+              "df[df['sales'] > 1000]",
+              "df.query(sales > 1000)",
+              "df.where('sales', '>', 1000)"
+            ],
+            "correct": 1,
+            "explanation": "Boolean indexing with df[df['sales'] > 1000] is the standard pandas approach for filtering rows. The expression inside the brackets creates a boolean Series used as a mask."
+          },
+          {
+            "question": "After running df.groupby('region')['revenue'].mean(), what does the result represent?",
+            "options": [
+              "The total revenue for each region",
+              "The average revenue per region",
+              "A DataFrame with one row per region showing all columns",
+              "The median revenue across all regions"
+            ],
+            "correct": 1,
+            "explanation": "groupby('region')['revenue'].mean() groups the data by the region column, selects the revenue column, and computes the arithmetic mean for each group."
+          }
+        ]
+      }
+    ]
+  },
+  "Graphics & UI/UX Design": {
+    "modules": [
+      {
+        "title": "Design Principles & Fundamentals",
+        "badge": "Foundation",
+        "notes": [
+          "<strong>Visual hierarchy</strong> guides the eye through size, color, contrast, and position. The most important element should be the most visually prominent.",
+          "<strong>Proximity & grouping:</strong> related elements should be placed close together. White space (negative space) separates unrelated groups and reduces cognitive load.",
+          "<strong>Alignment</strong> creates visual order. Use grids and guides to align elements consistently — left-align body text for readability in LTR languages.",
+          "<strong>Contrast</strong> creates emphasis: light vs. dark, large vs. small, thick vs. thin. WCAG requires a minimum 4.5:1 contrast ratio for body text accessibility.",
+          "<strong>Repetition</strong> builds consistency: use the same colors, fonts, spacing, and button styles throughout. This creates a cohesive brand feel.",
+          "The <strong>60-30-10 rule</strong> for color: 60% dominant color (background), 30% secondary (cards/sections), 10% accent (CTAs/highlights)."
+        ],
+        "questions": [
+          {
+            "question": "A designer places the most important headline in large bold text at the top of a page, with supporting details in smaller text below. Which design principle is being applied?",
+            "options": [
+              "Repetition",
+              "Visual hierarchy",
+              "Proximity",
+              "Alignment"
+            ],
+            "correct": 1,
+            "explanation": "Visual hierarchy uses size, weight, color, and placement to guide the viewer’s eye to the most important content first, establishing a clear reading order."
+          },
+          {
+            "question": "In the 60-30-10 color rule, what does the '60' represent?",
+            "options": [
+              "The accent color used for call-to-action buttons",
+              "The dominant color that covers the majority of the design surface",
+              "The number of colors allowed in a palette",
+              "The percentage of white space required"
+            ],
+            "correct": 1,
+            "explanation": "The 60-30-10 rule divides a design’s color usage: 60% dominant color (backgrounds), 30% secondary color (navigation, cards), and 10% accent color (CTAs, highlights)."
+          }
+        ]
+      },
+      {
+        "title": "Typography & Color Theory",
+        "badge": "Visual",
+        "notes": [
+          "<strong>Font pairing:</strong> combine a serif heading font with a sans-serif body font, or use weight contrast within one font family (e.g., Outfit 800 + Outfit 400).",
+          "Ideal body text size: <strong>16px minimum</strong> for screens. Line height should be 1.5–1.8× the font size. Line length: 50–75 characters per line for readability.",
+          "<strong>Type scale:</strong> use a consistent ratio (e.g., 1.25 or 1.333) to generate heading sizes. Example: 16px → 20px → 25px → 31px → 39px.",
+          "<strong>Color psychology:</strong> blue conveys trust, red signals urgency, green suggests growth, purple represents creativity. Choose brand colors that align with your message.",
+          "<strong>HSL color model</strong> is best for UI design: adjust Hue for color, Saturation for vibrancy, Lightness for shade variants. Create tint ladders (100–900) for a full palette.",
+          "Always test colors for <strong>accessibility:</strong> use tools like Stark or Contrast Checker. Avoid conveying meaning through color alone — add icons or labels."
+        ],
+        "questions": [
+          {
+            "question": "When pairing fonts for a design, which combination generally produces the best results?",
+            "options": [
+              "Two decorative display fonts for maximum visual interest",
+              "A serif and a sans-serif that share similar x-heights",
+              "Fonts from the same family with identical weights",
+              "Three or more contrasting script fonts"
+            ],
+            "correct": 1,
+            "explanation": "Pairing a serif with a sans-serif creates visual contrast while maintaining harmony. Matching x-heights ensures the fonts feel balanced when used together at the same size."
+          },
+          {
+            "question": "According to WCAG accessibility guidelines, what is the minimum contrast ratio required for normal-sized body text?",
+            "options": [
+              "2:1",
+              "3:1",
+              "4.5:1",
+              "7:1"
+            ],
+            "correct": 2,
+            "explanation": "WCAG 2.1 Level AA requires a minimum contrast ratio of 4.5:1 for normal text. Large text (18px+ bold or 24px+ regular) has a lower requirement of 3:1."
+          }
+        ]
+      },
+      {
+        "title": "Figma Essentials",
+        "badge": "Tool",
+        "notes": [
+          "<strong>Frames</strong> are the core building block in Figma. Use device-sized frames (1440×900 Desktop, 375×812 Mobile) as your artboards.",
+          "<strong>Auto Layout</strong> works like CSS flexbox: set direction, spacing, and padding. Nest Auto Layout frames for complex responsive structures.",
+          "<strong>Components</strong> are reusable elements: create a main component, then use instances. Changes to the main propagate to all instances automatically.",
+          "<strong>Variants</strong> let you define states: Default, Hover, Active, Disabled. Combine with <strong>Interactive Components</strong> for realistic prototype interactions.",
+          "Use <strong>Styles</strong> for colors, text, effects, and grids. Name them systematically: <code>Primary/500</code>, <code>Text/Body</code>, <code>Shadow/Medium</code>.",
+          "<strong>Dev Mode</strong> generates CSS, iOS, and Android code from designs. Use the Inspect panel for spacing, colors, and typography values during developer handoff."
+        ],
+        "questions": [
+          {
+            "question": "In Figma, what is the primary benefit of using Auto Layout on a frame?",
+            "options": [
+              "It automatically generates CSS code for the design",
+              "It makes the frame’s children resize and reflow dynamically based on content and defined spacing rules",
+              "It prevents other team members from editing the frame",
+              "It exports the frame as a responsive HTML page"
+            ],
+            "correct": 1,
+            "explanation": "Auto Layout lets child elements within a frame automatically adjust their position and size based on defined padding, spacing, and alignment — similar to CSS Flexbox."
+          },
+          {
+            "question": "What is the relationship between Figma components and variants?",
+            "options": [
+              "Variants are components that have been deleted and archived",
+              "Components are read-only; variants are the editable copies",
+              "Variants allow a single component to have multiple states or configurations (e.g., default, hover, disabled)",
+              "Variants are only used in Figma’s free tier"
+            ],
+            "correct": 2,
+            "explanation": "Variants let designers bundle multiple states of a component (sizes, states, themes) into one organized component set, making it easier to swap between configurations."
+          }
+        ]
+      },
+      {
+        "title": "UX Research & Strategy",
+        "badge": "Research",
+        "notes": [
+          "<strong>User personas</strong> represent target audience segments. Include demographics, goals, frustrations, and behaviors. Base them on real research, not assumptions.",
+          "<strong>User journey maps</strong> visualize the end-to-end experience: Awareness → Consideration → Onboarding → Usage → Retention. Identify pain points at each stage.",
+          "<strong>Usability testing:</strong> observe 5 users attempting tasks on your prototype. Follow the think-aloud protocol — ask users to narrate their thought process.",
+          "<strong>Heuristic evaluation</strong> uses Nielsen's 10 principles: visibility of system status, error prevention, recognition over recall, aesthetic minimalist design, and more.",
+          "<strong>Card sorting</strong> helps define information architecture: give users content cards and ask them to group and label categories for navigation design.",
+          "Measure UX with <strong>metrics:</strong> Task Success Rate, Time on Task, System Usability Scale (SUS) score (68+ is above average), and Net Promoter Score (NPS)."
+        ],
+        "questions": [
+          {
+            "question": "A UX researcher observes five users attempting to complete a checkout flow and notes where they hesitate or make errors. What research method is this?",
+            "options": [
+              "Card sorting",
+              "A/B testing",
+              "Usability testing",
+              "Heuristic evaluation"
+            ],
+            "correct": 2,
+            "explanation": "Usability testing involves observing real users as they attempt tasks, identifying pain points and areas of confusion in the interface through direct observation."
+          },
+          {
+            "question": "Which UX artifact maps out a user’s emotions, actions, and pain points across each stage of their interaction with a product?",
+            "options": [
+              "User persona",
+              "Site map",
+              "User journey map",
+              "Wireframe"
+            ],
+            "correct": 2,
+            "explanation": "A user journey map visualizes the end-to-end experience across touchpoints, capturing what users do, think, and feel at each stage to identify opportunities for improvement."
+          }
+        ]
+      },
+      {
+        "title": "UI Prototyping & Interaction",
+        "badge": "Interactive",
+        "notes": [
+          "<strong>Low-fidelity wireframes</strong> come first: sketch layouts with boxes and lines. Focus on structure and flow, not colors or fonts. Paper or Figma both work.",
+          "<strong>High-fidelity mockups</strong> add visual design: real colors, typography, images, and spacing. These represent the final look before development.",
+          "<strong>Micro-interactions</strong> improve UX: button hover effects, loading spinners, success animations, input field focus states. Use Figma Smart Animate for transitions.",
+          "<strong>Design tokens</strong> standardize values: colors, spacing (4px/8px grid), border-radius, shadows. Define once, use everywhere for consistency.",
+          "<strong>Responsive design:</strong> design for mobile-first, then scale up. Use breakpoints at 375px (mobile), 768px (tablet), 1024px (laptop), 1440px (desktop).",
+          "<strong>Accessibility (a11y):</strong> ensure touch targets are 44×44px minimum, use proper heading hierarchy (H1→H2→H3), and provide alt text for images."
+        ],
+        "questions": [
+          {
+            "question": "What is the key difference between a wireframe and a high-fidelity mockup?",
+            "options": [
+              "Wireframes are interactive; mockups are static",
+              "Wireframes focus on layout and structure with minimal detail, while mockups include visual design, color, and typography",
+              "Mockups are created before wireframes in the design process",
+              "There is no meaningful difference; the terms are interchangeable"
+            ],
+            "correct": 1,
+            "explanation": "Wireframes are low-fidelity sketches focused on information architecture and layout. High-fidelity mockups add visual polish — colors, fonts, images — to represent the final design."
+          },
+          {
+            "question": "A button subtly changes color and elevates its shadow when a user hovers over it. What is this type of feedback called?",
+            "options": [
+              "A design token",
+              "A micro-interaction",
+              "A responsive breakpoint",
+              "An accessibility audit"
+            ],
+            "correct": 1,
+            "explanation": "Micro-interactions are small, contained animations or visual responses triggered by user actions. They provide immediate feedback and make interfaces feel responsive and alive."
+          }
+        ]
+      },
+      {
+        "title": "Brand Identity & Design Systems",
+        "badge": "Branding",
+        "notes": [
+          "A <strong>brand identity</strong> includes: logo, color palette, typography, iconography, tone of voice, and imagery style. Consistency builds recognition and trust.",
+          "<strong>Logo design principles:</strong> keep it simple, make it scalable (works at 16px favicon to billboard), ensure it's recognizable in single-color and reversed versions.",
+          "<strong>Design systems</strong> are component libraries with documentation: buttons, inputs, cards, modals, navigation. They ensure consistency across teams and products.",
+          "Use <strong>atomic design methodology:</strong> Atoms (buttons, labels) → Molecules (search bar) → Organisms (header) → Templates → Pages.",
+          "<strong>Style guides</strong> document usage rules: minimum logo clear space, do/don't examples, color usage guidelines, and voice & tone for copy.",
+          "Popular design systems to study: <strong>Material Design</strong> (Google), <strong>Human Interface Guidelines</strong> (Apple), <strong>Carbon</strong> (IBM), <strong>Ant Design</strong> (Alibaba)."
+        ],
+        "questions": [
+          {
+            "question": "In atomic design methodology, which level represents the smallest, most basic UI elements like buttons, input fields, and labels?",
+            "options": [
+              "Pages",
+              "Organisms",
+              "Molecules",
+              "Atoms"
+            ],
+            "correct": 3,
+            "explanation": "Atoms are the foundational building blocks in atomic design — individual elements like buttons, icons, and form labels that cannot be broken down further while remaining functional."
+          },
+          {
+            "question": "What is the primary purpose of a design system in a large organization?",
+            "options": [
+              "To replace the need for designers entirely",
+              "To ensure visual and functional consistency across all products through shared components, patterns, and guidelines",
+              "To lock down the UI so no changes can be made after launch",
+              "To automatically generate marketing materials"
+            ],
+            "correct": 1,
+            "explanation": "A design system provides a single source of truth for reusable components, style guidelines, and interaction patterns, ensuring consistency and speeding up development across teams."
+          }
+        ]
+      }
+    ]
+  },
+  "Web Development": {
+    "modules": [
+      {
+        "title": "HTML Fundamentals",
+        "badge": "Structure",
+        "notes": [
+          "<strong>HTML5 semantic elements</strong> improve accessibility and SEO: <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;footer&gt;</code>.",
+          "Every page needs: <code>&lt;!DOCTYPE html&gt;</code>, <code>&lt;html lang=\"en\"&gt;</code>, <code>&lt;meta charset=\"UTF-8\"&gt;</code>, <code>&lt;meta viewport&gt;</code>, and a descriptive <code>&lt;title&gt;</code>.",
+          "<strong>Forms:</strong> <code>&lt;form action=\"/submit\" method=\"POST\"&gt;</code>. Use <code>&lt;label for=\"id\"&gt;</code> linked to inputs. Types: <code>text</code>, <code>email</code>, <code>password</code>, <code>number</code>, <code>date</code>.",
+          "<strong>Attributes matter:</strong> <code>alt</code> for images (accessibility), <code>required</code> for form validation, <code>placeholder</code> for hints, <code>id</code> for unique identification.",
+          "Use <code>&lt;a href=\"url\" target=\"_blank\" rel=\"noopener\"&gt;</code> for external links. Use <code>&lt;img src loading=\"lazy\"&gt;</code> for performance optimization.",
+          "<strong>Tables</strong> are for tabular data only: <code>&lt;table&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;th&gt;</code>, <code>&lt;td&gt;</code>. Never use tables for page layout."
+        ],
+        "questions": [
+          {
+            "question": "Which HTML element is the most semantically appropriate for wrapping a site's main navigation links?",
+            "options": [
+              "<div id=\"navigation\">",
+              "<nav>",
+              "<header>",
+              "<section>"
+            ],
+            "correct": 1,
+            "explanation": "The <nav> element is the semantic HTML5 element specifically designed to wrap major navigation blocks, improving accessibility and SEO over a generic <div>."
+          },
+          {
+            "question": "What does adding the 'required' attribute to an <input> element inside a <form> do?",
+            "options": [
+              "It styles the input with a red border by default",
+              "It prevents the form from being submitted until the field has a value",
+              "It automatically fills in a default value for the user",
+              "It makes the input field read-only"
+            ],
+            "correct": 1,
+            "explanation": "The 'required' attribute enables built-in browser validation that prevents form submission if the field is left empty, without needing any JavaScript."
+          }
+        ]
+      },
+      {
+        "title": "CSS & Layout Systems",
+        "badge": "Styling",
+        "notes": [
+          "<strong>The Box Model:</strong> every element = content + padding + border + margin. Use <code>box-sizing: border-box</code> so width includes padding and border.",
+          "<strong>Flexbox</strong> for 1D layouts: <code>display: flex</code>. Key properties: <code>justify-content</code> (main axis), <code>align-items</code> (cross axis), <code>gap</code>, <code>flex-wrap</code>.",
+          "<strong>CSS Grid</strong> for 2D layouts: <code>display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;</code>. Use <code>grid-area</code> for named regions.",
+          "<strong>Responsive design:</strong> <code>@media (max-width: 768px) { }</code>. Mobile-first approach: write base styles for mobile, add media queries for larger screens.",
+          "<strong>CSS Variables:</strong> <code>:root { --primary: #6D28D9; }</code> then <code>color: var(--primary)</code>. Makes theming and maintenance much easier.",
+          "<strong>Transitions & animations:</strong> <code>transition: all 0.3s ease;</code> for hover effects. Use <code>@keyframes</code> for complex multi-step animations. Prefer <code>transform</code> and <code>opacity</code> for performance."
+        ],
+        "questions": [
+          {
+            "question": "In the CSS box model, if an element has width: 200px, padding: 20px, and border: 5px solid black, what is its total rendered width by default (content-box)?",
+            "options": [
+              "200px",
+              "225px",
+              "250px",
+              "245px"
+            ],
+            "correct": 2,
+            "explanation": "With the default content-box model, total width = content (200px) + left padding (20px) + right padding (20px) + left border (5px) + right border (5px) = 250px."
+          },
+          {
+            "question": "Which CSS property and value correctly centers all flex items both horizontally and vertically inside a flex container?",
+            "options": [
+              "display: flex; text-align: center; vertical-align: middle;",
+              "display: flex; justify-content: center; align-items: center;",
+              "display: flex; margin: 0 auto; align-self: center;",
+              "display: flex; float: center; position: middle;"
+            ],
+            "correct": 1,
+            "explanation": "justify-content: center centers items along the main axis and align-items: center centers them along the cross axis, achieving full centering in a flex container."
+          }
+        ]
+      },
+      {
+        "title": "JavaScript Core Concepts",
+        "badge": "Logic",
+        "notes": [
+          "Use <code>const</code> by default, <code>let</code> when reassignment is needed. Never use <code>var</code> — it has function scope and hoisting issues.",
+          "<strong>Arrow functions:</strong> <code>const add = (a, b) => a + b;</code>. Use for callbacks and short functions. Regular functions for methods needing their own <code>this</code>.",
+          "<strong>Template literals:</strong> <code>`Hello ${name}, you are ${age} years old`</code>. Support multi-line strings and embedded expressions.",
+          "<strong>Destructuring:</strong> <code>const { name, age } = user;</code> for objects. <code>const [first, ...rest] = items;</code> for arrays with spread operator.",
+          "<strong>Array methods chain:</strong> <code>.filter()</code> → <code>.map()</code> → <code>.reduce()</code>. Also: <code>.find()</code>, <code>.some()</code>, <code>.every()</code>, <code>.forEach()</code>.",
+          "<strong>Async/Await:</strong> <code>const data = await fetch(url); const json = await data.json();</code>. Wrap in <code>try/catch</code> for error handling. Cleaner than Promise chains."
+        ],
+        "questions": [
+          {
+            "question": "What is the output of the following code?\n\nconst nums = [1, 2, 3, 4, 5];\nconst result = nums.filter(n => n > 2).map(n => n * 10);\nconsole.log(result);",
+            "options": [
+              "[10, 20, 30, 40, 50]",
+              "[30, 40, 50]",
+              "[3, 4, 5]",
+              "[1, 2, 30, 40, 50]"
+            ],
+            "correct": 1,
+            "explanation": "filter(n => n > 2) produces [3, 4, 5], then map(n => n * 10) transforms each element, producing [30, 40, 50]."
+          },
+          {
+            "question": "What is the key difference between 'const' and 'let' in JavaScript?",
+            "options": [
+              "'const' is function-scoped while 'let' is block-scoped",
+              "'const' cannot be reassigned after initialization, while 'let' can be",
+              "'const' variables are hoisted but 'let' variables are not",
+              "'const' can only hold primitive values, not objects or arrays"
+            ],
+            "correct": 1,
+            "explanation": "Both const and let are block-scoped, but const prevents reassignment of the binding. Note that const objects and arrays can still have their contents mutated — only the variable reference is immutable."
+          }
+        ]
+      },
+      {
+        "title": "DOM Manipulation & Events",
+        "badge": "Interactive",
+        "notes": [
+          "Select elements: <code>document.getElementById('id')</code>, <code>document.querySelector('.class')</code>, <code>document.querySelectorAll('div.card')</code>.",
+          "Modify content: <code>el.textContent = 'text'</code> (safe), <code>el.innerHTML = '&lt;b&gt;bold&lt;/b&gt;'</code> (parses HTML — beware XSS). Use <code>el.style.color = 'red'</code> for inline styles.",
+          "Create elements dynamically: <code>const div = document.createElement('div'); div.className = 'card'; parent.appendChild(div);</code>.",
+          "<strong>Event listeners:</strong> <code>btn.addEventListener('click', handler)</code>. Common events: <code>click</code>, <code>submit</code>, <code>input</code>, <code>keydown</code>, <code>DOMContentLoaded</code>.",
+          "<strong>Event delegation:</strong> attach one listener to a parent element. Use <code>event.target</code> to identify which child was clicked. Much more efficient than individual listeners.",
+          "<strong>Prevent defaults:</strong> <code>event.preventDefault()</code> stops form submission or link navigation. <code>event.stopPropagation()</code> prevents event bubbling."
+        ],
+        "questions": [
+          {
+            "question": "A developer attaches a single click handler to a <ul> element instead of to each <li> child. Which technique is this an example of?",
+            "options": [
+              "Event capturing",
+              "Event throttling",
+              "Event delegation",
+              "Event propagation"
+            ],
+            "correct": 2,
+            "explanation": "Event delegation leverages event bubbling by placing a single listener on a parent element and using event.target to determine which child was clicked, improving performance and handling dynamically added items."
+          },
+          {
+            "question": "What is the difference between textContent and innerHTML when setting content on a DOM element?",
+            "options": [
+              "textContent is faster but only works on <p> elements",
+              "innerHTML sets plain text, while textContent can parse HTML tags",
+              "textContent sets plain text safely, while innerHTML parses and renders HTML markup",
+              "There is no functional difference; they are aliases of each other"
+            ],
+            "correct": 2,
+            "explanation": "textContent treats the assigned string as plain text (safe from XSS), while innerHTML parses the string as HTML and renders any tags it contains, which can be a security risk with untrusted data."
+          }
+        ]
+      },
+      {
+        "title": "React Fundamentals",
+        "badge": "Framework",
+        "notes": [
+          "<strong>Components</strong> are functions that return JSX: <code>function Card({ title }) { return &lt;div&gt;{title}&lt;/div&gt;; }</code>. Keep them small and focused.",
+          "<strong>State</strong> with hooks: <code>const [count, setCount] = useState(0);</code>. State changes trigger re-renders. Never mutate state directly.",
+          "<strong>useEffect</strong> handles side effects: <code>useEffect(() => { fetchData(); }, [dependency]);</code>. Empty array <code>[]</code> = run once on mount.",
+          "<strong>Props</strong> are read-only inputs to components. Pass callbacks to children: <code>&lt;Button onClick={handleClick} /&gt;</code>. Lift state up to share between siblings.",
+          "<strong>Conditional rendering:</strong> <code>{isLogged && &lt;Dashboard /&gt;}</code> or ternary: <code>{loading ? &lt;Spinner /&gt; : &lt;Content /&gt;}</code>.",
+          "<strong>Lists:</strong> <code>{items.map(item => &lt;Card key={item.id} {...item} /&gt;)}</code>. Always provide a unique <code>key</code> prop for efficient re-rendering."
+        ],
+        "questions": [
+          {
+            "question": "Why does React require a unique 'key' prop when rendering a list of elements?",
+            "options": [
+              "Keys are required for CSS styling of list items",
+              "Keys help React efficiently identify which items changed, were added, or removed during re-renders",
+              "Keys bind each list item to a specific state variable",
+              "Keys are only needed for accessibility screen readers"
+            ],
+            "correct": 1,
+            "explanation": "Keys give each element a stable identity so React's diffing algorithm can efficiently determine the minimal set of DOM updates needed when the list changes, rather than re-rendering the entire list."
+          },
+          {
+            "question": "What will happen if you call the state setter function from useState directly inside the component body without wrapping it in useEffect or an event handler?",
+            "options": [
+              "The state will update once and stop",
+              "Nothing happens — React ignores state updates outside of events",
+              "It causes an infinite re-render loop, crashing the application",
+              "It only updates the state on the first render"
+            ],
+            "correct": 2,
+            "explanation": "Calling setState during render triggers a new render, which calls setState again, creating an infinite loop. Side effects and state updates should be placed inside useEffect or event handlers."
+          }
+        ]
+      },
+      {
+        "title": "Node.js & Express",
+        "badge": "Backend",
+        "notes": [
+          "<strong>Node.js</strong> runs JavaScript on the server. Initialize projects with <code>npm init -y</code>. Install packages: <code>npm install express</code>.",
+          "<strong>Express setup:</strong> <code>const app = express(); app.listen(3000);</code>. Define routes: <code>app.get('/api/users', (req, res) => { res.json(users); });</code>.",
+          "<strong>Middleware</strong> processes requests: <code>app.use(express.json())</code> parses JSON bodies. Custom middleware: <code>app.use((req, res, next) => { next(); });</code>.",
+          "<strong>Route parameters:</strong> <code>app.get('/users/:id', (req, res) => { const { id } = req.params; });</code>. Query strings: <code>req.query.search</code>.",
+          "<strong>Error handling:</strong> <code>app.use((err, req, res, next) => { res.status(500).json({ error: err.message }); });</code>. Always handle errors in async routes.",
+          "Use <code>dotenv</code> for environment variables: <code>require('dotenv').config()</code>. Access with <code>process.env.DB_URL</code>. Never commit <code>.env</code> files."
+        ],
+        "questions": [
+          {
+            "question": "In an Express application, what is the purpose of calling next() inside a middleware function?",
+            "options": [
+              "It sends the response back to the client",
+              "It restarts the server",
+              "It passes control to the next middleware function or route handler in the stack",
+              "It skips all remaining middleware and goes to the error handler"
+            ],
+            "correct": 2,
+            "explanation": "Calling next() tells Express to move on to the next middleware or route handler in the chain. Without it, the request will hang because no response is sent and no further processing occurs."
+          },
+          {
+            "question": "A route is defined as app.get('/users/:id', handler). If a request is made to /users/42, how do you access the value 42 inside the handler?",
+            "options": [
+              "req.body.id",
+              "req.query.id",
+              "req.params.id",
+              "req.headers.id"
+            ],
+            "correct": 2,
+            "explanation": "Route parameters defined with the colon syntax (e.g., :id) are accessible via req.params. req.query holds query string values, and req.body holds parsed request body data."
+          }
+        ]
+      },
+      {
+        "title": "SQL & Databases",
+        "badge": "Data",
+        "notes": [
+          "<strong>CRUD operations:</strong> <code>SELECT * FROM users WHERE age > 18;</code>, <code>INSERT INTO</code>, <code>UPDATE ... SET</code>, <code>DELETE FROM</code>.",
+          "<strong>Joins</strong> combine tables: <code>INNER JOIN</code> (matching rows), <code>LEFT JOIN</code> (all left + matching right), <code>RIGHT JOIN</code>, <code>FULL OUTER JOIN</code>.",
+          "<strong>Indexing</strong> speeds up queries: <code>CREATE INDEX idx_email ON users(email);</code>. Index columns used in WHERE, JOIN, and ORDER BY clauses.",
+          "<strong>Normalization</strong> reduces redundancy: 1NF (atomic values), 2NF (no partial dependencies), 3NF (no transitive dependencies). Balance with query performance.",
+          "<strong>Aggregation:</strong> <code>SELECT category, COUNT(*), AVG(price) FROM products GROUP BY category HAVING COUNT(*) > 5;</code>.",
+          "<strong>Security:</strong> always use parameterized queries to prevent SQL injection: <code>db.query('SELECT * FROM users WHERE id = ?', [userId])</code>."
+        ],
+        "questions": [
+          {
+            "question": "Which type of SQL JOIN returns only the rows that have matching values in both tables?",
+            "options": [
+              "LEFT JOIN",
+              "RIGHT JOIN",
+              "FULL OUTER JOIN",
+              "INNER JOIN"
+            ],
+            "correct": 3,
+            "explanation": "An INNER JOIN returns only the rows where the join condition is met in both tables, excluding rows from either table that have no corresponding match."
+          },
+          {
+            "question": "Why should you use parameterized queries instead of string concatenation when building SQL statements with user input?",
+            "options": [
+              "Parameterized queries run faster because they skip query parsing",
+              "String concatenation does not support WHERE clauses",
+              "Parameterized queries prevent SQL injection by separating data from the SQL command structure",
+              "Parameterized queries automatically create database indexes"
+            ],
+            "correct": 2,
+            "explanation": "Parameterized queries treat user input strictly as data values, not executable SQL, which prevents attackers from injecting malicious SQL code through input fields."
+          }
+        ]
+      }
+    ]
+  },
+  "Kotlin Android App Development": {
+    "modules": [
+      {
+        "title": "Kotlin Intro, Syntax & Variables",
+        "badge": "Foundation",
+        "notes": [
+          "<strong>Kotlin Intro:</strong> Kotlin is a modern, cross-platform, statically typed language developed by JetBrains. It runs on the JVM, is fully compatible with Java, and is Google's preferred language for Android development since 2017.",
+          "<strong>Entry Point:</strong> Every Kotlin application must have a <code>main</code> function as its starting entry point: <code>fun main() { println(\"Hello World\") }</code>. Parameters <code>args: Array<String></code> are optional since Kotlin 1.3.",
+          "<strong>Outputting Text:</strong> Use <code>println()</code> to print message and append a new line. Use <code>print()</code> to print a message without moving to a new line (subsequent prints will appear on the same line).",
+          "<strong>Comments:</strong> Use single-line comments starting with <code>//</code> to document code. Use block/multi-line comments starting with <code>/*</code> and ending with <code>*/</code> to document larger sections or temporarily disable blocks.",
+          "<strong>Declaring Variables:</strong> Use <code>val</code> to declare read-only (immutable) variables that cannot be reassigned. Use <code>var</code> to declare mutable variables that can be modified later: <code>val pi = 3.14</code> and <code>var score = 0</code>.",
+          "<strong>Type Inference:</strong> Kotlin can automatically infer variable types from the assigned value: <code>val name = \"Alice\"</code> (inferred as String). Explicitly specify type if initialized later: <code>val age: Int</code>.",
+          "<strong>Variable Naming:</strong> Names are case-sensitive (<code>myVar</code> is distinct from <code>myvar</code>). Must start with a letter or underscore, and camelCase is the standard convention (e.g., <code>userAccountBalance</code>). Reserved keywords cannot be used.",
+          "<strong>Variables Reassignment:</strong> Reassigning a <code>val</code> variable generates a compilation error: <code>val x = 10; x = 20 // Val cannot be reassigned</code>. Reassigning a <code>var</code> is fully supported: <code>var y = 10; y = 20</code>."
+        ],
+        "questions": [
+          {
+            "question": "What is the entry point of every Kotlin program?",
+            "options": [
+              "fun main()",
+              "fun entry()",
+              "fun start()",
+              "fun init()"
+            ],
+            "correct": 0,
+            "explanation": "The main() function is the starting point of every Kotlin program and is required to execute any code."
+          },
+          {
+            "question": "What is the key difference between declaring a variable with 'val' vs 'var' in Kotlin?",
+            "options": [
+              "val is mutable, var is immutable",
+              "val is read-only (immutable), var is mutable",
+              "val can only store integers, var can store any type",
+              "There is no difference; they are interchangeable"
+            ],
+            "correct": 1,
+            "explanation": "val creates a read-only (immutable) variable whose value cannot be reassigned, whereas var creates a mutable variable that can be changed later."
+          }
+        ]
+      },
+      {
+        "title": "Kotlin Data Types & Operators",
+        "badge": "Data Types",
+        "notes": [
+          "<strong>Data Types Overview:</strong> All types in Kotlin are treated as objects, which means they have member properties and functions. The basic types are Numbers, Characters, Booleans, Strings, and Arrays.",
+          "<strong>Integer Types:</strong> Kotlin provides <code>Byte</code> (8-bit, -128 to 127), <code>Short</code> (16-bit, -32768 to 32767), <code>Int</code> (32-bit, default for integers), and <code>Long</code> (64-bit, suffix with L: <code>150L</code>).",
+          "<strong>Floating-Point Types:</strong> Numbers with decimals are represented using <code>Float</code> (32-bit single-precision, suffixed with F: <code>5.75F</code>) or <code>Double</code> (64-bit double-precision, default for decimals: <code>19.99</code>).",
+          "<strong>Explicit Type Conversion:</strong> Implicit widening conversions (e.g., Int to Long) are NOT supported in Kotlin. You must explicitly convert using: <code>toInt()</code>, <code>toLong()</code>, <code>toFloat()</code>, <code>toDouble()</code>, etc.",
+          "<strong>Booleans and Characters:</strong> <code>Boolean</code> holds <code>true</code> or <code>false</code>. <code>Char</code> holds a single character in single quotes (e.g., <code>'A'</code>). Unlike Java, Char cannot be directly compared to numeric values.",
+          "<strong>Arithmetic Operators:</strong> Performs standard math: addition (<code>+</code>), subtraction (<code>-</code>), multiplication (<code>*</code>), division (<code>/</code>), modulus (<code>%</code> - returns division remainder), increment (<code>++</code>), and decrement (<code>--</code>).",
+          "<strong>Assignment & Compound Operators:</strong> Assign values using <code>=</code>. Compound operators combine math and assignment: <code>+=</code> (adds and assigns), <code>-=</code>, <code>*=</code>, <code>/=</code>, and <code>%=</code>.",
+          "<strong>Comparison Operators:</strong> Used in boolean testing and conditional execution: equal to (<code>==</code>), not equal to (<code>!=</code>), greater than (<code>&gt;</code>), less than (<code>&lt;</code>), greater/equal (<code>&gt;=</code>), and less/equal (<code>&lt;=</code>).",
+          "<strong>Logical Operators:</strong> Combine conditions: Logical AND (<code>&&</code> - true if both are true), Logical OR (<code>||</code> - true if either is true), and Logical NOT (<code>!</code> - reverses boolean state: <code>!true == false</code>)."
+        ],
+        "questions": [
+          {
+            "question": "How does Kotlin handle type conversion between numeric types (e.g. Int to Double)?",
+            "options": [
+              "It is automatically converted by the compiler (implicit conversion)",
+              "It must be done explicitly using conversion functions like toDouble()",
+              "It requires using the 'as' casting operator",
+              "Kotlin does not allow conversion between different numeric types"
+            ],
+            "correct": 1,
+            "explanation": "Kotlin does not support implicit widening conversions for numbers. You must explicitly call helper functions like toDouble(), toInt(), or toByte()."
+          },
+          {
+            "question": "What is the result of the modulus operator expression '5 % 2' in Kotlin?",
+            "options": [
+              "2.5",
+              "2",
+              "1",
+              "0"
+            ],
+            "correct": 2,
+            "explanation": "The modulus operator (%) returns the remainder of the division of two numbers. 5 divided by 2 is 2 with a remainder of 1."
+          }
+        ]
+      },
+      {
+        "title": "Kotlin Strings & Control Flow",
+        "badge": "Control Flow",
+        "notes": [
+          "<strong>Strings creation:</strong> Define standard strings in double quotes: <code>val s = \"Hello\"</code>. Multi-line or formatted strings are created using raw strings enclosed in triple double quotes: <code>\"\"\"line 1\\nline 2\"\"\"</code>.",
+          "<strong>String Properties & Operations:</strong> Access length using <code>s.length</code>. Find first character using index: <code>s[0]</code>. Change casing using helper functions <code>s.uppercase()</code> and <code>s.lowercase()</code>.",
+          "<strong>String Templates:</strong> Embed variables directly inside strings using the <code>$</code> prefix: <code>\"Hello, $name\"</code>. Evaluate expressions within brackets: <code>\"Length is ${name.length}\"</code>.",
+          "<strong>If...Else Expression:</strong> In Kotlin, <code>if</code> is an expression that returns a value: <code>val result = if (a > b) a else b</code>. The ternary operator <code>? :</code> is not used because of this.",
+          "<strong>If...Else Blocks:</strong> When a branch has multiple statements, the last line evaluates as the return value: <code>val max = if (a > b) { println(\"A is max\"); a } else { b }</code>.",
+          "<strong>When Expression:</strong> Replaces switch-case. Matches an expression sequentially: <code>when (x) { 1 -> println(\"one\"); 2 -> println(\"two\"); else -> println(\"other\") }</code>.",
+          "<strong>Multiple Match & Ranges in When:</strong> Group multiple options separated by commas: <code>0, 1 -> println(\"binary\")</code>. Use <code>in</code> to check ranges: <code>in 10..20 -> println(\"in range\")</code>.",
+          "<strong>When Without Arguments:</strong> Can act as an alternative to long if-else chains: <code>when { x > 0 -> print(\"positive\"); x < 0 -> print(\"negative\"); else -> print(\"zero\") }</code>."
+        ],
+        "questions": [
+          {
+            "question": "What makes the 'if' construct in Kotlin different from Java or JavaScript?",
+            "options": [
+              "It does not support else-if branches",
+              "It is an expression that returns a value, meaning it can be assigned directly to a variable",
+              "It cannot evaluate boolean conditions",
+              "It is replaced entirely by the 'when' expression and is deprecated"
+            ],
+            "correct": 1,
+            "explanation": "In Kotlin, if is an expression rather than just a statement. It returns a value from the branch that gets executed, eliminating the need for a ternary operator."
+          },
+          {
+            "question": "Which branch is used as the default fallback in a Kotlin 'when' expression?",
+            "options": [
+              "default ->",
+              "otherwise ->",
+              "else ->",
+              "fallback ->"
+            ],
+            "correct": 2,
+            "explanation": "The 'else' branch is the default condition that executes when none of the other specified conditions in a 'when' expression match."
+          }
+        ]
+      },
+      {
+        "title": "Kotlin Loops & Arrays",
+        "badge": "Loops",
+        "notes": [
+          "<strong>While & Do...While Loops:</strong> <code>while (cond) { ... }</code> runs repeatedly as long as the condition evaluates to true. <code>do { ... } while (cond)</code> always runs at least once before checking condition.",
+          "<strong>For Loops:</strong> Iterates through ranges, arrays, or collections: <code>for (item in items) { println(item) }</code>. The loop variable is implicitly read-only (immutable).",
+          "<strong>Iterating Ranges:</strong> Create inclusive ranges using <code>..</code>: <code>for (i in 1..5)</code> loops 1, 2, 3, 4, 5. Use <code>until</code> to exclude the end value: <code>for (i in 1 until 5)</code> loops 1, 2, 3, 4.",
+          "<strong>Step & Reverse Ranges:</strong> Use <code>step</code> to configure custom increments: <code>for (i in 1..10 step 2)</code>. Use <code>downTo</code> to iterate backwards in reverse order: <code>for (i in 10 downTo 1)</code>.",
+          "<strong>Break & Continue:</strong> Use <code>break</code> to immediately exit the current loop. Use <code>continue</code> to skip execution of remaining statements in the block and proceed to next iteration.",
+          "<strong>Creating Arrays:</strong> Use the <code>arrayOf()</code> helper function to instantiate arrays: <code>val cars = arrayOf(\"Volvo\", \"BMW\", \"Ford\")</code>. Types can be inferred or explicitly specified.",
+          "<strong>Accessing and Modifying Arrays:</strong> Read elements using index: <code>val car = cars[0]</code>. Reassign values: <code>cars[0] = \"Tesla\"</code>. Check array size using the <code>size</code> property.",
+          "<strong>Array Membership & Loop:</strong> Check if an item exists using <code>in</code> or <code>!in</code>: <code>if (\"BMW\" in cars)</code>. Loop through elements directly: <code>for (car in cars) { println(car) }</code>."
+        ],
+        "questions": [
+          {
+            "question": "Which range expression is used to iterate backwards from 10 down to 1 in a for loop?",
+            "options": [
+              "for (i in 10..1)",
+              "for (i in 10 downTo 1)",
+              "for (i in 10 until 1)",
+              "for (i in 10 step -1)"
+            ],
+            "correct": 1,
+            "explanation": "The 'downTo' keyword is used to define a range that progresses in reverse (decrementing) order, inclusive of both endpoints."
+          },
+          {
+            "question": "Which helper function is used to create an array with initial values in Kotlin?",
+            "options": [
+              "arrayOf()",
+              "createArray()",
+              "array()",
+              "listOf()"
+            ],
+            "correct": 0,
+            "explanation": "arrayOf() is the standard utility function in Kotlin to instantiate an Array with the specified values (e.g. arrayOf('A', 'B'))."
+          }
+        ]
+      },
+      {
+        "title": "Kotlin Functions & Null Safety",
+        "badge": "Functions",
+        "notes": [
+          "<strong>Declaring Functions:</strong> Functions are declared using the <code>fun</code> keyword, specifying parameters with explicit types, and an optional return type: <code>fun add(x: Int, y: Int): Int</code>.",
+          "<strong>Return Types:</strong> If a function does not return any value, its return type is <code>Unit</code> (which is optional to declare). Return values explicitly using the <code>return</code> keyword.",
+          "<strong>Default Parameter Arguments:</strong> Assign default values to parameters: <code>fun greet(name: String, msg: String = \"Hello\")</code>. If omitted in call, the default is used automatically.",
+          "<strong>Named Arguments:</strong> Specify parameter names when calling functions to improve clarity and change the argument order: <code>greet(msg = \"Welcome\", name = \"John\")</code>.",
+          "<strong>Single-Expression Functions:</strong> If a function body returns a single expression, omit curly braces and specify the body after <code>=</code>: <code>fun double(x: Int): Int = x * 2</code>.",
+          "<strong>Null Safety Principle:</strong> Kotlin prevents NullPointerExceptions by separating nullable from non-nullable types. Variables cannot hold null values by default: <code>var s: String = null // Error</code>.",
+          "<strong>Nullable Types:</strong> Mark a variable as nullable by adding a question mark <code>?</code> to its data type declaration: <code>var nullableString: String? = null</code>.",
+          "<strong>Safe Call Operator:</strong> Access properties on nullable objects using <code>?.</code>. It returns the value if the object is non-null, or returns null instead of crashing: <code>nullableString?.length</code>.",
+          "<strong>Elvis Operator:</strong> Use the Elvis operator <code>?:</code> to provide a default fallback value if the expression on the left is null: <code>val len = nullableString?.length ?: 0</code>.",
+          "<strong>Non-Null Assertion:</strong> Use the double exclamation <code>!!</code> operator to convert a nullable value to a non-null type. Throws a NullPointerException if value is null (use with extreme caution)."
+        ],
+        "questions": [
+          {
+            "question": "What is the syntax for a single-expression function that returns the square of a number?",
+            "options": [
+              "fun square(x: Int) = x * x",
+              "fun square(x: Int) { return x * x }",
+              "fun square(x: Int) -> x * x",
+              "fun square(x: Int) : x * x"
+            ],
+            "correct": 0,
+            "explanation": "If a function returns a single expression, the curly braces and return keyword can be omitted by using an equals (=) symbol."
+          },
+          {
+            "question": "Which operator is the Elvis operator, used to provide a default fallback value if an expression is null?",
+            "options": [
+              "?.",
+              "!!",
+              "?:",
+              "?"
+            ],
+            "correct": 2,
+            "explanation": "The Elvis operator (?:) evaluates the expression to its left; if it is not null, it returns it. Otherwise, it returns the fallback value to its right."
+          }
+        ]
+      },
+      {
+        "title": "Kotlin OOP (Classes & Objects)",
+        "badge": "OOP",
+        "notes": [
+          "<strong>Classes & Objects:</strong> Define a blueprint using the <code>class</code> keyword: <code>class Car { var brand = \"\" }</code>. Create instances without the <code>new</code> keyword: <code>val myCar = Car()</code>.",
+          "<strong>Properties & Dot Notation:</strong> Access class attributes and functions using dot syntax: <code>myCar.brand = \"Tesla\"</code>. Variables in class represent fields, auto-generating getters and setters.",
+          "<strong>Primary Constructors:</strong> Declare class properties directly in the header constructor: <code>class Person(val name: String, var age: Int)</code>. Properties are auto-initialized upon instantiation.",
+          "<strong>Initializer Block:</strong> The <code>init</code> block runs immediately when an object is created. Use it for validation or initialization logic since primary constructors cannot contain code.",
+          "<strong>Class Methods:</strong> Functions declared inside a class block define object behavior: <code>class Dog(val name: String) { fun bark() { println(\"$name says Woof!\") } }</code>.",
+          "<strong>Inheritance:</strong> Classes are final (non-inheritable) by default in Kotlin. To permit inheritance, mark the parent class with the <code>open</code> keyword: <code>open class Parent</code>.",
+          "<strong>Inheritance Syntax:</strong> Subclasses inherit using a colon <code>:</code> followed by parent class constructor call: <code>class Child(name: String) : Parent(name)</code>.",
+          "<strong>Overriding Methods:</strong> Functions must be explicitly marked as <code>open</code> in the parent class to be overridden. Subclasses must use the <code>override</code> keyword to modify behaviors.",
+          "<strong>Abstract Classes:</strong> Declared with the <code>abstract</code> keyword, abstract classes cannot be instantiated. Subclasses must implement all abstract functions and properties.",
+          "<strong>Interfaces:</strong> Define contracts using the <code>interface</code> keyword. Interfaces can contain abstract methods as well as concrete method implementations, but cannot store state.",
+          "<strong>Data Classes:</strong> Specially used for classes holding data. Mark with <code>data</code>: <code>data class User(val id: Int, val email: String)</code>. Automatically generates equals, toString, and copy methods."
+        ],
+        "questions": [
+          {
+            "question": "Are classes in Kotlin open for inheritance by default?",
+            "options": [
+              "Yes, all classes can be inherited by default",
+              "No, classes are final by default and require the 'open' keyword to be inheritable",
+              "Only classes inside interfaces can be inherited",
+              "Classes can only be inherited if they are declared inside a data class"
+            ],
+            "correct": 1,
+            "explanation": "By default, all classes in Kotlin are final (non-inheritable). You must explicitly mark a class with the 'open' keyword to allow other classes to inherit from it."
+          },
+          {
+            "question": "Which keyword must be used in a subclass to override a method from a parent class?",
+            "options": [
+              "super",
+              "extends",
+              "override",
+              "open"
+            ],
+            "correct": 2,
+            "explanation": "Kotlin enforces safe method overriding by requiring the 'override' keyword on any member that overrides a superclass function or property."
+          }
+        ]
+      }
+    ]
+  },
+  "Microsoft Office Productivity": {
+    "modules": [
+      {
+        "title": "Word Document Essentials",
+        "badge": "Documents",
+        "notes": [
+          "<strong>Styles</strong> are the key to professional documents: use Heading 1, Heading 2, Body Text styles instead of manually formatting. This enables automatic Table of Contents.",
+          "<strong>Page layout:</strong> set margins (Normal: 1 inch), orientation, and paper size in Layout tab. Use <strong>Section Breaks</strong> for different layouts within one document.",
+          "<strong>Headers & Footers:</strong> Insert → Header/Footer. Use <code>Page X of Y</code> for page numbers. Check \"Different First Page\" for title pages without numbers.",
+          "<strong>Track Changes</strong> (<code>Ctrl+Shift+E</code>) for collaboration: reviewers can suggest edits. Accept/Reject changes individually or all at once. Add comments with <code>Ctrl+Alt+M</code>.",
+          "<strong>Mail Merge:</strong> create personalized letters, labels, or emails from a data source (Excel spreadsheet). Insert → Rules for conditional content in merged documents.",
+          "<strong>Essential shortcuts:</strong> <code>Ctrl+S</code> (save), <code>Ctrl+Z</code> (undo), <code>Ctrl+B/I/U</code> (bold/italic/underline), <code>Ctrl+Shift+V</code> (paste without formatting)."
+        ],
+        "questions": [
+          {
+            "question": "You need to automatically update all chapter titles throughout a 50-page report when you change the formatting. What is the most efficient approach?",
+            "options": [
+              "Manually select each title and change the font size",
+              "Use Find & Replace to locate and reformat each title",
+              "Apply the Heading 1 style to all chapter titles, then modify the style definition",
+              "Copy-paste the formatting from one title to the others using Format Painter"
+            ],
+            "correct": 2,
+            "explanation": "Applying a built-in style like Heading 1 to all chapter titles means you only need to modify the style definition once, and all instances update automatically throughout the document."
+          },
+          {
+            "question": "What does the Mail Merge feature in Word allow you to do?",
+            "options": [
+              "Merge multiple Word documents into a single PDF",
+              "Combine tracked changes from several reviewers into one document",
+              "Generate personalized copies of a document using data from a source like an Excel spreadsheet",
+              "Send emails directly from Word without using Outlook"
+            ],
+            "correct": 2,
+            "explanation": "Mail Merge connects a Word template document to a data source (such as an Excel file or database) and generates personalized copies by inserting field values like names and addresses into each copy."
+          }
+        ]
+      },
+      {
+        "title": "Excel Formulas & Functions",
+        "badge": "Calculations",
+        "notes": [
+          "<strong>Essential functions:</strong> <code>=SUM(A1:A10)</code>, <code>=AVERAGE()</code>, <code>=COUNT()</code>, <code>=MAX()</code>, <code>=MIN()</code>. All formulas start with <code>=</code>.",
+          "<strong>VLOOKUP:</strong> <code>=VLOOKUP(lookup_value, table, col_index, FALSE)</code>. Use FALSE for exact match. Modern alternative: <code>=XLOOKUP()</code> which searches in any direction.",
+          "<strong>IF statements:</strong> <code>=IF(A1>100, \"High\", \"Low\")</code>. Nest for multiple conditions: <code>=IF(A1>90, \"A\", IF(A1>80, \"B\", \"C\"))</code>. Or use <code>=IFS()</code>.",
+          "<strong>COUNTIF/SUMIF:</strong> <code>=COUNTIF(range, criteria)</code> counts matching cells. <code>=SUMIFS(sum_range, criteria_range1, criteria1, ...)</code> for multiple conditions.",
+          "<strong>Cell references:</strong> <code>A1</code> (relative), <code>$A$1</code> (absolute — locked), <code>A$1</code> (mixed). Press <code>F4</code> to cycle through reference types while editing.",
+          "<strong>TEXT functions:</strong> <code>=LEFT(A1, 5)</code>, <code>=RIGHT()</code>, <code>=MID()</code>, <code>=TRIM()</code> (remove extra spaces), <code>=CONCATENATE()</code> or <code>&</code> operator for joining."
+        ],
+        "questions": [
+          {
+            "question": "You have a price list in Sheet2 and need to look up a product price by its ID in Sheet1. The product ID may not always be in the first column. Which function is the best choice?",
+            "options": [
+              "VLOOKUP, because it works across sheets",
+              "XLOOKUP, because it does not require the lookup value to be in the first column",
+              "SUMIF, because it can conditionally sum prices",
+              "INDEX with no MATCH, because it returns any cell value"
+            ],
+            "correct": 1,
+            "explanation": "XLOOKUP is more flexible than VLOOKUP because it can search any column and return a result from any other column, regardless of their positions. VLOOKUP requires the lookup column to be the leftmost column in the range."
+          },
+          {
+            "question": "What does the cell reference $A$1 signify in Excel?",
+            "options": [
+              "A relative reference that adjusts when the formula is copied",
+              "An absolute reference that stays fixed on cell A1 when copied",
+              "A named range pointing to cell A1",
+              "A reference to cell A1 on a protected sheet"
+            ],
+            "correct": 1,
+            "explanation": "The dollar signs in $A$1 create an absolute reference, locking both the column (A) and the row (1) so the reference does not change when the formula is copied to other cells."
+          }
+        ]
+      },
+      {
+        "title": "Excel Dashboards & Data Visualization",
+        "badge": "Analytics",
+        "notes": [
+          "<strong>PivotTables</strong> summarize large datasets: select data → Insert → PivotTable. Drag fields to Rows, Columns, Values, and Filters areas for dynamic analysis.",
+          "<strong>Chart types:</strong> Bar/Column for comparisons, Line for trends over time, Pie for proportions (limit to 5-6 slices), Scatter for correlations. Choose the right chart for your data.",
+          "<strong>Conditional Formatting:</strong> Home → Conditional Formatting. Use color scales for heat maps, data bars for in-cell charts, and icon sets for KPI status indicators.",
+          "<strong>Data Validation:</strong> restrict cell input to lists (<code>=INDIRECT()</code> for dynamic), numbers within ranges, or dates. Add input messages and error alerts for user guidance.",
+          "<strong>Named Ranges:</strong> select cells → Name Box → type name. Use in formulas: <code>=SUM(MonthlySales)</code> instead of <code>=SUM(B2:B13)</code>. Improves formula readability.",
+          "<strong>Sparklines:</strong> tiny charts inside cells — Insert → Sparklines. Great for showing trends in dashboards without taking up chart space."
+        ],
+        "questions": [
+          {
+            "question": "You have a large sales dataset and need to quickly summarize total revenue by region and product category. Which Excel feature is most appropriate?",
+            "options": [
+              "Conditional Formatting with color scales",
+              "A PivotTable with Region and Category as row/column fields and Revenue as the value",
+              "Data Validation dropdown lists for each region",
+              "Sparklines embedded in each row of the dataset"
+            ],
+            "correct": 1,
+            "explanation": "PivotTables are specifically designed to summarize, group, and analyze large datasets by dragging fields into row, column, and value areas, making them ideal for cross-tabulating revenue by region and category."
+          },
+          {
+            "question": "What is the primary purpose of Data Validation in Excel?",
+            "options": [
+              "To format cells based on their values automatically",
+              "To restrict the type or range of data a user can enter into a cell",
+              "To create dynamic chart titles that update with the data",
+              "To protect the workbook from unauthorized access"
+            ],
+            "correct": 1,
+            "explanation": "Data Validation allows you to set rules that restrict what users can enter into specific cells, such as limiting input to whole numbers within a range, dates, or values from a predefined dropdown list."
+          }
+        ]
+      },
+      {
+        "title": "PowerPoint Presentation Design",
+        "badge": "Presentations",
+        "notes": [
+          "<strong>Slide Master</strong> (View → Slide Master) controls global design: fonts, colors, logo placement, backgrounds. Edit once, apply to all slides for consistency.",
+          "<strong>The 6×6 rule:</strong> maximum 6 bullet points per slide, maximum 6 words per bullet. Slides support your speech — they're not a script. Less text = more impact.",
+          "<strong>Visual hierarchy:</strong> title (28-36pt), subtitle (20-24pt), body (18-20pt). Use contrast between heading and body. Stick to 2 fonts maximum throughout.",
+          "<strong>Animations:</strong> use Entrance animations sparingly (Fade and Appear are professional). Avoid Bounce, Spin, or Fly-In. Set timing to \"On Click\" or \"After Previous\" for control.",
+          "<strong>SmartArt</strong> converts bullet points into visual diagrams: process flows, hierarchies, cycles, and relationships. Right-click text → Convert to SmartArt.",
+          "<strong>Export options:</strong> Save as PDF for sharing (preserves formatting), PPTX for editing, MP4 for video presentations. Use <code>Ctrl+P</code> to print handouts (3 slides per page with note lines)."
+        ],
+        "questions": [
+          {
+            "question": "You want to ensure that your company logo and footer appear consistently on every slide in a presentation. What should you use?",
+            "options": [
+              "Copy and paste the logo onto each slide manually",
+              "Use the Slide Master to place the logo and footer in the layout",
+              "Insert the logo as a watermark using the Design tab",
+              "Group the logo with each slide’s content"
+            ],
+            "correct": 1,
+            "explanation": "The Slide Master controls the default layout for all slides. Placing elements like logos and footers on the Slide Master ensures they appear consistently on every slide without manual duplication."
+          },
+          {
+            "question": "What does the 6×6 rule in presentation design recommend?",
+            "options": [
+              "Use no more than 6 slides per section and 6 sections per presentation",
+              "Limit each slide to no more than 6 bullet points with no more than 6 words per bullet",
+              "Use 6-point font for footnotes and 6 images maximum per slide",
+              "Present for no longer than 6 minutes per 6 slides"
+            ],
+            "correct": 1,
+            "explanation": "The 6×6 rule is a design guideline that recommends no more than 6 bullet points per slide and no more than 6 words per bullet point, helping keep slides concise and readable for the audience."
+          }
+        ]
+      },
+      {
+        "title": "Productivity Workflows & Integration",
+        "badge": "Efficiency",
+        "notes": [
+          "<strong>OneDrive integration:</strong> save files to OneDrive for automatic cloud backup, version history, and real-time co-authoring with colleagues.",
+          "<strong>Excel → Word linking:</strong> paste Excel tables into Word as linked objects. When the Excel source updates, right-click the Word table → Update Link.",
+          "<strong>Excel → PowerPoint:</strong> embed live Excel charts in presentations. Changes in the source spreadsheet automatically reflect in your slides.",
+          "<strong>Quick Access Toolbar:</strong> customize with your most-used commands (Save, Undo, Print Preview). Right-click any ribbon button → Add to Quick Access Toolbar.",
+          "<strong>Templates:</strong> create custom templates (.dotx for Word, .xltx for Excel, .potx for PowerPoint) for recurring documents. Save hours on formatting.",
+          "<strong>Keyboard mastery:</strong> <code>Ctrl+Home</code> (go to start), <code>Ctrl+End</code> (go to end), <code>Alt+Tab</code> (switch apps), <code>Ctrl+F</code> (find), <code>F5</code> (start slideshow in PPT)."
+        ],
+        "questions": [
+          {
+            "question": "You have an Excel chart that needs to appear in both a Word report and a PowerPoint presentation, and it must update automatically when the Excel data changes. What linking method should you use?",
+            "options": [
+              "Copy the chart and use Paste Special > Paste Link in both Word and PowerPoint",
+              "Export the chart as an image and insert it into each application",
+              "Retype the data into native Word and PowerPoint charts",
+              "Save the Excel file to OneDrive and share the link in a text box"
+            ],
+            "correct": 0,
+            "explanation": "Using Paste Special with the Paste Link option creates a live connection between the Excel source and the destination document. When the Excel data changes, the linked chart in Word or PowerPoint updates automatically."
+          },
+          {
+            "question": "What is the benefit of customizing the Quick Access Toolbar in Microsoft Office?",
+            "options": [
+              "It changes the default file format for all saved documents",
+              "It places frequently used commands in a always-visible toolbar for one-click access",
+              "It automatically backs up documents to OneDrive at regular intervals",
+              "It enables macro recording across all Office applications"
+            ],
+            "correct": 1,
+            "explanation": "The Quick Access Toolbar sits above the ribbon and provides instant one-click access to commands you use frequently, saving time by eliminating the need to navigate through ribbon tabs for common actions."
+          }
+        ]
+      },
+      {
+        "title": "Advanced Automation & Macros",
+        "badge": "Advanced",
+        "notes": [
+          "<strong>Macros</strong> record and replay actions: View → Macros → Record Macro. Assign to a button or keyboard shortcut. Automates repetitive formatting and data entry.",
+          "<strong>VBA basics:</strong> macros generate VBA code. <code>Sub MyMacro() ... End Sub</code>. Open the VBA editor with <code>Alt+F11</code>. Add logic with <code>If...Then</code> and <code>For...Next</code>.",
+          "<strong>Excel Power Query:</strong> Data → Get & Transform. Import, clean, and reshape data from multiple sources (CSV, databases, web) with repeatable steps.",
+          "<strong>Power Pivot:</strong> create data models with relationships between tables. Write DAX formulas for advanced calculations: <code>=CALCULATE(SUM(Sales), FILTER(...))</code>.",
+          "<strong>Outlook integration:</strong> send personalized emails from Excel using VBA macros. Automate meeting scheduling, task tracking, and email follow-ups.",
+          "<strong>Security note:</strong> save macro-enabled files as <code>.xlsm</code> (Excel) or <code>.docm</code> (Word). Enable macros only from trusted sources to prevent malicious code execution."
+        ],
+        "questions": [
+          {
+            "question": "You recorded a macro in Excel but need to modify it to include a loop that processes all rows in a dataset. Where do you edit the macro code?",
+            "options": [
+              "In the Formula Bar by selecting the macro name",
+              "In the Visual Basic Editor, opened with Alt+F11",
+              "In the Macro Settings dialog under the File tab",
+              "In Power Query’s Advanced Editor"
+            ],
+            "correct": 1,
+            "explanation": "The Visual Basic Editor (VBE), accessed with Alt+F11, is where all VBA macro code is stored and edited. You can modify recorded macros and add programming constructs like loops and conditionals here."
+          },
+          {
+            "question": "Why must a workbook be saved as .xlsm rather than .xlsx when it contains macros?",
+            "options": [
+              "The .xlsm format compresses the file to a smaller size",
+              "The .xlsx format does not support embedded VBA macro code and will strip it on save",
+              "The .xlsm format encrypts the macros for security",
+              "The .xlsx format is only compatible with older versions of Excel"
+            ],
+            "correct": 1,
+            "explanation": "The .xlsx format is a macro-free format by design. Saving a workbook with macros as .xlsx will discard all VBA code. The .xlsm format is specifically designed to preserve macro code within the workbook."
+          }
+        ]
+      }
+    ]
+  },
+  "Networking Fundamentals": {
+    "modules": [
+      {
+        "title": "Network Basics & OSI/TCP-IP Models",
+        "badge": "Foundation",
+        "notes": [
+          "<strong>OSI 7-Layer Model:</strong> Physical → Data Link → Network → Transport → Session → Presentation → Application. Mnemonic: <strong>P</strong>lease <strong>D</strong>o <strong>N</strong>ot <strong>T</strong>hrow <strong>S</strong>ausage <strong>P</strong>izza <strong>A</strong>way.",
+          "<strong>TCP/IP 4-Layer Model:</strong> Network Access → Internet → Transport → Application. This is the practical model used in real networks and the internet.",
+          "<strong>Network types:</strong> LAN (local, building), WAN (wide, cities/countries), MAN (metropolitan), PAN (personal, Bluetooth). The Internet is the largest WAN.",
+          "<strong>Protocols:</strong> HTTP/HTTPS (web, port 80/443), DNS (name resolution, port 53), DHCP (IP assignment, port 67/68), FTP (file transfer, port 21), SSH (secure shell, port 22).",
+          "<strong>Network devices:</strong> Hub (broadcasts to all), Switch (forwards to specific MAC), Router (routes between networks), Firewall (filters traffic by rules).",
+          "<strong>Data encapsulation:</strong> Data → Segment (TCP header) → Packet (IP header) → Frame (MAC header) → Bits. Each layer adds its own header."
+        ],
+        "questions": [
+          {
+            "question": "A network engineer is troubleshooting a connectivity issue. The physical cable tests fine, the NIC shows link activity, but the device cannot obtain an IP address. Which OSI layer is most likely where the problem exists?",
+            "options": [
+              "Layer 1 – Physical",
+              "Layer 2 – Data Link",
+              "Layer 3 – Network",
+              "Layer 7 – Application"
+            ],
+            "correct": 2,
+            "explanation": "Since the physical connection (Layer 1) and link activity (Layer 2) are working, but the device cannot obtain an IP address, the issue lies at Layer 3 (Network), which handles logical addressing and IP configuration."
+          },
+          {
+            "question": "Which of the following correctly describes data encapsulation as it moves down the OSI model?",
+            "options": [
+              "Data → Frame → Packet → Segment → Bits",
+              "Data → Segment → Packet → Frame → Bits",
+              "Bits → Frame → Packet → Segment → Data",
+              "Data → Packet → Segment → Frame → Bits"
+            ],
+            "correct": 1,
+            "explanation": "As data moves down the OSI model, it is encapsulated at each layer: the Transport layer creates Segments, the Network layer creates Packets, the Data Link layer creates Frames, and the Physical layer transmits Bits."
+          }
+        ]
+      },
+      {
+        "title": "IP Addressing & Subnetting",
+        "badge": "Addressing",
+        "notes": [
+          "<strong>IPv4:</strong> 32-bit address in dotted decimal: <code>192.168.1.1</code>. Each octet is 0–255. Total: ~4.3 billion addresses (now exhausted, hence IPv6).",
+          "<strong>Address classes:</strong> Class A (1–126, /8), Class B (128–191, /16), Class C (192–223, /24). Private ranges: <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code>, <code>192.168.0.0/16</code>.",
+          "<strong>Subnet mask</strong> separates network and host portions: <code>255.255.255.0</code> (/24) means 24 network bits, 8 host bits = 254 usable hosts per subnet.",
+          "<strong>Subnetting formula:</strong> Usable hosts = 2^(host bits) − 2 (subtract network and broadcast addresses). A /26 gives 2^6 − 2 = 62 usable hosts.",
+          "<strong>IPv6:</strong> 128-bit address in hexadecimal: <code>2001:0db8::1</code>. Provides 3.4×10^38 addresses. Features: auto-configuration, no NAT needed, built-in IPsec.",
+          "<strong>CIDR notation:</strong> <code>/24</code> means 24 bits for network. Allows variable-length subnets instead of rigid classful boundaries. Enables efficient IP allocation."
+        ],
+        "questions": [
+          {
+            "question": "A company needs to create 6 subnets from the network 192.168.1.0/24. How many bits must be borrowed from the host portion, and how many usable hosts will each subnet support?",
+            "options": [
+              "2 bits borrowed, 62 usable hosts per subnet",
+              "3 bits borrowed, 30 usable hosts per subnet",
+              "4 bits borrowed, 14 usable hosts per subnet",
+              "3 bits borrowed, 32 usable hosts per subnet"
+            ],
+            "correct": 1,
+            "explanation": "To create at least 6 subnets, you need 3 borrowed bits (2³ = 8 subnets). This leaves 5 host bits, giving 2⁵ – 2 = 30 usable host addresses per subnet (subtracting the network and broadcast addresses)."
+          },
+          {
+            "question": "Which of the following is a valid private IPv4 address range as defined by RFC 1918?",
+            "options": [
+              "11.0.0.0 to 11.255.255.255",
+              "172.16.0.0 to 172.31.255.255",
+              "192.0.0.0 to 192.255.255.255",
+              "10.0.0.0 to 10.0.255.255"
+            ],
+            "correct": 1,
+            "explanation": "The RFC 1918 private address ranges are 10.0.0.0/8, 172.16.0.0/12 (172.16.0.0–172.31.255.255), and 192.168.0.0/16. The range 172.16.0.0 to 172.31.255.255 is one of the three valid private ranges."
+          }
+        ]
+      },
+      {
+        "title": "Routing Fundamentals",
+        "badge": "Routing",
+        "notes": [
+          "<strong>Routing</strong> is the process of forwarding packets between networks. Routers use routing tables to determine the best path to a destination network.",
+          "<strong>Static routes:</strong> manually configured: <code>ip route 10.0.0.0 255.255.255.0 192.168.1.1</code>. Simple but doesn't adapt to network changes. Good for small networks.",
+          "<strong>Dynamic routing protocols:</strong> RIP (distance-vector, max 15 hops), OSPF (link-state, uses cost metric), EIGRP (Cisco hybrid), BGP (inter-AS, runs the internet).",
+          "<strong>Default gateway:</strong> the router IP that hosts use to reach networks outside their own subnet. Typically the first or last usable IP in the subnet.",
+          "<strong>Routing table fields:</strong> Destination Network, Subnet Mask, Next Hop, Interface, Metric (cost). Lower metric = preferred route. Show with <code>show ip route</code>.",
+          "<strong>NAT (Network Address Translation):</strong> converts private IPs to public IPs for internet access. Types: Static NAT (1:1), Dynamic NAT (pool), PAT/Overload (many:1 using ports)."
+        ],
+        "questions": [
+          {
+            "question": "Which dynamic routing protocol uses bandwidth and delay as its default composite metric and is a Cisco proprietary protocol?",
+            "options": [
+              "RIP (Routing Information Protocol)",
+              "OSPF (Open Shortest Path First)",
+              "EIGRP (Enhanced Interior Gateway Routing Protocol)",
+              "BGP (Border Gateway Protocol)"
+            ],
+            "correct": 2,
+            "explanation": "EIGRP is a Cisco proprietary protocol that uses a composite metric based on bandwidth and delay by default. RIP uses hop count, OSPF uses cost (based on bandwidth), and BGP uses path attributes."
+          },
+          {
+            "question": "What is the purpose of NAT (Network Address Translation) in a network?",
+            "options": [
+              "To encrypt traffic between internal and external networks",
+              "To translate private internal IP addresses to public IP addresses for internet communication",
+              "To assign IP addresses automatically to devices on the network",
+              "To route packets between different VLANs on a switch"
+            ],
+            "correct": 1,
+            "explanation": "NAT translates private IP addresses used within a local network to public IP addresses needed for communication over the internet, allowing multiple devices to share a limited number of public addresses."
+          }
+        ]
+      },
+      {
+        "title": "Switching & VLANs",
+        "badge": "Layer 2",
+        "notes": [
+          "<strong>Switches</strong> operate at Layer 2, using MAC addresses to forward frames. They build a MAC address table by learning source MACs from incoming frames.",
+          "<strong>VLANs</strong> (Virtual LANs) logically segment a switch into separate broadcast domains. VLAN 10 cannot communicate with VLAN 20 without a router (inter-VLAN routing).",
+          "<strong>Trunk ports</strong> carry traffic for multiple VLANs between switches using 802.1Q tagging. Access ports belong to a single VLAN and connect to end devices.",
+          "<strong>STP (Spanning Tree Protocol):</strong> prevents switching loops by blocking redundant paths. Elects a Root Bridge (lowest Bridge ID). Ports: Root, Designated, Blocked.",
+          "<strong>Port security:</strong> limits MAC addresses per port to prevent unauthorized access: <code>switchport port-security maximum 2</code>. Violation modes: Protect, Restrict, Shutdown.",
+          "<strong>EtherChannel:</strong> bundles multiple physical links into one logical link for increased bandwidth and redundancy. Protocols: LACP (standard) and PAgP (Cisco)."
+        ],
+        "questions": [
+          {
+            "question": "A switch port needs to carry traffic for multiple VLANs between two switches. What must be configured on this port?",
+            "options": [
+              "The port must be set as an access port assigned to all VLANs",
+              "The port must be configured as a trunk port using 802.1Q encapsulation",
+              "Port security must be enabled with multiple MAC addresses",
+              "STP must be disabled on the port to allow multi-VLAN traffic"
+            ],
+            "correct": 1,
+            "explanation": "A trunk port uses 802.1Q tagging to carry traffic from multiple VLANs over a single physical link between switches. Access ports can only belong to a single VLAN."
+          },
+          {
+            "question": "What is the primary purpose of Spanning Tree Protocol (STP) in a switched network?",
+            "options": [
+              "To load-balance traffic across multiple switch uplinks",
+              "To prevent broadcast storms by eliminating Layer 2 loops",
+              "To encrypt traffic between switches in the same VLAN",
+              "To assign IP addresses to devices in different VLANs"
+            ],
+            "correct": 1,
+            "explanation": "STP detects and prevents Layer 2 switching loops by placing redundant ports into a blocking state. Without STP, broadcast frames could circulate endlessly, causing broadcast storms that bring down the network."
+          }
+        ]
+      },
+      {
+        "title": "Wireless Networking",
+        "badge": "Wireless",
+        "notes": [
+          "<strong>Wi-Fi standards:</strong> 802.11n (Wi-Fi 4, 600 Mbps), 802.11ac (Wi-Fi 5, 6.9 Gbps), 802.11ax (Wi-Fi 6/6E, 9.6 Gbps). Higher standards = faster speeds and better efficiency.",
+          "<strong>Frequency bands:</strong> 2.4 GHz (longer range, more interference, 3 non-overlapping channels: 1, 6, 11) vs 5 GHz (shorter range, faster speeds, more channels).",
+          "<strong>Wireless security:</strong> WPA3 is current standard. WPA2-AES is still acceptable. Never use WEP (cracked in minutes) or WPA-TKIP (deprecated).",
+          "<strong>SSID</strong> is the network name. Can be hidden (not broadcast) but this is not real security. Use strong passwords (12+ characters) and WPA3-Personal or Enterprise.",
+          "<strong>Access Point (AP) placement:</strong> mount APs high on walls/ceilings, avoid metal obstructions. Use site survey tools for optimal coverage. 20% overlap between APs for roaming.",
+          "<strong>Wireless troubleshooting:</strong> check signal strength (dBm, closer to 0 = better), channel interference, firmware updates, and client driver compatibility."
+        ],
+        "questions": [
+          {
+            "question": "An office environment experiences heavy interference from Bluetooth devices and microwaves on the wireless network. Which action would most likely improve Wi-Fi performance?",
+            "options": [
+              "Switch all devices to the 2.4 GHz band for better range",
+              "Move wireless clients to the 5 GHz band to avoid interference",
+              "Reduce the transmit power of the access point",
+              "Change the SSID to a hidden network"
+            ],
+            "correct": 1,
+            "explanation": "Bluetooth and microwaves operate in the 2.4 GHz frequency range. Moving Wi-Fi clients to the 5 GHz band avoids this interference since it operates on a completely different frequency with more available channels."
+          },
+          {
+            "question": "Which Wi-Fi standard introduced MU-MIMO and OFDMA to improve performance in high-density environments?",
+            "options": [
+              "802.11n (Wi-Fi 4)",
+              "802.11ac (Wi-Fi 5)",
+              "802.11ax (Wi-Fi 6)",
+              "802.11g (Wi-Fi 3)"
+            ],
+            "correct": 2,
+            "explanation": "802.11ax (Wi-Fi 6) introduced both uplink and downlink MU-MIMO along with OFDMA (Orthogonal Frequency Division Multiple Access), enabling more efficient communication with many devices simultaneously in dense environments."
+          }
+        ]
+      },
+      {
+        "title": "Network Security Essentials",
+        "badge": "Security",
+        "notes": [
+          "<strong>Firewall types:</strong> Packet filtering (basic, checks headers), Stateful inspection (tracks connections), Application-layer/proxy (deep packet inspection). Defense in depth: use multiple layers.",
+          "<strong>CIA Triad:</strong> Confidentiality (encryption), Integrity (hashing — MD5, SHA-256), Availability (redundancy, backups). The foundation of all security decisions.",
+          "<strong>Common threats:</strong> Phishing (social engineering), DDoS (flood attacks), Man-in-the-Middle (intercepts traffic), Malware (viruses, ransomware), SQL Injection (database attacks).",
+          "<strong>VPN (Virtual Private Network):</strong> encrypts traffic over public networks. Types: Site-to-Site (connects offices) and Remote Access (connects individuals). Protocols: IPsec, SSL/TLS.",
+          "<strong>ACLs (Access Control Lists):</strong> filter traffic on routers: <code>permit tcp 192.168.1.0 0.0.0.255 any eq 80</code>. Standard ACLs filter by source; Extended ACLs filter by source, destination, protocol, port.",
+          "<strong>Best practices:</strong> principle of least privilege, regular patching, strong password policies (12+ chars, MFA), network segmentation, intrusion detection systems (IDS/IPS), and regular security audits."
+        ],
+        "questions": [
+          {
+            "question": "A security policy requires that only devices on the 10.0.1.0/24 network can access a server at 192.168.5.10 via SSH (port 22). Which type of ACL should be used?",
+            "options": [
+              "A standard ACL, because it filters based on source IP address only",
+              "An extended ACL, because it can filter based on source IP, destination IP, and port number",
+              "A reflexive ACL, because it tracks connection states",
+              "No ACL is needed; a firewall handles all port-based filtering"
+            ],
+            "correct": 1,
+            "explanation": "An extended ACL can match traffic based on source address, destination address, protocol, and port numbers. Since the rule requires filtering by source network, destination host, and specific port (SSH/22), an extended ACL is necessary."
+          },
+          {
+            "question": "What are the three core principles of the CIA triad in information security?",
+            "options": [
+              "Compliance, Identity, Authentication",
+              "Confidentiality, Integrity, Availability",
+              "Control, Inspection, Authorization",
+              "Certification, Investigation, Accountability"
+            ],
+            "correct": 1,
+            "explanation": "The CIA triad stands for Confidentiality (protecting data from unauthorized access), Integrity (ensuring data is not tampered with), and Availability (ensuring systems and data are accessible when needed). It is the foundational model for information security."
+          }
+        ]
+      }
+    ]
+  }
+}
