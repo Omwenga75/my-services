@@ -696,20 +696,8 @@ body.course-details-page .navbar {
     border-radius: 20px;
     padding: 0;
     box-shadow: 0 20px 50px rgba(15, 23, 42, 0.35);
-    max-height: calc(100vh - 140px);
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.1) transparent;
     display: flex;
     flex-direction: column;
-}
-
-.cd-notes-sidebar::-webkit-scrollbar {
-    width: 4px;
-}
-.cd-notes-sidebar::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.1);
-    border-radius: 4px;
 }
 
 /* Admin-style sidebar header */
