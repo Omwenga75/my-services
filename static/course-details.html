@@ -1192,74 +1192,173 @@
             }
         }
 
-        let currentMainSlideIndex = 0;
-        let totalMainSlides = 0;
+        let currentCourseNotes = null;
+        let notesObserver = null;
 
-        function updateMainSlider() {
-            const track = document.getElementById('main-notes-track');
-            if (!track) return;
-            track.style.transform = `translateX(-${currentMainSlideIndex * 100}%)`;
+        function scrollToModule(idx) {
+            const card = document.getElementById(`module-card-${idx}`);
+            if (!card) return;
 
-            // Adjust height dynamically to the active slide to reduce whitespace
-            const slides = track.querySelectorAll('.cd-notes-slide');
-            const activeSlide = slides[currentMainSlideIndex];
-            const container = track.parentElement;
-            if (activeSlide && container) {
-                container.style.height = activeSlide.offsetHeight + 'px';
-                container.style.transition = 'height 0.3s ease-out';
+            const section = document.getElementById('cd-notes-section');
+            const isFocusMode = section && section.classList.contains('fullscreen-focus');
+
+            if (isFocusMode) {
+                const mainContent = document.getElementById('cd-notes-main');
+                if (mainContent) {
+                    const topPos = card.offsetTop - 15;
+                    mainContent.scrollTo({ top: topPos, behavior: 'smooth' });
+                }
+            } else {
+                const yOffset = -95; // Account for the sticky header
+                const y = card.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
             }
-
-            const counter = document.getElementById('main-slider-counter');
-            if (counter) {
-                counter.textContent = `${currentMainSlideIndex + 1} / ${totalMainSlides}`;
-            }
-
-            const dotsContainer = document.getElementById('main-slider-dots');
-            if (dotsContainer) {
-                Array.from(dotsContainer.children).forEach((dot, dotIdx) => {
-                    if (dotIdx === currentMainSlideIndex) {
-                        dot.classList.add('active');
-                    } else {
-                        dot.classList.remove('active');
-                    }
-                });
-            }
-
-            const prevBtn = document.getElementById('main-slider-prev');
-            const nextBtn = document.getElementById('main-slider-next');
-            if (prevBtn) prevBtn.disabled = currentMainSlideIndex === 0;
-            if (nextBtn) nextBtn.disabled = currentMainSlideIndex === totalMainSlides - 1;
+            setActiveSidebarItem(idx);
         }
 
-        function scrollToNotesTop() {
-            const notesSection = document.getElementById('cd-notes-section');
-            if (notesSection) {
-                const rect = notesSection.getBoundingClientRect();
-                if (rect.top < 60) {
-                    notesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        function setupNotesObserver() {
+            if (notesObserver) {
+                notesObserver.disconnect();
+            }
+
+            const section = document.getElementById('cd-notes-section');
+            const isFocusMode = section && section.classList.contains('fullscreen-focus');
+
+            const options = {
+                root: isFocusMode ? document.getElementById('cd-notes-main') : null,
+                rootMargin: isFocusMode ? '-10% 0px -50% 0px' : '-20% 0px -50% 0px',
+                threshold: 0
+            };
+
+            notesObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        const idx = id.split('-').pop();
+                        setActiveSidebarItem(idx);
+                    }
+                });
+            }, options);
+
+            document.querySelectorAll('.cd-module-card').forEach(card => {
+                notesObserver.observe(card);
+            });
+        }
+
+        function setActiveSidebarItem(idx) {
+            // Desktop active state
+            document.querySelectorAll('.cd-sidebar-nav-item').forEach((item, itemIdx) => {
+                if (itemIdx === parseInt(idx)) {
+                    item.classList.add('active');
+                    item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Mobile active state
+            document.querySelectorAll('.cd-mobile-tab-btn').forEach((btn, btnIdx) => {
+                if (btnIdx === parseInt(idx)) {
+                    btn.classList.add('active');
+                    btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Update Progress Bar
+            if (currentCourseNotes && currentCourseNotes.modules) {
+                const totalModules = currentCourseNotes.modules.length;
+                const progress = ((parseInt(idx) + 1) / totalModules) * 100;
+                const progressBar = document.getElementById('cd-notes-progress-bar');
+                if (progressBar) {
+                    progressBar.style.width = `${progress}%`;
                 }
             }
         }
 
-        function prevMainSlide() {
-            if (currentMainSlideIndex > 0) {
-                currentMainSlideIndex--;
-                updateMainSlider();
-                scrollToNotesTop();
+        function filterNotes(query) {
+            const cleanQuery = query.toLowerCase().trim();
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (clearBtn) {
+                clearBtn.style.display = cleanQuery ? 'block' : 'none';
+            }
+
+            const mainContainer = document.getElementById('cd-notes-main');
+            if (!mainContainer || !currentCourseNotes) return;
+
+            const modules = currentCourseNotes.modules;
+            let visibleCount = 0;
+            let firstVisibleIdx = null;
+
+            modules.forEach((mod, idx) => {
+                const titleMatch = mod.title.toLowerCase().includes(cleanQuery);
+                const notesMatch = mod.notes.some(note => note.toLowerCase().includes(cleanQuery));
+
+                const card = document.getElementById(`module-card-${idx}`);
+                const sidebarItem = document.getElementById(`sidebar-nav-${idx}`);
+                const mobileTab = document.getElementById(`mobile-tab-${idx}`);
+
+                if (titleMatch || notesMatch) {
+                    if (card) card.style.display = '';
+                    if (sidebarItem) sidebarItem.style.display = '';
+                    if (mobileTab) mobileTab.style.display = '';
+                    
+                    if (firstVisibleIdx === null) {
+                        firstVisibleIdx = idx;
+                    }
+                    visibleCount++;
+
+                    // Fade out non-matching note items inside the module
+                    const noteItems = card.querySelectorAll('.cd-note-item');
+                    mod.notes.forEach((note, noteIdx) => {
+                        const noteItem = noteItems[noteIdx];
+                        if (noteItem) {
+                            if (cleanQuery && !note.toLowerCase().includes(cleanQuery)) {
+                                noteItem.style.opacity = '0.3';
+                            } else {
+                                noteItem.style.opacity = '1';
+                            }
+                        }
+                    });
+                } else {
+                    if (card) card.style.display = 'none';
+                    if (sidebarItem) sidebarItem.style.display = 'none';
+                    if (mobileTab) mobileTab.style.display = 'none';
+                }
+            });
+
+            // Handle no results message
+            let noResultsEl = document.getElementById('cd-notes-no-results');
+            if (visibleCount === 0) {
+                if (!noResultsEl) {
+                    noResultsEl = document.createElement('div');
+                    noResultsEl.id = 'cd-notes-no-results';
+                    noResultsEl.className = 'cd-notes-no-results-card';
+                    noResultsEl.innerHTML = `
+                        <div class="no-results-icon"><i class="fas fa-search-minus"></i></div>
+                        <h4>No matching notes found</h4>
+                        <p>Try searching for different keywords (e.g. classes, variables, loops, design principles)</p>
+                    `;
+                    mainContainer.appendChild(noResultsEl);
+                }
+                noResultsEl.style.display = 'flex';
+            } else {
+                if (noResultsEl) noResultsEl.style.display = 'none';
+                
+                // If there's an active visible item, highlight it
+                if (firstVisibleIdx !== null) {
+                    setActiveSidebarItem(firstVisibleIdx);
+                }
             }
         }
 
-        function nextMainSlide() {
-            if (currentMainSlideIndex < totalMainSlides - 1) {
-                currentMainSlideIndex++;
-                updateMainSlider();
-                scrollToNotesTop();
+        function clearNotesSearch() {
+            const input = document.getElementById('cd-notes-search-input');
+            if (input) {
+                input.value = '';
+                filterNotes('');
             }
-        }
-
-        function goToMainSlide(slideIdx) {
-            currentMainSlideIndex = slideIdx;
-            updateMainSlider();
         }
 
         function renderCourseNotes(courseTitle) {
@@ -1268,10 +1367,9 @@
             const accordion = document.getElementById('cd-notes-accordion');
             if (!notesData || !section || !accordion) return;
 
-            const modules = notesData.modules;
-            totalMainSlides = modules.length;
-            currentMainSlideIndex = 0;
+            currentCourseNotes = notesData; // Store globally for search filtering
 
+            const modules = notesData.modules;
             const totalNotes = modules.reduce((sum, m) => sum + m.notes.length, 0);
             const readTime = Math.max(5, Math.round(totalNotes * 0.4));
 
@@ -1281,7 +1379,14 @@
             const controls = section.querySelector('.cd-notes-controls');
             if (controls) {
                 controls.style.display = 'flex';
+                controls.style.alignItems = 'center';
+                controls.style.gap = '1rem';
                 controls.innerHTML = `
+                    <div class="cd-notes-search-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="cd-notes-search-input" placeholder="Search notes..." oninput="filterNotes(this.value)">
+                        <button class="clear-search-btn" id="clear-search-btn" onclick="clearNotesSearch()"><i class="fas fa-times"></i></button>
+                    </div>
                     <button class="cd-notes-ctrl-btn" id="cd-notes-focus-btn" onclick="toggleFocusMode()">
                         <i class="fas fa-expand"></i> Focus Mode
                     </button>
@@ -1289,46 +1394,59 @@
             }
 
             accordion.innerHTML = `
-                <div class="cd-notes-slider" style="background: #ffffff; border: 1px solid #ede9fe; border-radius: 16px; box-shadow: 0 4px 20px rgba(109, 40, 217, 0.05); position: relative; display: flex; flex-direction: column;">
-                    <div style="overflow: hidden;">
-                        <div class="cd-notes-slides-track" id="main-notes-track" style="display: flex; align-items: flex-start; transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);">
+                <!-- Mobile Horizontal Sticky Tabs Bar -->
+                <div class="cd-mobile-notes-tabs" id="cd-mobile-notes-tabs-list">
+                    ${modules.map((mod, idx) => `
+                        <button class="cd-mobile-tab-btn${idx === 0 ? ' active' : ''}" id="mobile-tab-${idx}" onclick="scrollToModule(${idx})">
+                            ${idx + 1}. ${mod.title}
+                        </button>
+                    `).join('')}
+                </div>
+
+                <div class="cd-notes-layout-container">
+                    <!-- Left Sidebar Index -->
+                    <aside class="cd-notes-sidebar">
+                        <div class="cd-notes-sidebar-title">Course modules</div>
+                        <div id="cd-notes-sidebar-list">
                             ${modules.map((mod, idx) => `
-                                <div class="cd-notes-slide" style="min-width: 100%; box-sizing: border-box; padding: 2rem;">
-                                    <div style="margin-bottom: 1.5rem; border-bottom: 1.5px solid #faf8ff; padding-bottom: 1rem; display: flex; flex-direction: column; align-items: flex-start;">
-                                        <h3 style="font-size: 1.35rem; font-weight: 800; color: #1F2937; margin: 0;">${mod.title}</h3>
+                                <div class="cd-sidebar-nav-item${idx === 0 ? ' active' : ''}" id="sidebar-nav-${idx}" onclick="scrollToModule(${idx})">
+                                    <span class="nav-item-num">${idx + 1}</span>
+                                    <span class="nav-item-title" title="${mod.title}">${mod.title}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </aside>
+
+                    <!-- Right Notes Main Stream -->
+                    <main class="cd-notes-main" id="cd-notes-main">
+                        ${modules.map((mod, idx) => `
+                            <div class="cd-module-card" id="module-card-${idx}">
+                                <div class="cd-module-card-header">
+                                    <div class="cd-module-card-num">${idx + 1}</div>
+                                    <div class="cd-module-card-title-group">
+                                        <span class="cd-module-card-badge">${mod.badge || 'Topic'}</span>
+                                        <h3>${mod.title}</h3>
                                     </div>
-                                    <div style="display: flex; flex-direction: column; gap: 0.85rem; margin-bottom: 2rem;">
+                                </div>
+                                <div class="cd-module-card-body">
+                                    <div class="cd-notes-list">
                                         ${mod.notes.map(note => `
-                                            <div class="cd-note-item" style="border-bottom: none; padding: 0; display: flex; align-items: flex-start; gap: 0.85rem;">
+                                            <div class="cd-note-item">
                                                 <div class="cd-note-bullet"></div>
                                                 <div class="cd-note-text">${note}</div>
                                             </div>
                                         `).join('')}
                                     </div>
-                                    <div class="cd-quiz-section" id="quiz-section-${idx}" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed #ede9fe;"></div>
+                                    <!-- Practice Quiz Section -->
+                                    <div class="cd-quiz-section" id="quiz-section-${idx}"></div>
                                 </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                    <div class="cd-notes-slider-nav" style="padding: 1rem 1.5rem; border-top: 1px solid #ede9fe; display: flex; align-items: center; justify-content: space-between; background: #ffffff; border-radius: 0 0 16px 16px;">
-                        <span class="cd-slider-counter" id="main-slider-counter" style="font-size: 0.85rem; color: #6D28D9; font-weight: 700;">1 / ${modules.length}</span>
-                        <div class="cd-slider-dots" id="main-slider-dots">
-                            ${modules.map((_, idx) => `
-                                <button class="cd-slider-dot${idx === 0 ? ' active' : ''}" onclick="goToMainSlide(${idx})"></button>
-                            `).join('')}
-                        </div>
-                        <div class="cd-slider-arrows" style="display: flex; gap: 0.5rem;">
-                            <button class="cd-slider-btn" id="main-slider-prev" onclick="prevMainSlide()" disabled>
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <button class="cd-slider-btn" id="main-slider-next" onclick="nextMainSlide()" ${modules.length <= 1 ? 'disabled' : ''}>
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
+                            </div>
+                        `).join('')}
+                    </main>
                 </div>
             `;
 
+            // Render quizzes inside modules
             modules.forEach((mod, idx) => {
                 renderModuleQuiz(courseTitle, mod.title, idx);
             });
@@ -1347,12 +1465,16 @@
             }
 
             section.style.display = '';
-            updateMainSlider();
 
+            // Setup intersection observer for scrolling sync
             setTimeout(() => {
-                document.getElementById('cd-notes-progress-bar').style.width = '100%';
-            }, 300);
+                setupNotesObserver();
+                // Initialize progress bar width
+                const progressBar = document.getElementById('cd-notes-progress-bar');
+                if (progressBar) progressBar.style.width = `${(1 / modules.length) * 100}%`;
+            }, 100);
         }
+
 
         function renderLockedCourseNotes(courseTitle) {
             const notesData = courseNotesMap[courseTitle];
@@ -1456,8 +1578,8 @@
                 document.body.style.overflow = '';
             }
             
-            // Recalculate layout heights
-            setTimeout(updateMainSlider, 50);
+            // Re-initialize intersection observer for new scrolling container
+            setTimeout(setupNotesObserver, 50);
         }
 
         let isAdmin = false;
