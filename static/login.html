@@ -481,9 +481,10 @@
         const urlParams = new URLSearchParams(window.location.search);
         const error = urlParams.get('error');
         const success = urlParams.get('success');
+        const redirect = urlParams.get('redirect');
         const msgBox = document.getElementById('message-box');
 
-        if (error && error !== 'Please login to enroll') {
+        if (error) {
             msgBox.textContent = error;
             msgBox.className = 'message-banner error-banner';
             msgBox.style.display = 'block';
@@ -491,6 +492,13 @@
             msgBox.textContent = success;
             msgBox.className = 'message-banner success-banner';
             msgBox.style.display = 'block';
+        }
+
+        if (redirect) {
+            const form = document.querySelector('form');
+            if (form) {
+                form.action = `/login?redirect=${encodeURIComponent(redirect)}`;
+            }
         }
     </script>
 </body>

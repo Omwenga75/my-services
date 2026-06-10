@@ -330,21 +330,33 @@ async def login(
     response: Response,
     email: str = Form(...),
     password: str = Form(...),
+    redirect: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
     email = email.strip().lower()
     print(f"[LOGIN] Attempt for email: '{email}'")
+    
+    error_redirect_url = "/login?error=Invalid credentials"
+    if redirect:
+        error_redirect_url += f"&redirect={redirect}"
+        
     user = db.query(models.User).filter(models.User.email == email).first()
     if not user:
         print(f"[LOGIN] No user found with email: '{email}'")
-        return RedirectResponse(url="/login?error=Invalid credentials", status_code=303)
+        return RedirectResponse(url=error_redirect_url, status_code=303)
     if not verify_password(password, user.hashed_password):
         print(f"[LOGIN] Password verification failed for: '{email}'")
-        return RedirectResponse(url="/login?error=Invalid credentials", status_code=303)
+        return RedirectResponse(url=error_redirect_url, status_code=303)
     
     print(f"[LOGIN] Success for: '{email}'")
     access_token = create_access_token(data={"sub": user.email})
-    redirect_url = "/admin" if is_admin_user(user) else "/"
+    
+    redirect_url = "/"
+    if redirect and redirect.startswith("/") and not redirect.startswith("//"):
+        redirect_url = redirect
+    else:
+        redirect_url = "/admin" if is_admin_user(user) else "/"
+        
     response = RedirectResponse(url=redirect_url, status_code=303)
     response.set_cookie(key="access_token", value=access_token, httponly=True)
     return response
@@ -402,6 +414,11 @@ async def admin_page(user: models.User = Depends(get_current_user)):
 @app.get("/course-details/", response_class=HTMLResponse)
 async def course_details_page():
     return render_html("course-details.html")
+
+@app.get("/course-notes", response_class=HTMLResponse)
+@app.get("/course-notes/", response_class=HTMLResponse)
+async def course_notes_page():
+    return render_html("course-notes.html")
 
 @app.get("/api/courses")
 async def get_courses(db: Session = Depends(get_db), user: Optional[models.User] = Depends(get_current_user)):

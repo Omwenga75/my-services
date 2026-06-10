@@ -1495,3 +1495,46 @@ body.course-details-page .navbar {
     border-radius: 4px;
 }
 
+/* Course Notes CTA Card Styles */
+.cd-notes-cta-card {
+    display: flex;
+    gap: 2rem;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 1px solid #ede9fe;
+    box-shadow: 0 4px 20px rgba(109, 40, 217, 0.03);
+    align-items: flex-start;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+.cd-notes-cta-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(109, 40, 217, 0.08);
+    border-color: rgba(109, 40, 217, 0.2);
+}
+.cd-notes-cta-icon-box {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #6D28D9, #4F46E5);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+    box-shadow: 0 8px 20px rgba(109, 40, 217, 0.2);
+    flex-shrink: 0;
+}
+.cd-notes-cta-content {
+    flex: 1;
+}
+@media (max-width: 768px) {
+    .cd-notes-cta-card {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 2rem 1.5rem;
+    }
+}
+
+

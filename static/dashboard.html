@@ -109,7 +109,26 @@
                                     </div>
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <span style="font-size: 0.8rem; font-weight: 600; color: #64748b;">15% Complete</span>
-                                        <a href="/course-details?id=${course.id}" class="btn-enroll-premium" style="padding: 0.4rem 1rem; font-size: 0.8rem; text-decoration: none;">Continue</a>
+                                        <div style="display: flex; gap: 0.4rem; align-items: center;">
+                                            <a href="/course-notes?id=${course.id}" style="
+                                                background: #f5f3ff;
+                                                color: #6D28D9;
+                                                padding: 0.4rem 0.8rem;
+                                                border-radius: 999px;
+                                                font-weight: 800;
+                                                border: 1px solid rgba(109, 40, 217, 0.15);
+                                                transition: all 0.25s ease;
+                                                font-size: 0.8rem;
+                                                text-decoration: none;
+                                                white-space: nowrap;
+                                                display: inline-flex;
+                                                align-items: center;
+                                                gap: 0.35rem;
+                                            " onmouseover="this.style.background='#ede9fe'; this.style.transform='translateY(-1px)';" onmouseout="this.style.background='#f5f3ff'; this.style.transform='';">
+                                                <i class="fas fa-book-open" style="font-size:0.75rem;"></i> Notes
+                                            </a>
+                                            <a href="/course-details?id=${course.id}" class="btn-enroll-premium" style="padding: 0.45rem 0.9rem; font-size: 0.8rem; text-decoration: none;">Continue</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
