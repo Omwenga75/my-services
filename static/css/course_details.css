@@ -1210,6 +1210,69 @@ body.course-details-page .navbar {
     }
 }
 
+/* ══════════════════════════════════════════════════════════════
+   Notes Split Layout – Responsive Breakpoints
+   ══════════════════════════════════════════════════════════════ */
+
+/* Desktop: show sidebar, hide mobile tabs */
+@media (min-width: 993px) {
+    .cd-notes-sidebar { display: block; }
+    .cd-mobile-notes-tabs { display: none !important; }
+    .cd-notes-layout-container { flex-direction: row; }
+}
+
+/* Tablet / Mobile: hide sidebar, show horizontal tabs bar */
+@media (max-width: 992px) {
+    .cd-notes-sidebar { display: none !important; }
+    .cd-mobile-notes-tabs { display: flex !important; }
+
+    .cd-notes-layout-container {
+        flex-direction: column;
+        margin-top: 0;
+    }
+
+    .cd-notes-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .cd-notes-search-wrapper {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .cd-notes-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .cd-notes-ctrl-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .cd-module-card-header {
+        padding: 1.25rem 1.25rem;
+        gap: 1rem;
+    }
+
+    .cd-module-card-body {
+        padding: 1.25rem;
+    }
+
+    .cd-module-card-title-group h3 {
+        font-size: 1.05rem;
+    }
+
+    .cd-module-card-num {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+}
+
 /* Print styles */
 @media print {
     .cd-notes-controls, .cd-notes-slider-nav, .cd-quiz-section {
