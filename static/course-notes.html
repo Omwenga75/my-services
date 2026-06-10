@@ -438,6 +438,8 @@
                     document.getElementById('focus-course-title').textContent = `${course.title} Study Guide`;
                     document.getElementById('back-to-course-btn').href = `/course-details?id=${course.id}`;
 
+                    const isEnrolled = course.is_enrolled || isAdmin;
+
                     if (isEnrolled) {
                         try {
                             const contentRes = await fetch(`/api/courses/${courseId}/content`);
@@ -484,11 +486,11 @@
                 if (data.status === 'success') {
                     showToast('Successfully Enrolled!');
                     document.getElementById('notes-locked-view').style.display = 'none';
-                    renderCourseNotes(currentCourseTitle);
+                    loadNotesPage();
                 } else if (data.status === 'already_enrolled') {
                     showToast('You are already enrolled!');
                     document.getElementById('notes-locked-view').style.display = 'none';
-                    renderCourseNotes(currentCourseTitle);
+                    loadNotesPage();
                 } else if (data.status === 'limit_reached') {
                     showToast('Enrollment limit reached (Max 2 courses allowed).');
                 } else {

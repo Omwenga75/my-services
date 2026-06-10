@@ -1671,7 +1671,7 @@
         if (totalEl) totalEl.textContent = currentCourseContent.length;
 
         if (!currentCourseContent.length) {
-            listContainer.innerHTML = '<div style="color:#94a3b8;font-size:0.8rem;text-align:center;padding:1.5rem 0.5rem;"><i class="fas fa-layer-group" style="font-size:1.5rem;margin-bottom:0.5rem;display:block;opacity:0.4"></i>No chapters yet.<br>Click "Add Chapter" below!</div>';
+            listContainer.innerHTML = '<div style="color:#94a3b8;font-size:0.8rem;text-align:center;padding:1.5rem 0.5rem;"><i class="fas fa-layer-group" style="font-size:1.5rem;margin-bottom:0.5rem;display:block;opacity:0.4"></i>No chapters yet.<br>Click "Add Chapter" above!</div>';
             return;
         }
         listContainer.innerHTML = currentCourseContent.map((m, idx) => {
@@ -2105,16 +2105,16 @@
             <div class="manage-content-layout" style="height: auto; min-height: 560px;">
                 <!-- Sidebar of chapters -->
                 <div class="mcl-sidebar">
-                    <div class="mcl-sidebar-title">
+                    <div class="mcl-sidebar-title" style="margin-bottom: 0.5rem;">
                         <span>Chapters</span>
                         <span id="mcl-total-chapters" style="background:#ede9fe;color:#6d28d9;font-size:0.72rem;font-weight:800;padding:0.1rem 0.5rem;border-radius:999px;">0</span>
                     </div>
+                    <button class="mcl-btn-add-module" onclick="addNewModuleAdmin()" style="margin-top: 0; margin-bottom: 0.75rem; width: 100%;">
+                        <i class="fas fa-plus"></i> Add Chapter
+                    </button>
                     <div class="mcl-sidebar-list" id="mcl-modules-list">
                         <!-- Loaded dynamically -->
                     </div>
-                    <button class="mcl-btn-add-module" onclick="addNewModuleAdmin()">
-                        <i class="fas fa-plus"></i> Add Chapter
-                    </button>
                 </div>
                 
                 <!-- Main detail view -->
@@ -2227,7 +2227,10 @@
                 <div class="mcl-empty" id="mcl-empty-state">
                     <i class="fas fa-book-open" style="font-size:2.5rem; color:#cbd5e1; margin-bottom:1rem;"></i>
                     <h4 style="margin:0 0 0.25rem 0; color:#475569;">No Chapter Selected</h4>
-                    <p style="margin:0; font-size:0.84rem;">Select a chapter from the left sidebar to edit its study notes and revision quizzes, or click "Add Chapter" to create a new one.</p>
+                    <p style="margin:0 0 1rem 0; font-size:0.84rem; max-width: 300px;">Select a chapter from the left sidebar to edit its study notes and revision quizzes, or click below to create a new one.</p>
+                    <button class="btn-modal-primary" onclick="addNewModuleAdmin()" style="margin-top: 0; font-size: 0.82rem; padding: 0.5rem 1rem; border-radius: 8px;">
+                        <i class="fas fa-plus"></i> Add New Chapter
+                    </button>
                 </div>
             </div>
         </div>
