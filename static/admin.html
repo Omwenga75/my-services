@@ -1566,6 +1566,58 @@
     let selectedModuleIdx = null;
     let activeMclTab = 'notes';
     let editingQuestionIdx = null;
+    let _autoSaveTimer = null;
+    let _noteDebounceTimer = null;
+    let _hasUnsavedChanges = false;
+
+    /* ── Auto-save to DB ── */
+    async function autoSaveContent(silent = true) {
+        if (!activeCourseId) return;
+        _hasUnsavedChanges = false;
+        setSaveStatus('saving');
+        try {
+            const r = await fetch(`/api/admin/courses/${activeCourseId}/content`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(currentCourseContent)
+            });
+            if (r.ok) {
+                setSaveStatus('saved');
+                if (!silent) toast('Content saved successfully!');
+            } else {
+                setSaveStatus('error');
+                if (!silent) toast('Failed to save content.', 'err');
+            }
+        } catch (e) {
+            setSaveStatus('error');
+            if (!silent) toast('Error saving content.', 'err');
+        }
+    }
+
+    function setSaveStatus(state) {
+        const el = document.getElementById('mcl-save-status');
+        if (!el) return;
+        if (state === 'saving') {
+            el.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+            el.style.color = '#f59e0b';
+        } else if (state === 'saved') {
+            el.innerHTML = '<i class="fas fa-check-circle"></i> Saved';
+            el.style.color = '#10b981';
+        } else if (state === 'error') {
+            el.innerHTML = '<i class="fas fa-exclamation-circle"></i> Save failed';
+            el.style.color = '#ef4444';
+        } else {
+            el.innerHTML = '';
+        }
+    }
+
+    /* Debounced save used for note-text edits */
+    function scheduleAutoSave() {
+        _hasUnsavedChanges = true;
+        setSaveStatus('saving');
+        clearTimeout(_noteDebounceTimer);
+        _noteDebounceTimer = setTimeout(() => autoSaveContent(true), 1500);
+    }
 
     async function openManageNotesQuizzesModal() {
         const course = coursesData.find(c => c.id === activeCourseId);
@@ -1603,7 +1655,13 @@
     }
 
     function closeManageNotesQuizzesModal() {
+        // Auto-save any pending changes before closing
+        clearTimeout(_noteDebounceTimer);
+        if (_hasUnsavedChanges || currentCourseContent.length > 0) {
+            autoSaveContent(true);
+        }
         document.getElementById('manage-notes-quizzes-overlay').classList.remove('open');
+        setSaveStatus('');
     }
 
     function renderChaptersSidebar() {
@@ -1682,6 +1740,7 @@
         }
         currentCourseContent[selectedModuleIdx].badge = badge || 'Topic';
         renderChaptersSidebar();
+        scheduleAutoSave();
     }
 
     function addNewModuleAdmin() {
@@ -1692,6 +1751,7 @@
             questions: []
         });
         selectModuleAdmin(currentCourseContent.length - 1);
+        autoSaveContent(true);
     }
 
     function deleteSelectedModuleAdmin() {
@@ -1708,7 +1768,8 @@
             document.getElementById('mcl-module-details').style.display = 'none';
             document.getElementById('mcl-empty-state').style.display = 'flex';
         }
-        toast('Chapter deleted locally. Save changes to make it permanent.');
+        autoSaveContent(true);
+        toast('Chapter deleted and saved.');
     }
 
     function switchMclTab(tab) {
@@ -1758,11 +1819,13 @@
         // Scroll to bottom of notes list
         const notesList = document.getElementById('mcl-notes-list');
         if (notesList) notesList.scrollTop = notesList.scrollHeight;
+        autoSaveContent(true);
     }
 
     function updateNoteInModule(noteIdx, val) {
         if (selectedModuleIdx === null) return;
         currentCourseContent[selectedModuleIdx].notes[noteIdx] = val;
+        scheduleAutoSave();
     }
 
     function deleteNoteFromModule(noteIdx) {
@@ -1770,6 +1833,7 @@
         renderNotesList();
         renderContentSummary();
         renderChaptersSidebar();
+        autoSaveContent(true);
     }
 
     function renderQuizQuestionsList() {
@@ -1881,6 +1945,7 @@
         renderQuizQuestionsList();
         renderContentSummary();
         renderChaptersSidebar();
+        autoSaveContent(true);
     }
 
     function deleteQuestion(qIdx) {
@@ -1889,31 +1954,19 @@
         renderQuizQuestionsList();
         renderContentSummary();
         renderChaptersSidebar();
+        autoSaveContent(true);
     }
 
     async function saveNotesQuizzesContent() {
         const btn = document.getElementById('btn-save-notes-quizzes');
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving changes...';
-        
-        try {
-            const r = await fetch(`/api/admin/courses/${activeCourseId}/content`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(currentCourseContent)
-            });
-            if (r.ok) {
-                toast('Course notes and quizzes updated successfully!');
-                closeManageNotesQuizzesModal();
-            } else {
-                const err = await r.json();
-                toast(err.detail || 'Failed to save course content.', 'err');
-            }
-        } catch (e) {
-            toast('Error saving content.', 'err');
-        }
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+        await autoSaveContent(false);
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-save"></i> Save Content Changes';
+        btn.innerHTML = '<i class="fas fa-check"></i> Saved';
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fas fa-save"></i> Save All';
+        }, 2000);
     }
 
 </script>
@@ -2039,8 +2092,14 @@
 <div class="modal-overlay" id="manage-notes-quizzes-overlay" onclick="closeManageNotesQuizzesModal()">
     <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 900px; width: 95%;">
         <div class="modal-head">
-            <span class="modal-title"><i class="fas fa-book-reader" style="color:var(--primary);"></i> Manage Notes & Quizzes: <span id="mcl-course-title" style="font-weight:600; color:#475569;">Course</span></span>
-            <button class="modal-close" onclick="closeManageNotesQuizzesModal()"><i class="fas fa-times"></i></button>
+            <span class="modal-title">
+                <i class="fas fa-book-reader" style="color:var(--primary);"></i>
+                Manage Notes &amp; Quizzes: <span id="mcl-course-title" style="font-weight:600; color:#475569;">Course</span>
+            </span>
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <span id="mcl-save-status" style="font-size:0.78rem;font-weight:700;display:flex;align-items:center;gap:0.3rem;"></span>
+                <button class="modal-close" onclick="closeManageNotesQuizzesModal()"><i class="fas fa-times"></i></button>
+            </div>
         </div>
         <div class="modal-body" style="padding: 1.25rem;">
             <div class="manage-content-layout" style="height: auto; min-height: 560px;">
@@ -2173,9 +2232,9 @@
             </div>
         </div>
         <div class="modal-foot">
-            <button class="btn-modal-secondary" onclick="closeManageNotesQuizzesModal()">Cancel</button>
-            <button class="btn-modal-primary" id="btn-save-notes-quizzes" onclick="saveNotesQuizzesContent()">
-                <i class="fas fa-save"></i> Save Content Changes
+            <button class="btn-modal-secondary" onclick="closeManageNotesQuizzesModal()">Close</button>
+            <button class="btn-modal-primary" id="btn-save-notes-quizzes" onclick="saveNotesQuizzesContent()" style="min-width:110px;">
+                <i class="fas fa-save"></i> Save All
             </button>
         </div>
     </div>
