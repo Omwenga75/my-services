@@ -143,6 +143,52 @@ async def lifespan(app: FastAPI):
             print(f"Migration: {me}")
             try: db.rollback()
             except: pass
+
+        # Migrate courses: add modules_json column if it doesn't exist
+        try:
+            columns_info = db.execute(sql_text("PRAGMA table_info(courses)")).fetchall()
+            columns = [col[1] for col in columns_info]
+            if "modules_json" not in columns:
+                db.execute(sql_text("ALTER TABLE courses ADD COLUMN modules_json TEXT"))
+                db.commit()
+                print("Courses table migrated: modules_json column added.")
+        except Exception as ce:
+            print(f"Migration error for courses: {ce}")
+            try: db.rollback()
+            except: pass
+
+        # Compile and Seed course notes and quizzes if needed
+        json_path = os.path.join(BASE_DIR, "notes_and_quizzes.json")
+        if not os.path.exists(json_path):
+            try:
+                import subprocess
+                subprocess.run(["node", "compile_notes.js"], cwd=BASE_DIR, shell=True, check=True)
+                print("Generated notes_and_quizzes.json from static JS files.")
+            except Exception as se:
+                print(f"Failed to generate notes_and_quizzes.json: {se}")
+
+        if os.path.exists(json_path):
+            try:
+                import json
+                with open(json_path, "r", encoding="utf-8") as f:
+                    notes_and_quizzes = json.load(f)
+                
+                db_courses = db.query(models.Course).all()
+                seeded_any = False
+                for db_c in db_courses:
+                    if not db_c.modules_json:
+                        course_content = notes_and_quizzes.get(db_c.title)
+                        if course_content and "modules" in course_content:
+                            db_c.modules_json = json.dumps(course_content["modules"])
+                            seeded_any = True
+                            print(f"Seeded content for course: {db_c.title}")
+                if seeded_any:
+                    db.commit()
+            except Exception as sde:
+                print(f"Seeding course content failed: {sde}")
+                try: db.rollback()
+                except: pass
+
         # Seed initial course catalog and keep only the requested six courses
         initial_courses = [
             {
@@ -697,3 +743,59 @@ async def admin_delete_course(
     db.delete(course)
     db.commit()
     return {"status": "deleted"}
+
+@app.get("/api/courses/{course_id}/content")
+async def get_course_content(
+    course_id: int,
+    db: Session = Depends(get_db),
+    user: Optional[models.User] = Depends(get_current_user)
+):
+    course = db.query(models.Course).filter(models.Course.id == course_id).first()
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+        
+    enrolled = False
+    if user:
+        if user.email in ADMIN_EMAILS:
+            enrolled = True
+        else:
+            enrolled = db.query(models.Enrollment).filter(
+                models.Enrollment.user_id == user.id,
+                models.Enrollment.course_id == course_id
+            ).first() is not None
+            
+    import json
+    modules = []
+    if course.modules_json:
+        try:
+            modules = json.loads(course.modules_json)
+        except Exception:
+            modules = []
+            
+    return {
+        "is_enrolled": enrolled,
+        "modules": modules
+    }
+
+@app.put("/api/admin/courses/{course_id}/content")
+async def admin_update_course_content(
+    course_id: int,
+    data: list,
+    db: Session = Depends(get_db),
+    user: models.User = Depends(get_current_user)
+):
+    if not is_admin_user(user):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    course = db.query(models.Course).filter(models.Course.id == course_id).first()
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+        
+    import json
+    try:
+        course.modules_json = json.dumps(data)
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to save content: {str(e)}")
+        
+    return {"status": "updated"}

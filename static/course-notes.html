@@ -385,10 +385,6 @@
 
     <!-- Scripts -->
     <script src="/static/js/main.js?v=3"></script>
-    <script src="/static/js/quiz_data_1.js?v=2"></script>
-    <script src="/static/js/quiz_data_2.js?v=2"></script>
-    <script src="/static/js/quiz_data_3.js?v=2"></script>
-    <script src="/static/js/course_notes_data.js"></script>
 
     <script>
         let currentCourseId = null;
@@ -442,10 +438,15 @@
                     document.getElementById('focus-course-title').textContent = `${course.title} Study Guide`;
                     document.getElementById('back-to-course-btn').href = `/course-details?id=${course.id}`;
 
-                    const isEnrolled = course.is_enrolled || isAdmin;
-
                     if (isEnrolled) {
-                        renderCourseNotes(course.title);
+                        try {
+                            const contentRes = await fetch(`/api/courses/${courseId}/content`);
+                            const contentData = await contentRes.json();
+                            renderCourseNotes(contentData.modules || []);
+                        } catch (ce) {
+                            console.error("Error fetching course content:", ce);
+                            showToast("Failed to load course modules.");
+                        }
                     } else {
                         // Show lock view
                         document.getElementById('notes-locked-view').style.display = 'block';
@@ -499,23 +500,21 @@
             }
         }
 
-        function renderCourseNotes(courseTitle) {
-            const notesData = window.courseNotesMap ? window.courseNotesMap[courseTitle] : null;
+        function renderCourseNotes(modules) {
             const section = document.getElementById('cd-notes-section');
             const accordion = document.getElementById('cd-notes-accordion');
-            if (!notesData || !section || !accordion) {
+            if (!modules || !modules.length || !section || !accordion) {
                 showToast("Study notes are not available for this course yet.");
                 return;
             }
 
-            currentCourseNotes = notesData;
+            currentCourseNotes = { modules };
 
             // Track completion state per module
             if (!window.moduleCompletionState) {
                 window.moduleCompletionState = {};
             }
 
-            const modules = notesData.modules;
             const totalNotes = modules.reduce((sum, m) => sum + m.notes.length, 0);
             const readTime = Math.max(5, Math.round(totalNotes * 0.4));
 
@@ -573,9 +572,9 @@
                                 <div class="cd-sidebar-nav-item${isFirst ? ' active' : ''}${isLocked ? ' locked' : ''}" 
                                      id="sidebar-nav-${idx}" 
                                      onclick="handleSidebarClick(${idx})">
-                                    <span class="nav-item-num">${idx + 1}</span>
-                                    <span class="nav-item-title" title="${mod.title}">${mod.title}</span>
-                                    ${isFirst ? '' : `<i class="fas fa-lock nav-item-lock-icon" id="sidebar-lock-${idx}"></i>`}
+                                     <span class="nav-item-num">${idx + 1}</span>
+                                     <span class="nav-item-title" title="${mod.title}">${mod.title}</span>
+                                     ${isFirst ? '' : `<i class="fas fa-lock nav-item-lock-icon" id="sidebar-lock-${idx}"></i>`}
                                 </div>`;
                             }).join('')}
                         </div>
@@ -612,7 +611,7 @@
 
             // Render quizzes
             modules.forEach((mod, idx) => {
-                renderModuleQuiz(courseTitle, mod.title, idx);
+                renderModuleQuiz(mod, idx);
             });
 
             section.style.display = 'block';
@@ -824,13 +823,8 @@
             return escaped.replace(/\n/g, '<br>').replace(/  /g, '&nbsp;&nbsp;');
         }
 
-        function renderModuleQuiz(courseTitle, moduleTitle, moduleIdx) {
-            const q1 = typeof quizData1 !== 'undefined' ? quizData1 : {};
-            const q2 = typeof quizData2 !== 'undefined' ? quizData2 : {};
-            const q3 = typeof quizData3 !== 'undefined' ? quizData3 : {};
-            const quizData = { ...q1, ...q2, ...q3 };
-            const courseQuizzes = quizData[courseTitle];
-            const questions = courseQuizzes ? courseQuizzes[moduleTitle] : null;
+        function renderModuleQuiz(mod, moduleIdx) {
+            const questions = mod.questions;
             const container = document.getElementById(`quiz-section-${moduleIdx}`);
             if (!container) return;
 

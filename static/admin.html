@@ -766,6 +766,87 @@
             cursor: pointer; transition: all 0.18s;
         }
         .btn-dlg-cancel:hover { background: #f1f5f9; color: #334155; }
+        .btn-dlg-notes {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white; border: none;
+            padding: 0.65rem; border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem; font-weight: 700;
+            cursor: pointer; transition: all 0.18s;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn-dlg-notes:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(16,185,129,0.32); }
+
+        /* Notes and Quizzes Content Manager Styles */
+        .manage-content-layout {
+            display: flex; gap: 1.5rem; min-height: 500px;
+        }
+        .mcl-sidebar {
+            width: 240px; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding-right: 1.25rem;
+        }
+        .mcl-sidebar-title {
+            font-weight: 700; font-size: 0.78rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; letter-spacing: 0.05em;
+        }
+        .mcl-sidebar-list {
+            flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 0.45rem;
+        }
+        .mcl-chapter-item {
+            padding: 0.7rem 0.85rem; border-radius: 8px; border: 1px solid var(--border); background: #f8fafc; font-size: 0.84rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: space-between; gap: 0.4rem;
+        }
+        .mcl-chapter-item:hover { background: #f1f5f9; border-color: #cbd5e1; color: #1e293b; }
+        .mcl-chapter-item.active { background: #f5f3ff; color: #6d28d9; border-color: rgba(109, 40, 217, 0.3); }
+        .mcl-btn-add-module {
+            background: #f5f3ff; color: #6d28d9; border: 1px dashed rgba(109, 40, 217, 0.3); padding: 0.65rem; border-radius: 8px; font-weight: 700; font-size: 0.84rem; cursor: pointer; transition: all 0.2s; margin-top: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+        }
+        .mcl-btn-add-module:hover { background: #ede9fe; border-color: #6d28d9; }
+        .mcl-main {
+            flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding-left: 0.25rem;
+        }
+        .mcl-module-header {
+            display: grid; grid-template-columns: 2fr 1fr auto; gap: 0.75rem; margin-bottom: 1.25rem; align-items: end;
+        }
+        .mcl-tabs {
+            display: flex; gap: 0.5rem; border-bottom: 2px solid var(--border); margin-bottom: 1rem;
+        }
+        .mcl-tab-btn {
+            background: none; border: none; padding: 0.6rem 1.2rem; font-weight: 700; font-size: 0.86rem; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s;
+        }
+        .mcl-tab-btn:hover { color: #334155; }
+        .mcl-tab-btn.active { color: #6d28d9; border-bottom-color: #6d28d9; }
+        .mcl-tab-content {
+            display: none; flex-direction: column; flex: 1;
+        }
+        .mcl-tab-content.active { display: flex; }
+        .mcl-empty {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--text-muted); padding: 3rem;
+        }
+        .mcl-notes-list {
+            display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; overflow-y: auto; max-height: 280px; padding-right: 0.25rem;
+        }
+        .mcl-note-item {
+            display: flex; gap: 0.5rem; align-items: start; background: #fafafa; border: 1px solid var(--border); border-radius: 8px; padding: 0.65rem 0.75rem;
+        }
+        .mcl-note-textarea {
+            flex: 1; border: none; background: transparent; font-family: inherit; font-size: 0.86rem; color: #334155; resize: vertical; line-height: 1.4; outline: none;
+        }
+        .mcl-quiz-list {
+            display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; overflow-y: auto; max-height: 280px; padding-right: 0.25rem;
+        }
+        .mcl-quiz-item {
+            background: #fafafa; border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem;
+        }
+        .mcl-quiz-item-header {
+            display: flex; justify-content: space-between; align-items: start; gap: 0.5rem; margin-bottom: 0.5rem;
+        }
+        .mcl-quiz-question-txt {
+            font-weight: 700; font-size: 0.86rem; color: #1e293b; line-height: 1.4;
+        }
+        .mcl-quiz-details {
+            font-size: 0.78rem; color: #475569; display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem 1rem; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border);
+        }
+        .mcl-add-note-box {
+            display: flex; gap: 0.5rem; align-items: end; background: #f8fafc; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border);
+        }
     </style>
 </head>
 <body>
@@ -1440,6 +1521,317 @@
         } else toast('Failed to delete course.', 'err');
     }
 
+    /* ── Manage Notes & Quizzes Logic ── */
+    let currentCourseContent = [];
+    let selectedModuleIdx = null;
+    let activeMclTab = 'notes';
+    let editingQuestionIdx = null;
+
+    async function openManageNotesQuizzesModal() {
+        const course = coursesData.find(c => c.id === activeCourseId);
+        if (!course) return;
+        closeCourseActionDialog();
+        
+        document.getElementById('mcl-course-title').textContent = course.title;
+        const listContainer = document.getElementById('mcl-modules-list');
+        listContainer.innerHTML = '<div style="text-align:center;padding:2rem;"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+        
+        document.getElementById('mcl-module-details').style.display = 'none';
+        document.getElementById('mcl-empty-state').style.display = 'flex';
+        document.getElementById('manage-notes-quizzes-overlay').classList.add('open');
+        
+        try {
+            const r = await fetch(`/api/courses/${activeCourseId}/content`);
+            if (r.ok) {
+                const res = await r.json();
+                currentCourseContent = res.modules || [];
+                renderChaptersSidebar();
+                if (currentCourseContent.length > 0) {
+                    selectModuleAdmin(0);
+                } else {
+                    document.getElementById('mcl-module-details').style.display = 'none';
+                    document.getElementById('mcl-empty-state').style.display = 'flex';
+                }
+            } else {
+                toast('Failed to load course content.', 'err');
+                closeManageNotesQuizzesModal();
+            }
+        } catch (e) {
+            toast('Error loading content.', 'err');
+            closeManageNotesQuizzesModal();
+        }
+    }
+
+    function closeManageNotesQuizzesModal() {
+        document.getElementById('manage-notes-quizzes-overlay').classList.remove('open');
+    }
+
+    function renderChaptersSidebar() {
+        const listContainer = document.getElementById('mcl-modules-list');
+        if (!currentCourseContent.length) {
+            listContainer.innerHTML = '<div style="color:#94a3b8;font-size:0.8rem;text-align:center;padding:1rem;">No chapters. Add one below!</div>';
+            return;
+        }
+        listContainer.innerHTML = currentCourseContent.map((m, idx) => {
+            const isActive = idx === selectedModuleIdx;
+            return `
+                <div class="mcl-chapter-item ${isActive ? 'active' : ''}" onclick="selectModuleAdmin(${idx})">
+                    <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px;">
+                        ${idx + 1}. ${m.title}
+                    </span>
+                    <span class="badge ${isActive ? 'b-blue' : 'b-gray'}" style="font-size:0.68rem;padding:0.15rem 0.4rem;">${m.badge || 'Topic'}</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function selectModuleAdmin(idx) {
+        selectedModuleIdx = idx;
+        renderChaptersSidebar();
+        
+        document.getElementById('mcl-empty-state').style.display = 'none';
+        document.getElementById('mcl-module-details').style.display = 'flex';
+        
+        const mod = currentCourseContent[idx];
+        document.getElementById('mcl-edit-title').value = mod.title || '';
+        document.getElementById('mcl-edit-badge').value = mod.badge || '';
+        
+        closeQuestionForm();
+        switchMclTab(activeMclTab);
+        renderNotesList();
+        renderQuizQuestionsList();
+    }
+
+    function updateSelectedModuleMeta() {
+        if (selectedModuleIdx === null) return;
+        const title = document.getElementById('mcl-edit-title').value.trim();
+        const badge = document.getElementById('mcl-edit-badge').value.trim();
+        if (title) {
+            currentCourseContent[selectedModuleIdx].title = title;
+        }
+        currentCourseContent[selectedModuleIdx].badge = badge || 'Topic';
+        renderChaptersSidebar();
+    }
+
+    function addNewModuleAdmin() {
+        currentCourseContent.push({
+            title: "New Chapter " + (currentCourseContent.length + 1),
+            badge: "Topic",
+            notes: [],
+            questions: []
+        });
+        selectModuleAdmin(currentCourseContent.length - 1);
+    }
+
+    function deleteSelectedModuleAdmin() {
+        if (selectedModuleIdx === null) return;
+        if (!confirm(`Delete chapter "${currentCourseContent[selectedModuleIdx].title}" and all its notes/quizzes?`)) return;
+        
+        currentCourseContent.splice(selectedModuleIdx, 1);
+        selectedModuleIdx = null;
+        renderChaptersSidebar();
+        
+        if (currentCourseContent.length > 0) {
+            selectModuleAdmin(0);
+        } else {
+            document.getElementById('mcl-module-details').style.display = 'none';
+            document.getElementById('mcl-empty-state').style.display = 'flex';
+        }
+        toast('Chapter deleted locally. Save changes to make it permanent.');
+    }
+
+    function switchMclTab(tab) {
+        activeMclTab = tab;
+        document.getElementById('mcl-btn-tab-notes').classList.toggle('active', tab === 'notes');
+        document.getElementById('mcl-btn-tab-quiz').classList.toggle('active', tab === 'quiz');
+        
+        document.getElementById('mcl-tab-notes').classList.toggle('active', tab === 'notes');
+        document.getElementById('mcl-tab-quiz').classList.toggle('active', tab === 'quiz');
+        closeQuestionForm();
+    }
+
+    function renderNotesList() {
+        const list = document.getElementById('mcl-notes-list');
+        const mod = currentCourseContent[selectedModuleIdx];
+        if (!mod || !mod.notes || !mod.notes.length) {
+            list.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8;font-size:0.84rem;">No study notes in this chapter. Type one below to get started!</div>';
+            return;
+        }
+        list.innerHTML = mod.notes.map((note, idx) => {
+            return `
+                <div class="mcl-note-item">
+                    <span style="font-weight:700;color:var(--primary);margin-top:0.15rem;font-size:0.84rem;">&bull;</span>
+                    <textarea class="mcl-note-textarea" oninput="updateNoteInModule(${idx}, this.value)">${note}</textarea>
+                    <button class="btn-act btn-del" onclick="deleteNoteFromModule(${idx})" style="padding:0.25rem 0.4rem;font-size:0.75rem;margin-top:0;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function addNoteToModule() {
+        const txtInput = document.getElementById('mcl-new-note-text');
+        const text = txtInput.value.trim();
+        if (!text) {
+            toast('Please enter note text first.', 'err');
+            return;
+        }
+        currentCourseContent[selectedModuleIdx].notes.push(text);
+        txtInput.value = '';
+        renderNotesList();
+    }
+
+    function updateNoteInModule(noteIdx, val) {
+        if (selectedModuleIdx === null) return;
+        currentCourseContent[selectedModuleIdx].notes[noteIdx] = val;
+    }
+
+    function deleteNoteFromModule(noteIdx) {
+        currentCourseContent[selectedModuleIdx].notes.splice(noteIdx, 1);
+        renderNotesList();
+    }
+
+    function renderQuizQuestionsList() {
+        const list = document.getElementById('mcl-quiz-list');
+        const mod = currentCourseContent[selectedModuleIdx];
+        if (!mod || !mod.questions || !mod.questions.length) {
+            list.innerHTML = '<div style="text-align:center;padding:2rem;color:#94a3b8;font-size:0.84rem;">No quiz questions in this chapter. Click "Add Question" to start!</div>';
+            return;
+        }
+        
+        list.innerHTML = mod.questions.map((q, idx) => {
+            const optsText = q.options.map((opt, oIdx) => {
+                const isCorrect = oIdx === parseInt(q.correct);
+                return `<span style="${isCorrect ? 'color:#10b981;font-weight:700;' : ''}">${String.fromCharCode(65 + oIdx)}. ${opt}</span>`;
+            }).join('');
+            
+            return `
+                <div class="mcl-quiz-item">
+                    <div class="mcl-quiz-item-header">
+                        <div class="mcl-quiz-question-txt">Q${idx + 1}. ${q.question}</div>
+                        <div style="display:flex;gap:0.35rem;">
+                            <button class="btn-act" onclick="openEditQuestionForm(${idx})" style="padding:0.25rem 0.5rem;font-size:0.75rem;margin-top:0;background:#eff6ff;color:#3b82f6;">
+                                <i class="fas fa-pen"></i> Edit
+                            </button>
+                            <button class="btn-act btn-del" onclick="deleteQuestion(${idx})" style="padding:0.25rem 0.5rem;font-size:0.75rem;margin-top:0;">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mcl-quiz-details">
+                        ${optsText}
+                        <div style="grid-column: 1/-1; color:#64748b; font-style:italic; margin-top:0.25rem; font-size:0.74rem;">
+                            <strong>Explanation:</strong> ${q.explanation || 'None'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function openAddQuestionForm() {
+        editingQuestionIdx = null;
+        document.getElementById('qform-title').textContent = 'Add Question';
+        document.getElementById('qform-text').value = '';
+        document.getElementById('qform-opt0').value = '';
+        document.getElementById('qform-opt1').value = '';
+        document.getElementById('qform-opt2').value = '';
+        document.getElementById('qform-opt3').value = '';
+        document.getElementById('qform-correct').value = '0';
+        document.getElementById('qform-explanation').value = '';
+        
+        document.getElementById('mcl-question-form-box').style.display = 'block';
+        document.getElementById('mcl-question-form-box').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function openEditQuestionForm(qIdx) {
+        editingQuestionIdx = qIdx;
+        const q = currentCourseContent[selectedModuleIdx].questions[qIdx];
+        
+        document.getElementById('qform-title').textContent = `Edit Question ${qIdx + 1}`;
+        document.getElementById('qform-text').value = q.question || '';
+        document.getElementById('qform-opt0').value = q.options[0] || '';
+        document.getElementById('qform-opt1').value = q.options[1] || '';
+        document.getElementById('qform-opt2').value = q.options[2] || '';
+        document.getElementById('qform-opt3').value = q.options[3] || '';
+        document.getElementById('qform-correct').value = q.correct !== undefined ? q.correct.toString() : '0';
+        document.getElementById('qform-explanation').value = q.explanation || '';
+        
+        document.getElementById('mcl-question-form-box').style.display = 'block';
+        document.getElementById('mcl-question-form-box').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeQuestionForm() {
+        document.getElementById('mcl-question-form-box').style.display = 'none';
+    }
+
+    function saveQuestion() {
+        const question = document.getElementById('qform-text').value.trim();
+        const opt0 = document.getElementById('qform-opt0').value.trim();
+        const opt1 = document.getElementById('qform-opt1').value.trim();
+        const opt2 = document.getElementById('qform-opt2').value.trim();
+        const opt3 = document.getElementById('qform-opt3').value.trim();
+        const correct = parseInt(document.getElementById('qform-correct').value);
+        const explanation = document.getElementById('qform-explanation').value.trim();
+        
+        if (!question || !opt0 || !opt1) {
+            toast('Please fill in the question and at least Option A & B.', 'err');
+            return;
+        }
+        
+        const options = [opt0, opt1];
+        if (opt2) options.push(opt2);
+        if (opt3) options.push(opt3);
+        
+        if (correct >= options.length) {
+            toast('Correct answer selection exceeds provided options.', 'err');
+            return;
+        }
+        
+        const qObj = { question, options, correct, explanation };
+        
+        if (editingQuestionIdx === null) {
+            currentCourseContent[selectedModuleIdx].questions.push(qObj);
+        } else {
+            currentCourseContent[selectedModuleIdx].questions[editingQuestionIdx] = qObj;
+        }
+        
+        closeQuestionForm();
+        renderQuizQuestionsList();
+    }
+
+    function deleteQuestion(qIdx) {
+        if (!confirm(`Delete this question?`)) return;
+        currentCourseContent[selectedModuleIdx].questions.splice(qIdx, 1);
+        renderQuizQuestionsList();
+    }
+
+    async function saveNotesQuizzesContent() {
+        const btn = document.getElementById('btn-save-notes-quizzes');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving changes...';
+        
+        try {
+            const r = await fetch(`/api/admin/courses/${activeCourseId}/content`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(currentCourseContent)
+            });
+            if (r.ok) {
+                toast('Course notes and quizzes updated successfully!');
+                closeManageNotesQuizzesModal();
+            } else {
+                const err = await r.json();
+                toast(err.detail || 'Failed to save course content.', 'err');
+            }
+        } catch (e) {
+            toast('Error saving content.', 'err');
+        }
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> Save Content Changes';
+    }
+
 </script>
 
 <!-- ── Course Action Dialog (small popup) ── -->
@@ -1449,6 +1841,9 @@
         <div class="action-dialog-course" id="cad-title">Course Title</div>
         <div class="action-dialog-sub">What would you like to do?</div>
         <div class="action-dialog-btns">
+            <button class="btn-dlg-notes" onclick="openManageNotesQuizzesModal()">
+                <i class="fas fa-book-open"></i> Notes & Quizzes
+            </button>
             <button class="btn-dlg-edit" onclick="openEditCourseModal()">
                 <i class="fas fa-pen"></i> Edit Course
             </button>
@@ -1551,6 +1946,137 @@
             <button class="btn-modal-secondary" onclick="closeEditCourseModal()">Cancel</button>
             <button class="btn-modal-primary" onclick="submitEditCourse()">
                 <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Manage Notes & Quizzes Modal ── -->
+<div class="modal-overlay" id="manage-notes-quizzes-overlay" onclick="closeManageNotesQuizzesModal()">
+    <div class="modal-box" onclick="event.stopPropagation()" style="max-width: 900px; width: 95%;">
+        <div class="modal-head">
+            <span class="modal-title"><i class="fas fa-book-reader" style="color:var(--primary);"></i> Manage Notes & Quizzes: <span id="mcl-course-title" style="font-weight:600; color:#475569;">Course</span></span>
+            <button class="modal-close" onclick="closeManageNotesQuizzesModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body" style="padding: 1.25rem;">
+            <div class="manage-content-layout" style="height: auto; min-height: 520px;">
+                <!-- Sidebar of chapters -->
+                <div class="mcl-sidebar">
+                    <div class="mcl-sidebar-title">Chapters / Modules</div>
+                    <div class="mcl-sidebar-list" id="mcl-modules-list">
+                        <!-- Loaded dynamically -->
+                    </div>
+                    <button class="mcl-btn-add-module" onclick="addNewModuleAdmin()">
+                        <i class="fas fa-plus"></i> Add Chapter
+                    </button>
+                </div>
+                
+                <!-- Main detail view -->
+                <div class="mcl-main" id="mcl-module-details" style="display:none;">
+                    <div class="mcl-module-header">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label" style="font-size:0.75rem;">Chapter Title</label>
+                            <input type="text" id="mcl-edit-title" class="form-input" oninput="updateSelectedModuleMeta()" style="padding: 0.45rem 0.75rem; font-size: 0.85rem;">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label" style="font-size:0.75rem;">Badge</label>
+                            <input type="text" id="mcl-edit-badge" class="form-input" oninput="updateSelectedModuleMeta()" placeholder="e.g. Topic, Foundation, OOP" style="padding: 0.45rem 0.75rem; font-size: 0.85rem;">
+                        </div>
+                        <button class="btn-act btn-del" onclick="deleteSelectedModuleAdmin()" style="height: 34px; padding: 0 0.75rem; margin-top: 0;">
+                            <i class="fas fa-trash"></i> Delete Chapter
+                        </button>
+                    </div>
+                    
+                    <!-- Tab Switchers -->
+                    <div class="mcl-tabs">
+                        <button class="mcl-tab-btn active" id="mcl-btn-tab-notes" onclick="switchMclTab('notes')">Study Notes</button>
+                        <button class="mcl-tab-btn" id="mcl-btn-tab-quiz" onclick="switchMclTab('quiz')">Quiz Questions</button>
+                    </div>
+                    
+                    <!-- Notes Content Pane -->
+                    <div class="mcl-tab-content active" id="mcl-tab-notes">
+                        <div class="mcl-notes-list" id="mcl-notes-list">
+                            <!-- Loaded dynamically -->
+                        </div>
+                        <div class="mcl-add-note-box">
+                            <textarea id="mcl-new-note-text" class="form-textarea" placeholder="Type a new study note (supports inline HTML like &lt;code&gt;)..." style="height: 52px; font-size: 0.84rem; padding: 0.5rem;"></textarea>
+                            <button class="btn-modal-primary" onclick="addNoteToModule()" style="padding: 0.5rem 1rem; font-size: 0.82rem; height: 52px; display: flex; align-items: center; justify-content: center; margin-top: 0; border-radius: 8px;">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Quiz Content Pane -->
+                    <div class="mcl-tab-content" id="mcl-tab-quiz">
+                        <div class="mcl-quiz-list" id="mcl-quiz-list">
+                            <!-- Loaded dynamically -->
+                        </div>
+                        <div style="display:flex; justify-content: space-between; align-items: center;">
+                            <button class="btn-modal-primary" id="mcl-btn-add-q" onclick="openAddQuestionForm()" style="padding: 0.5rem 1rem; font-size: 0.82rem; margin-top: 0; border-radius: 8px;">
+                                <i class="fas fa-plus"></i> Add Question
+                            </button>
+                        </div>
+                        
+                        <!-- Question Form Box (Inline Drawer) -->
+                        <div id="mcl-question-form-box" style="display:none; margin-top: 1rem; border: 1px solid var(--border); border-radius: 12px; padding: 1rem; background: #f8fafc;">
+                            <h4 id="qform-title" style="margin-top:0; margin-bottom:0.75rem; font-size:0.88rem; font-weight:700; color:#1e293b;">Add Question</h4>
+                            <div class="form-group full" style="margin-bottom:0.65rem;">
+                                <label class="form-label" style="font-size:0.75rem;">Question Text</label>
+                                <textarea id="qform-text" class="form-textarea" placeholder="Enter the quiz question..." style="height: 50px; font-size: 0.84rem; padding: 0.5rem;"></textarea>
+                            </div>
+                            <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap:0.5rem; margin-bottom:0.65rem;">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label class="form-label" style="font-size:0.72rem;">Option A *</label>
+                                    <input type="text" id="qform-opt0" class="form-input" style="padding: 0.4rem 0.6rem; font-size: 0.82rem;">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label class="form-label" style="font-size:0.72rem;">Option B *</label>
+                                    <input type="text" id="qform-opt1" class="form-input" style="padding: 0.4rem 0.6rem; font-size: 0.82rem;">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label class="form-label" style="font-size:0.72rem;">Option C</label>
+                                    <input type="text" id="qform-opt2" class="form-input" style="padding: 0.4rem 0.6rem; font-size: 0.82rem;" placeholder="(optional)">
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label class="form-label" style="font-size:0.72rem;">Option D</label>
+                                    <input type="text" id="qform-opt3" class="form-input" style="padding: 0.4rem 0.6rem; font-size: 0.82rem;" placeholder="(optional)">
+                                </div>
+                            </div>
+                            <div class="form-grid" style="grid-template-columns: 1fr 2fr; gap:0.5rem; margin-bottom:0.75rem;">
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label class="form-label" style="font-size:0.72rem;">Correct Answer</label>
+                                    <select id="qform-correct" class="form-input" style="height: 32px; padding: 0 0.5rem; font-size: 0.82rem;">
+                                        <option value="0">Option A</option>
+                                        <option value="1">Option B</option>
+                                        <option value="2">Option C</option>
+                                        <option value="3">Option D</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin-bottom:0;">
+                                    <label class="form-label" style="font-size:0.72rem;">Explanation</label>
+                                    <input type="text" id="qform-explanation" class="form-input" placeholder="e.g. Variables are mutable in Python..." style="padding: 0.4rem 0.6rem; font-size: 0.82rem;">
+                                </div>
+                            </div>
+                            <div style="display:flex; justify-content: flex-end; gap:0.5rem;">
+                                <button class="btn-modal-secondary" onclick="closeQuestionForm()" style="padding:0.35rem 0.8rem; font-size:0.78rem;">Cancel</button>
+                                <button class="btn-modal-primary" onclick="saveQuestion()" style="padding:0.35rem 0.8rem; font-size:0.78rem; margin-top:0;">Save Question</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Empty State -->
+                <div class="mcl-empty" id="mcl-empty-state">
+                    <i class="fas fa-book-open" style="font-size:2.5rem; color:#cbd5e1; margin-bottom:1rem;"></i>
+                    <h4 style="margin:0 0 0.25rem 0; color:#475569;">No Chapter Selected</h4>
+                    <p style="margin:0; font-size:0.84rem;">Select a chapter from the left sidebar to edit its study notes and revision quizzes, or click "Add Chapter" to create a new one.</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn-modal-secondary" onclick="closeManageNotesQuizzesModal()">Cancel</button>
+            <button class="btn-modal-primary" id="btn-save-notes-quizzes" onclick="saveNotesQuizzesContent()">
+                <i class="fas fa-save"></i> Save Content Changes
             </button>
         </div>
     </div>

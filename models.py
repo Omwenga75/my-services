@@ -24,6 +24,7 @@ class Course(Base):
     image_url = Column(String)
     instructor = Column(String, default="Admin")
     rating = Column(Float, default=4.8)
+    modules_json = Column(Text, nullable=True)
     
     enrollments = relationship("Enrollment", back_populates="course")
 
