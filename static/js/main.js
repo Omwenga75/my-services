@@ -73,13 +73,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Build a base nav with all primary links so they remain visible on all pages
             let baseNav = `
-                <a href="/"><i class="fas fa-home"></i> Home</a>
-                <a href="/courses"><i class="fas fa-book-open"></i> Courses</a>
-                <a href="/services"><i class="fas fa-concierge-bell"></i> Services</a>
-                <a href="/books"><i class="fas fa-book"></i> Books</a>
-                <a href="/projects"><i class="fas fa-project-diagram"></i> Projects</a>
-                <a href="/about"><i class="fas fa-building"></i> About Us</a>
-                <a href="/contact"><i class="fas fa-envelope"></i> Contact Us</a>
+                <div class="nav-center-links">
+                    <a href="/"><i class="fas fa-home"></i> Home</a>
+                    <a href="/courses"><i class="fas fa-book-open"></i> Courses</a>
+                    <a href="/services"><i class="fas fa-concierge-bell"></i> Services</a>
+                    <a href="/books"><i class="fas fa-book"></i> Books</a>
+                    <a href="/projects"><i class="fas fa-project-diagram"></i> Projects</a>
+                    <a href="/about"><i class="fas fa-building"></i> About Us</a>
+                    <a href="/contact"><i class="fas fa-envelope"></i> Contact Us</a>
+                </div>
+                <div class="nav-right-links">
             `;
 
             if (data.logged_in) {
@@ -88,9 +91,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 baseNav += `
                     <a href="${dashboardUrl}"><i class="fas fa-chart-line"></i> ${dashboardText}</a>
                     <a href="/logout" style="color: #ef4444;"><i class="fas fa-sign-out-alt" style="display:inline-block !important;"></i> Logout</a>
-                `;
+                </div>`;
             } else {
-                baseNav += `<a href="/login" class="btn-auth-nav"><i class="fas fa-sign-in-alt"></i> Login</a>`;
+                baseNav += `<a href="/login" class="btn-auth-nav"><i class="fas fa-sign-in-alt"></i> Login</a></div>`;
             }
 
             nav.innerHTML = baseNav;
