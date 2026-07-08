@@ -237,13 +237,13 @@
             justify-content: center;
         }
         
-        /* Unified Premium Dark Covers */
+        /* Unified Premium Covers */
         .book-front {
             width: 140px; height: 200px;
             transform: translateZ(14px);
             border-radius: 2px 5px 5px 2px;
-            background: #121212;
-            color: #fff;
+            background: var(--cover-bg, #121212);
+            color: var(--text-color, #fff);
             flex-direction: column;
             overflow: hidden;
             border-left: 1px solid rgba(255,255,255,0.1);
@@ -252,7 +252,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to right, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 20%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.15) 100%);
+            background: linear-gradient(to right, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 20%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.15) 100%);
             pointer-events: none;
         }
 
@@ -260,7 +260,7 @@
             width: 140px; height: 200px;
             transform: rotateY(180deg) translateZ(14px);
             border-radius: 5px 2px 2px 5px;
-            background: #0a0a0a;
+            background: var(--spine-bg, #0a0a0a);
         }
 
         .book-spine {
@@ -268,10 +268,10 @@
             left: -14px; top: 0;
             transform: rotateY(-90deg) translateZ(14px);
             border-radius: 4px 0 0 4px;
-            background: #0a0a0a;
-            color: #fff;
+            background: var(--spine-bg, #0a0a0a);
+            color: var(--text-color, #fff);
             border-right: 1px solid rgba(255,255,255,0.05);
-            border-left: 3px solid var(--accent);
+            border-left: 3px solid var(--accent, #fff);
             overflow: hidden;
         }
         .book-spine span {
@@ -349,8 +349,8 @@
         }
         .bf-footer {
             padding: 0.8rem 0.5rem;
-            background: #0a0a0a;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            background: var(--spine-bg, #0a0a0a);
+            border-top: 1px solid rgba(0,0,0,0.05);
             width: 100%;
             text-align: center;
         }
@@ -360,22 +360,53 @@
             margin-bottom: 0.3rem;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.6);
+            opacity: 0.75;
         }
         .bf-author {
             font-size: 0.45rem;
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 1px;
+            opacity: 0.9;
         }
 
         /* Color Themes for Books */
-        .cv-python { --accent: #F7C948; }
-        .cv-js { --accent: #F7DF1E; }
-        .cv-numpy { --accent: #4FC3F7; }
-        .cv-web { --accent: #E040FB; }
-        .cv-kotlin { --accent: #FF7043; }
-        .cv-android { --accent: #69F0AE; }
+        .cv-python { 
+            --cover-bg: #aedce1; 
+            --spine-bg: #8bbec4; 
+            --text-color: #173e4b; 
+            --accent: #0f2d38; 
+        }
+        .cv-js { 
+            --cover-bg: #fce47c; 
+            --spine-bg: #d4be5c; 
+            --text-color: #2d2d2a; 
+            --accent: #1f1f1d; 
+        }
+        .cv-numpy { 
+            --cover-bg: #b3d4f0; 
+            --spine-bg: #8ab1d4; 
+            --text-color: #193c66; 
+            --accent: #102947; 
+        }
+        .cv-web { 
+            --cover-bg: #f3d2f5; 
+            --spine-bg: #ceabdb; 
+            --text-color: #48165e; 
+            --accent: #2e0e3c; 
+        }
+        .cv-kotlin { 
+            --cover-bg: #f7cbad; 
+            --spine-bg: #cf9d7c; 
+            --text-color: #6e2f12; 
+            --accent: #491f0b; 
+        }
+        .cv-android { 
+            --cover-bg: #c2f0cc; 
+            --spine-bg: #9bd1a7; 
+            --text-color: #1a542b; 
+            --accent: #0e3018; 
+        }
 
         /* Badge */
         .bestseller-badge {
