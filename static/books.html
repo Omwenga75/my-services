@@ -175,11 +175,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
             position: relative;
         }
-        .book-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(255,122,0,0.4);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
+
 
         /* ── 3D Book Cover Design ── */
         .book-cover-wrapper {
@@ -199,9 +195,7 @@
             transform: rotateY(25deg) rotateX(-5deg);
             transition: transform 0.5s ease;
         }
-        .book-card:hover .book-composition {
-            transform: rotateY(15deg) rotateX(-2deg) scale(1.05);
-        }
+
 
         .book-3d {
             position: absolute;
@@ -780,7 +774,7 @@
             </div>
 
             <!-- Web Design Book -->
-            <div class="book-card" data-category="web" onclick="handleBuy('Modern Web Design Bible')">
+            <div class="book-card" data-category="web" onclick="handleBuy('Modern Web Design')">
                 <div class="book-cover-wrapper cv-web">
                     <div class="book-composition">
                         <!-- Book 1 (Back) -->
@@ -790,7 +784,7 @@
                                 <div class="bf-title" style="padding-top: 2rem;"><span class="accent">MODERN</span>Web Design</div>
                                 <div style="flex: 1;"></div>
                                 <div class="bf-footer">
-                                    <div class="bf-subtitle">The Complete UX/UI Bible</div>
+                                    <div class="bf-subtitle">The Complete UX/UI</div>
                                     <div class="bf-author">Nelson Omwenga</div>
                                 </div>
                             </div>
@@ -809,7 +803,7 @@
                                 <div class="bf-title" style="padding-top: 2rem;"><span class="accent">MODERN</span>Web Design</div>
                                 <div style="flex: 1;"></div>
                                 <div class="bf-footer">
-                                    <div class="bf-subtitle">The Complete UX/UI Bible</div>
+                                    <div class="bf-subtitle">The Complete UX/UI</div>
                                     <div class="bf-author">Nelson Omwenga</div>
                                 </div>
                             </div>
@@ -825,7 +819,7 @@
                     <span class="bestseller-badge" style="background:linear-gradient(135deg,#E040FB,#AA00FF);">Top Pick</span>
                 </div>
                 <div class="book-info">
-                    <div class="book-title">Modern Web Design Bible</div>
+                    <div class="book-title">Modern Web Design</div>
                     <div class="book-author-row">Nelson Omwenga</div>
                     <div class="book-tags">
                         <span class="book-tag">HTML/CSS</span>
@@ -843,7 +837,7 @@
                         <div class="book-price">KES 1,150</div>
                         <div class="book-price-orig">KES 1,900</div>
                     </div>
-                    <button class="btn-buy" onclick="handleBuy('Modern Web Design Bible');event.stopPropagation()">Buy Now</button>
+                    <button class="btn-buy" onclick="handleBuy('Modern Web Design');event.stopPropagation()">Buy Now</button>
                 </div>
             </div>
 
