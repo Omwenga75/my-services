@@ -124,7 +124,8 @@ html {
     object-fit: contain;
     transform: scale(2.5);
     transform-origin: center left;
-    mix-blend-mode: multiply;
+    filter: invert(1) brightness(1.2);
+    mix-blend-mode: screen;
 }
 
 .nav-links {
@@ -626,7 +627,7 @@ html {
     font-size: 4rem;
     font-weight: 800;
     line-height: 1.1;
-    color: var(--primary-dark);
+    color: var(--text-main);
     margin-bottom: 1.5rem;
 }
 
