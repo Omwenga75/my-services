@@ -442,6 +442,10 @@ async def about_page():
 async def books_page():
     return render_html("books.html")
 
+@app.get("/projects", response_class=HTMLResponse)
+async def projects_page():
+    return render_html("projects.html")
+
 @app.get("/contact", response_class=HTMLResponse)
 async def contact_page():
     return render_html("contact.html")
