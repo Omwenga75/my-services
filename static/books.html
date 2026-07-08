@@ -183,7 +183,7 @@
 
         /* ── 3D Book Cover Design ── */
         .book-cover-wrapper {
-            padding: 3rem 1.5rem 1rem;
+            padding: 3rem 1.5rem 2.5rem;
             display: flex;
             justify-content: center;
             perspective: 1200px;
@@ -196,157 +196,186 @@
             width: 140px;
             height: 200px;
             transform-style: preserve-3d;
+            transform: rotateY(25deg) rotateX(-5deg);
+            transition: transform 0.5s ease;
         }
+        .book-card:hover .book-composition {
+            transform: rotateY(15deg) rotateX(-2deg) scale(1.05);
+        }
+
         .book-3d {
-            width: 100%;
-            height: 100%;
             position: absolute;
             top: 0; left: 0;
+            width: 140px; height: 200px;
             transform-style: preserve-3d;
-            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        /* Standing Book */
+        /* Offset the two books */
         .book-standing {
-            transform: rotateY(-22deg) rotateX(4deg) translateZ(20px);
+            transform: translateZ(15px);
             z-index: 2;
-            filter: drop-shadow(-12px 15px 15px rgba(0,0,0,0.6));
         }
-        /* Lying Flat Book */
         .book-lying {
-            transform: rotateX(70deg) rotateZ(-20deg) translateZ(-60px) translateX(25px) translateY(15px);
+            transform: translateZ(-15px) translateX(25px) translateY(-5px);
             z-index: 1;
-            filter: drop-shadow(0 30px 20px rgba(0,0,0,0.8));
-            opacity: 0.85; /* Slightly faded because it's behind */
         }
 
-        .book-card:hover .book-standing {
-            transform: rotateY(-12deg) rotateX(2deg) translateZ(30px) scale(1.05);
-        }
-        .book-card:hover .book-lying {
-            transform: rotateX(68deg) rotateZ(-15deg) translateZ(-50px) translateX(20px) translateY(10px) scale(1.02);
-            opacity: 0.95;
-        }
-
-        .book-front {
+        .book-shadow {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            border-radius: 1px 4px 4px 1px;
+            width: 140px; height: 28px;
+            left: 0; bottom: -14px;
+            transform: rotateX(-90deg) translateZ(14px);
+            box-shadow: 0 0 20px 15px rgba(0,0,0,0.6);
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .book-face {
+            position: absolute;
+            backface-visibility: hidden;
             display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Unified Premium Dark Covers */
+        .book-front {
+            width: 140px; height: 200px;
+            transform: translateZ(14px);
+            border-radius: 2px 5px 5px 2px;
+            background: #121212;
+            color: #fff;
             flex-direction: column;
             overflow: hidden;
-            backface-visibility: hidden;
-            border-right: 1px solid rgba(255,255,255,0.3);
+            border-left: 1px solid rgba(255,255,255,0.1);
         }
-        /* Glossy overlay */
         .book-front::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to right, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 15%, rgba(0,0,0,0) 85%, rgba(0,0,0,0.15) 100%);
+            background: linear-gradient(to right, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 20%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.15) 100%);
             pointer-events: none;
         }
+
+        .book-back {
+            width: 140px; height: 200px;
+            transform: rotateY(180deg) translateZ(14px);
+            border-radius: 5px 2px 2px 5px;
+            background: #0a0a0a;
+        }
+
         .book-spine {
-            position: absolute;
-            top: 0; left: -18px;
-            width: 18px; height: 100%;
-            transform-origin: right center;
-            transform: rotateY(-90deg);
-            border-radius: 3px 0 0 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-left: 1px solid rgba(255,255,255,0.15);
+            width: 28px; height: 200px;
+            left: -14px; top: 0;
+            transform: rotateY(-90deg) translateZ(14px);
+            border-radius: 4px 0 0 4px;
+            background: #0a0a0a;
+            color: #fff;
+            border-right: 1px solid rgba(255,255,255,0.05);
+            border-left: 3px solid var(--accent);
+            overflow: hidden;
         }
         .book-spine span {
             writing-mode: vertical-rl;
             transform: rotate(180deg);
-            font-size: 0.5rem;
-            font-weight: 800;
-            letter-spacing: 1px;
+            font-size: 0.55rem;
+            letter-spacing: 1.5px;
             white-space: nowrap;
+        }
+        .book-spine span b {
+            color: var(--accent);
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .book-pages-right {
+            width: 28px; height: 194px;
+            left: 126px; top: 3px;
+            transform: rotateY(90deg) translateZ(14px);
+            background: repeating-linear-gradient(to right, #f4f4f4 0%, #e0e0e0 20%, #f4f4f4 40%);
+            border-radius: 0 3px 3px 0;
+        }
+        .book-pages-top {
+            width: 134px; height: 28px;
+            left: 3px; top: -14px;
+            transform: rotateX(90deg) translateZ(14px);
+            background: repeating-linear-gradient(to bottom, #f4f4f4 0%, #e0e0e0 20%, #f4f4f4 40%);
+        }
+        .book-pages-bottom {
+            width: 134px; height: 28px;
+            left: 3px; bottom: -14px;
+            transform: rotateX(-90deg) translateZ(14px);
+            background: #d0d0d0;
         }
 
         /* Front Content Layout */
         .bf-header {
-            padding: 0.4rem 0.5rem;
-            font-size: 0.5rem;
+            padding: 0.6rem 0.5rem 0.2rem;
+            font-size: 0.45rem;
             font-weight: 800;
+            color: rgba(255,255,255,0.6);
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 0.3rem;
-            margin: 0.5rem 0.5rem 0;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            width: 100%;
         }
         .bf-title {
-            font-size: 1.1rem;
-            font-weight: 900;
-            line-height: 1.05;
-            padding: 0.5rem 0.5rem 0;
+            font-size: 0.9rem;
+            font-weight: 800;
+            line-height: 1.1;
+            padding: 0 0.5rem;
             text-transform: uppercase;
+            text-align: center;
+        }
+        .bf-title .accent {
+            color: var(--accent);
+            display: block;
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 0.2rem;
         }
         .bf-graphic {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3.2rem;
+            font-size: 3.5rem;
             position: relative;
             z-index: 1;
+            filter: drop-shadow(0 5px 15px var(--accent));
+            opacity: 0.95;
         }
         .bf-footer {
-            padding: 0.5rem;
-            margin-top: auto;
+            padding: 0.8rem 0.5rem;
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            width: 100%;
+            text-align: center;
         }
         .bf-subtitle {
-            font-size: 0.4rem;
+            font-size: 0.35rem;
             font-weight: 800;
             margin-bottom: 0.3rem;
             letter-spacing: 0.5px;
             text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
         }
         .bf-author {
-            font-size: 0.35rem;
+            font-size: 0.45rem;
             text-transform: uppercase;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
         /* Color Themes for Books */
-        /* Python */
-        .cv-python .book-front { background: #aedce1; color: #173e4b; }
-        .cv-python .book-spine { background: #8bbec4; color: #173e4b; }
-        .cv-python .bf-header, .cv-python .bf-footer { background: #173e4b; color: #aedce1; }
-        .cv-python .bf-author { color: rgba(174,220,225,0.7); }
-        
-        /* JavaScript */
-        .cv-js .book-front { background: #fce47c; color: #2d2d2a; }
-        .cv-js .book-spine { background: #d4be5c; color: #2d2d2a; }
-        .cv-js .bf-header, .cv-js .bf-footer { background: #2d2d2a; color: #fce47c; }
-        .cv-js .bf-author { color: rgba(252,228,124,0.7); }
-
-        /* NumPy */
-        .cv-numpy .book-front { background: #b3d4f0; color: #193c66; }
-        .cv-numpy .book-spine { background: #8ab1d4; color: #193c66; }
-        .cv-numpy .bf-header, .cv-numpy .bf-footer { background: #193c66; color: #b3d4f0; }
-        .cv-numpy .bf-author { color: rgba(179,212,240,0.7); }
-
-        /* Web */
-        .cv-web .book-front { background: #f3d2f5; color: #48165e; }
-        .cv-web .book-spine { background: #ceabdb; color: #48165e; }
-        .cv-web .bf-header, .cv-web .bf-footer { background: #48165e; color: #f3d2f5; }
-        .cv-web .bf-author { color: rgba(243,210,245,0.7); }
-
-        /* Kotlin */
-        .cv-kotlin .book-front { background: #f7cbad; color: #6e2f12; }
-        .cv-kotlin .book-spine { background: #cf9d7c; color: #6e2f12; }
-        .cv-kotlin .bf-header, .cv-kotlin .bf-footer { background: #6e2f12; color: #f7cbad; }
-        .cv-kotlin .bf-author { color: rgba(247,203,173,0.7); }
-
-        /* Android */
-        .cv-android .book-front { background: #c2f0cc; color: #1a542b; }
-        .cv-android .book-spine { background: #9bd1a7; color: #1a542b; }
-        .cv-android .bf-header, .cv-android .bf-footer { background: #1a542b; color: #c2f0cc; }
-        .cv-android .bf-author { color: rgba(194,240,204,0.7); }
+        .cv-python { --accent: #F7C948; }
+        .cv-js { --accent: #F7DF1E; }
+        .cv-numpy { --accent: #4FC3F7; }
+        .cv-web { --accent: #E040FB; }
+        .cv-kotlin { --accent: #FF7043; }
+        .cv-android { --accent: #69F0AE; }
 
         /* Badge */
         .bestseller-badge {
@@ -520,37 +549,45 @@
             <div class="book-card" data-category="python" onclick="handleBuy('Python Vibe Coding Guide')">
                 <div class="book-cover-wrapper cv-python">
                     <div class="book-composition">
+                        <!-- Book 1 (Back) -->
                         <div class="book-3d book-lying">
-                            <div class="book-spine">
-                                <span>PYTHON VIBE CODING GUIDE</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>🐍</span> QuickLearn
-                                </div>
-                                <div class="bf-title">PYTHON<br>VIBE<br>CODING</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>🐍</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">PYTHON</span>Vibe Coding</div>
                                 <div class="bf-graphic">💻</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">AI-Assisted Projects Guide</div>
-                                    <div class="bf-author">By Nelson Omwenga</div>
+                                    <div class="bf-author">Nelson Omwenga</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>PYTHON</b> VIBE CODING</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
+                        <!-- Book 2 (Front) -->
                         <div class="book-3d book-standing">
-                            <div class="book-spine">
-                                <span>PYTHON VIBE CODING GUIDE</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>🐍</span> QuickLearn
-                                </div>
-                                <div class="bf-title">PYTHON<br>VIBE<br>CODING</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>🐍</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">PYTHON</span>Vibe Coding</div>
                                 <div class="bf-graphic">💻</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">AI-Assisted Projects Guide</div>
-                                    <div class="bf-author">By Nelson Omwenga</div>
+                                    <div class="bf-author">Nelson Omwenga</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>PYTHON</b> VIBE CODING</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
                     </div>
                     <span class="bestseller-badge">⭐ Best Seller</span>
@@ -582,37 +619,45 @@
             <div class="book-card" data-category="javascript" onclick="handleBuy('JavaScript Mastery')">
                 <div class="book-cover-wrapper cv-js">
                     <div class="book-composition">
+                        <!-- Book 1 (Back) -->
                         <div class="book-3d book-lying">
-                            <div class="book-spine">
-                                <span>JAVASCRIPT MASTERY</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>⚡</span> QuickLearn
-                                </div>
-                                <div class="bf-title">JAVA<br>SCRIPT<br>MASTERY</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>⚡</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">JAVA</span>Script Mastery</div>
                                 <div class="bf-graphic">⚡</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">ES2024 & Async Programming</div>
-                                    <div class="bf-author">By Samuel Maveke</div>
+                                    <div class="bf-author">Samuel Maveke</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>JAVASCRIPT</b> MASTERY</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
+                        <!-- Book 2 (Front) -->
                         <div class="book-3d book-standing">
-                            <div class="book-spine">
-                                <span>JAVASCRIPT MASTERY</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>⚡</span> QuickLearn
-                                </div>
-                                <div class="bf-title">JAVA<br>SCRIPT<br>MASTERY</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>⚡</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">JAVA</span>Script Mastery</div>
                                 <div class="bf-graphic">⚡</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">ES2024 & Async Programming</div>
-                                    <div class="bf-author">By Samuel Maveke</div>
+                                    <div class="bf-author">Samuel Maveke</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>JAVASCRIPT</b> MASTERY</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
                     </div>
                 </div>
@@ -643,37 +688,45 @@
             <div class="book-card" data-category="numpy" onclick="handleBuy('NumPy for Data Science')">
                 <div class="book-cover-wrapper cv-numpy">
                     <div class="book-composition">
+                        <!-- Book 1 (Back) -->
                         <div class="book-3d book-lying">
-                            <div class="book-spine">
-                                <span>NUMPY FOR DATA SCIENCE</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>📊</span> QuickLearn
-                                </div>
-                                <div class="bf-title">NUMPY<br>FOR DATA<br>SCIENCE</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>📊</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">NUMPY</span>Data Science</div>
                                 <div class="bf-graphic">📈</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">Arrays, Algebra & ML Prep</div>
-                                    <div class="bf-author">By Nelson Omwenga</div>
+                                    <div class="bf-author">Nelson Omwenga</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>NUMPY</b> DATA SCIENCE</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
+                        <!-- Book 2 (Front) -->
                         <div class="book-3d book-standing">
-                            <div class="book-spine">
-                                <span>NUMPY FOR DATA SCIENCE</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>📊</span> QuickLearn
-                                </div>
-                                <div class="bf-title">NUMPY<br>FOR DATA<br>SCIENCE</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>📊</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">NUMPY</span>Data Science</div>
                                 <div class="bf-graphic">📈</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">Arrays, Algebra & ML Prep</div>
-                                    <div class="bf-author">By Nelson Omwenga</div>
+                                    <div class="bf-author">Nelson Omwenga</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>NUMPY</b> DATA SCIENCE</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
                     </div>
                     <span class="bestseller-badge" style="background:linear-gradient(135deg,#4FC3F7,#0288D1);">🔥 New</span>
@@ -705,37 +758,45 @@
             <div class="book-card" data-category="web" onclick="handleBuy('Modern Web Design Bible')">
                 <div class="book-cover-wrapper cv-web">
                     <div class="book-composition">
+                        <!-- Book 1 (Back) -->
                         <div class="book-3d book-lying">
-                            <div class="book-spine">
-                                <span>MODERN WEB DESIGN BIBLE</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>🎨</span> QuickLearn
-                                </div>
-                                <div class="bf-title">MODERN<br>WEB<br>DESIGN</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>🎨</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">MODERN</span>Web Design</div>
                                 <div class="bf-graphic">🖌️</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">The Complete UX/UI Bible</div>
-                                    <div class="bf-author">By Isaac Mwangi</div>
+                                    <div class="bf-author">Isaac Mwangi</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>MODERN</b> WEB DESIGN</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
+                        <!-- Book 2 (Front) -->
                         <div class="book-3d book-standing">
-                            <div class="book-spine">
-                                <span>MODERN WEB DESIGN BIBLE</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>🎨</span> QuickLearn
-                                </div>
-                                <div class="bf-title">MODERN<br>WEB<br>DESIGN</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>🎨</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">MODERN</span>Web Design</div>
                                 <div class="bf-graphic">🖌️</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">The Complete UX/UI Bible</div>
-                                    <div class="bf-author">By Isaac Mwangi</div>
+                                    <div class="bf-author">Isaac Mwangi</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>MODERN</b> WEB DESIGN</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
                     </div>
                     <span class="bestseller-badge" style="background:linear-gradient(135deg,#E040FB,#AA00FF);">✦ Top Pick</span>
@@ -767,37 +828,45 @@
             <div class="book-card" data-category="kotlin" onclick="handleBuy('Kotlin Crash Course')">
                 <div class="book-cover-wrapper cv-kotlin">
                     <div class="book-composition">
+                        <!-- Book 1 (Back) -->
                         <div class="book-3d book-lying">
-                            <div class="book-spine">
-                                <span>KOTLIN CRASH COURSE</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>🔷</span> QuickLearn
-                                </div>
-                                <div class="bf-title">KOTLIN<br>CRASH<br>COURSE</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>🔷</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">KOTLIN</span>Crash Course</div>
                                 <div class="bf-graphic">📱</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">Null Safety to Coroutines</div>
-                                    <div class="bf-author">By James Njuguna</div>
+                                    <div class="bf-author">James Njuguna</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>KOTLIN</b> CRASH COURSE</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
+                        <!-- Book 2 (Front) -->
                         <div class="book-3d book-standing">
-                            <div class="book-spine">
-                                <span>KOTLIN CRASH COURSE</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>🔷</span> QuickLearn
-                                </div>
-                                <div class="bf-title">KOTLIN<br>CRASH<br>COURSE</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>🔷</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">KOTLIN</span>Crash Course</div>
                                 <div class="bf-graphic">📱</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">Null Safety to Coroutines</div>
-                                    <div class="bf-author">By James Njuguna</div>
+                                    <div class="bf-author">James Njuguna</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>KOTLIN</b> CRASH COURSE</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
                     </div>
                 </div>
@@ -828,37 +897,45 @@
             <div class="book-card" data-category="android" onclick="handleBuy('Android App Development Handbook')">
                 <div class="book-cover-wrapper cv-android">
                     <div class="book-composition">
+                        <!-- Book 1 (Back) -->
                         <div class="book-3d book-lying">
-                            <div class="book-spine">
-                                <span>ANDROID APP DEV HANDBOOK</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>🤖</span> QuickLearn
-                                </div>
-                                <div class="bf-title">ANDROID<br>APP DEV<br>HANDBOOK</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>🤖</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">ANDROID</span>App Handbook</div>
                                 <div class="bf-graphic">🚀</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">Compose, MVVM & Play Store</div>
-                                    <div class="bf-author">By James Njuguna</div>
+                                    <div class="bf-author">James Njuguna</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>ANDROID</b> APP HANDBOOK</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
+                        <!-- Book 2 (Front) -->
                         <div class="book-3d book-standing">
-                            <div class="book-spine">
-                                <span>ANDROID APP DEV HANDBOOK</span>
-                            </div>
-                            <div class="book-front">
-                                <div class="bf-header">
-                                    <span>🤖</span> QuickLearn
-                                </div>
-                                <div class="bf-title">ANDROID<br>APP DEV<br>HANDBOOK</div>
+                            <div class="book-shadow"></div>
+                            <div class="book-face book-front">
+                                <div class="bf-header"><span>🤖</span> QuickLearn</div>
+                                <div class="bf-title"><span class="accent">ANDROID</span>App Handbook</div>
                                 <div class="bf-graphic">🚀</div>
                                 <div class="bf-footer">
                                     <div class="bf-subtitle">Compose, MVVM & Play Store</div>
-                                    <div class="bf-author">By James Njuguna</div>
+                                    <div class="bf-author">James Njuguna</div>
                                 </div>
                             </div>
+                            <div class="book-face book-back"></div>
+                            <div class="book-face book-spine">
+                                <span><b>ANDROID</b> APP HANDBOOK</span>
+                            </div>
+                            <div class="book-face book-pages-right"></div>
+                            <div class="book-face book-pages-top"></div>
+                            <div class="book-face book-pages-bottom"></div>
                         </div>
                     </div>
                     <span class="bestseller-badge" style="background:linear-gradient(135deg,#69F0AE,#00C853);color:#003300;">🤖 Hot</span>
