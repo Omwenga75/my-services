@@ -1,22 +1,22 @@
  :root {
-    --primary-dark: #020617;
-    --primary-light: #00F0FF;
-    --primary-accent: #8B5CF6;
-    --accent: #F43F5E;
-    --success: #10b981;
+    --primary-dark: #0B1E36;
+    --primary-light: #FF7A00;
+    --primary-accent: #FF5A00;
+    --accent: #FF3B30;
+    --success: #34C759;
     --white: #ffffff;
-    --bg-light: #0B0F19;
-    --bg-card: #111827;
+    --bg-light: #061121;
+    --bg-card: #0D233A;
     --text-main: #F8FAFC;
     --text-muted: #94A3B8;
-    --glass-bg: rgba(17, 24, 39, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(13, 35, 58, 0.7);
+    --glass-border: rgba(255, 122, 0, 0.2);
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.2);
     --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.3);
-    --glow-primary: 0 0 20px rgba(0, 240, 255, 0.4);
-    --glow-secondary: 0 0 20px rgba(139, 92, 246, 0.4);
+    --glow-primary: 0 0 20px rgba(255, 122, 0, 0.4);
+    --glow-secondary: 0 0 20px rgba(255, 90, 0, 0.4);
 }
 
 * {
@@ -80,7 +80,7 @@ html {
     align-items: center;
     padding: 0.5rem 5% 0.5rem 4%;
     min-height: 65px;
-    background: rgba(11, 15, 25, 0.95);
+    background: rgba(11, 30, 54, 0.95);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border-bottom: none;
@@ -265,7 +265,7 @@ html {
 }
 
 .udemy-card {
-    background: linear-gradient(180deg, rgba(17, 24, 39, 0.96), rgba(31, 41, 55, 0.96));
+    background: linear-gradient(180deg, rgba(13, 35, 58, 0.96), rgba(6, 17, 33, 0.96));
     border-radius: 20px;
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
