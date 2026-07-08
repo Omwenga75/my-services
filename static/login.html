@@ -17,8 +17,8 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background: #e4ecf5;
-            color: #1a1a2e;
+            background: #061121;
+            color: #F8FAFC;
             position: relative;
             overflow-x: hidden;
             overflow-y: auto;
@@ -87,7 +87,7 @@
         /* ── Floating Background Decoration ── */
         .bg-decoration {
             position: absolute;
-            color: rgba(45, 43, 85, 0.05); /* very soft cool-indigo tone */
+            color: rgba(255, 122, 0, 0.06);
             pointer-events: none;
             z-index: 0;
             user-select: none;
@@ -123,8 +123,8 @@
             min-height: 460px;
             border-radius: 24px;
             overflow: hidden;
-            border: 2.5px solid #2d2b55;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+            border: 1.5px solid rgba(255, 122, 0, 0.25);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 122, 0, 0.08);
             animation: cardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
@@ -148,19 +148,38 @@
             display: block;
         }
 
-        /* Purple tint overlay */
+        /* Orange tint overlay */
         .auth-image-side::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(88, 70, 220, 0.55) 0%, rgba(120, 60, 200, 0.45) 50%, rgba(60, 40, 180, 0.5) 100%);
+            background: linear-gradient(135deg, rgba(255, 90, 0, 0.6) 0%, rgba(11, 30, 54, 0.7) 100%);
             mix-blend-mode: multiply;
+        }
+
+        /* Branding text over image */
+        .auth-image-side .image-branding {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 2;
+            color: white;
+        }
+        .auth-image-side .image-branding h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
+        .auth-image-side .image-branding p {
+            font-size: 0.92rem;
+            opacity: 0.85;
         }
 
         /* ── Form Side (Right) ── */
         .auth-form-side {
             flex: 1;
-            background: #ffffff;
+            background: #0D233A;
             padding: 2rem 2.8rem;
             display: flex;
             flex-direction: column;
@@ -182,12 +201,13 @@
             width: 42px;
             height: 42px;
             border-radius: 12px;
-            background: linear-gradient(135deg, #6c5ce7, #00b4d8);
+            background: linear-gradient(135deg, #FF7A00, #FF5A00);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             color: #fff;
             font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(255, 122, 0, 0.4);
         }
 
         /* ── Heading ── */
@@ -198,12 +218,12 @@
         .auth-heading h1 {
             font-size: 1.7rem;
             font-weight: 800;
-            color: #1a1a2e;
+            color: #F8FAFC;
             margin-bottom: 0.3rem;
         }
         .auth-heading p {
             font-size: 0.9rem;
-            color: #6b7280;
+            color: #94A3B8;
             font-weight: 400;
         }
 
@@ -213,7 +233,7 @@
             align-items: center;
             gap: 1rem;
             margin: 1.2rem 0;
-            color: #9ca3af;
+            color: #64748b;
             font-size: 0.82rem;
             font-weight: 500;
         }
@@ -221,7 +241,7 @@
             content: '';
             flex: 1;
             height: 1px;
-            background: #e5e7eb;
+            background: rgba(255, 122, 0, 0.15);
         }
 
         /* ── Form Inputs ── */
@@ -232,7 +252,7 @@
             display: block;
             font-size: 0.82rem;
             font-weight: 600;
-            color: #4b5563;
+            color: #94A3B8;
             margin-bottom: 0.4rem;
         }
         .input-wrapper {
@@ -242,21 +262,22 @@
             width: 100%;
             padding: 0.7rem 1rem;
             padding-right: 2.8rem;
-            background: #ffffff;
-            border: 1.5px solid #d1d5db;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(255, 122, 0, 0.2);
             border-radius: 10px;
-            color: #1a1a2e;
+            color: #F8FAFC;
             font-size: 0.92rem;
             font-family: 'Outfit', sans-serif;
             transition: border-color 0.25s, box-shadow 0.25s;
         }
         .input-wrapper input::placeholder {
-            color: #9ca3af;
+            color: #475569;
         }
         .input-wrapper input:focus {
             outline: none;
-            border-color: #6c5ce7;
-            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+            border-color: #FF7A00;
+            box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.15);
+            background: rgba(255, 122, 0, 0.05);
         }
 
         /* Password toggle */
@@ -267,19 +288,19 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: #9ca3af;
+            color: #475569;
             cursor: pointer;
             font-size: 1rem;
             transition: color 0.25s;
             padding: 0.2rem;
         }
-        .toggle-pwd:hover { color: #6c5ce7; }
+        .toggle-pwd:hover { color: #FF7A00; }
 
         /* ── Submit Button ── */
         .btn-auth {
             width: 100%;
             padding: 0.75rem;
-            background: linear-gradient(135deg, #6c5ce7 0%, #7c3aed 50%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #FF7A00 0%, #FF5A00 100%);
             color: #fff !important;
             border: none;
             border-radius: 50px;
@@ -289,23 +310,23 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 0.6rem;
-            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.3);
+            box-shadow: 0 6px 20px rgba(255, 122, 0, 0.35);
         }
         .btn-auth:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
+            box-shadow: 0 10px 30px rgba(255, 122, 0, 0.5);
         }
         .btn-auth:active { transform: translateY(0); }
 
-        /* ── Footer ── */
+        /* ── Auth Footer ── */
         .auth-footer {
             margin-top: 1rem;
             text-align: center;
-            color: #6b7280;
+            color: #64748b;
             font-size: 0.9rem;
         }
         .auth-footer a {
-            color: #6c5ce7;
+            color: #FF7A00;
             text-decoration: none;
             font-weight: 700;
         }
@@ -322,19 +343,22 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: #f3f4f6;
+            background: rgba(255, 122, 0, 0.1);
+            border: 1px solid rgba(255, 122, 0, 0.2);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: #374151;
+            color: #94A3B8;
             font-size: 0.95rem;
             text-decoration: none;
             transition: all 0.25s;
         }
         .social-icons a:hover {
-            background: #6c5ce7;
+            background: #FF7A00;
+            border-color: #FF7A00;
             color: #fff;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 122, 0, 0.4);
         }
 
         /* ── Message Banners ── */
@@ -348,14 +372,14 @@
             display: none;
         }
         .error-banner {
-            background: #fef2f2;
-            color: #dc2626;
-            border: 1px solid #fecaca;
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.25);
         }
         .success-banner {
-            background: #f0fdf4;
-            color: #16a34a;
-            border: 1px solid #bbf7d0;
+            background: rgba(52, 199, 89, 0.1);
+            color: #4ade80;
+            border: 1px solid rgba(52, 199, 89, 0.25);
         }
 
         /* ── Responsive ── */
@@ -387,6 +411,10 @@
             <!-- Image Side -->
             <div class="auth-image-side">
                 <img src="/static/images/men-with-certificate.jpeg" alt="Students with Certificate">
+                <div class="image-branding">
+                    <h2>Welcome Back 👋</h2>
+                    <p>Continue your learning journey with QuickLearn</p>
+                </div>
             </div>
 
             <!-- Form Side -->
