@@ -142,13 +142,13 @@
 
         /* ── Books Grid ── */
         .books-section {
-            max-width: 1100px;
+            max-width: 1280px;
             margin: 0 auto;
             padding: 3rem 2rem 6rem;
         }
         .section-heading {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
         }
         .section-heading h2 {
             font-size: 2rem;
@@ -158,70 +158,115 @@
         .section-heading p { color: #64748b; font-size: 0.95rem; }
 
         .books-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem;
         }
 
-        /* ── Book Card (horizontal) ── */
+        /* ── Book Card (vertical) ── */
         .book-card {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 16px;
+            background: #0d1b35;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 18px;
             overflow: hidden;
             display: flex;
-            flex-direction: row;
-            align-items: stretch;
+            flex-direction: column;
             cursor: pointer;
-            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            position: relative;
         }
         .book-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(255,122,0,0.35);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+            transform: translateY(-6px);
+            border-color: rgba(255,122,0,0.4);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        /* ── Card Banner (left accent strip) ── */
-        .book-banner {
-            width: 90px;
-            min-height: 100%;
-            flex-shrink: 0;
+        /* ── Book Cover (top panel) ── */
+        .book-cover {
+            height: 190px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            padding: 1.2rem 0.6rem;
+            gap: 0.6rem;
+            position: relative;
+            overflow: hidden;
         }
-        .book-banner .b-icon {
-            font-size: 2rem;
-            line-height: 1;
+        .book-cover::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.35) 100%);
+            pointer-events: none;
         }
-        .book-banner .b-cat {
-            font-size: 0.48rem;
-            font-weight: 800;
-            letter-spacing: 1.5px;
+        .book-cover .cover-icon { font-size: 3rem; line-height: 1; position: relative; z-index: 1; }
+        .book-cover .cover-title {
+            font-size: 0.8rem;
+            font-weight: 900;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.65);
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.9);
             text-align: center;
+            line-height: 1.3;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        .book-cover .cover-author {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.55);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Color themes for banners */
-        .bn-python  { background: linear-gradient(160deg, #1a1a2e, #0f3460); }
-        .bn-js      { background: linear-gradient(160deg, #1a1500, #3d2e00); }
-        .bn-numpy   { background: linear-gradient(160deg, #001f3f, #004080); }
-        .bn-web     { background: linear-gradient(160deg, #1a0533, #3d0066); }
-        .bn-kotlin  { background: linear-gradient(160deg, #1a0a00, #5a2d00); }
-        .bn-android { background: linear-gradient(160deg, #001a00, #004d00); }
+        /* Cover color themes */
+        .cv-python  { background: linear-gradient(145deg, #1a1a2e 0%, #0f3460 60%, #1a3a6e 100%); }
+        .cv-js      { background: linear-gradient(145deg, #1a1500 0%, #3d2e00 60%, #4a3800 100%); }
+        .cv-numpy   { background: linear-gradient(145deg, #001f3f 0%, #004080 60%, #004d99 100%); }
+        .cv-web     { background: linear-gradient(145deg, #1a0533 0%, #3d0066 60%, #4a007a 100%); }
+        .cv-kotlin  { background: linear-gradient(145deg, #1a0a00 0%, #5a2d00 60%, #6b3500 100%); }
+        .cv-android { background: linear-gradient(145deg, #001a00 0%, #004d00 60%, #005c00 100%); }
 
-        /* ── Card Body ── */
-        .book-body {
-            flex: 1;
-            padding: 1.1rem 1.4rem;
+        /* Accent line at top of cover */
+        .cover-accent {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            border-radius: 0;
+        }
+        .ac-python  { background: linear-gradient(90deg, #F7C948, #E8A000); }
+        .ac-js      { background: linear-gradient(90deg, #F7DF1E, #D4A500); }
+        .ac-numpy   { background: linear-gradient(90deg, #4FC3F7, #0288D1); }
+        .ac-web     { background: linear-gradient(90deg, #E040FB, #AA00FF); }
+        .ac-kotlin  { background: linear-gradient(90deg, #FF7043, #E64A19); }
+        .ac-android { background: linear-gradient(90deg, #69F0AE, #00C853); }
+
+        /* Badge */
+        .bestseller-badge {
+            position: absolute;
+            top: 0.75rem; right: 0.75rem;
+            font-size: 0.58rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.25rem 0.65rem;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            color: #fff;
+            z-index: 2;
+            white-space: nowrap;
+        }
+
+        /* ── Card Info (bottom) ── */
+        .book-info {
+            padding: 1.2rem 1.3rem;
             display: flex;
             flex-direction: column;
-            gap: 0.45rem;
-            border-left: 1px solid rgba(255,255,255,0.06);
+            gap: 0.55rem;
+            flex: 1;
         }
         .book-title {
             font-size: 1rem;
@@ -242,12 +287,11 @@
             display: flex;
             flex-wrap: wrap;
             gap: 0.35rem;
-            margin-top: 0.1rem;
         }
         .book-tag {
             font-size: 0.65rem;
             font-weight: 700;
-            padding: 0.2rem 0.6rem;
+            padding: 0.22rem 0.6rem;
             border-radius: 50px;
             background: rgba(255,122,0,0.1);
             border: 1px solid rgba(255,122,0,0.2);
@@ -256,37 +300,31 @@
         .book-rating {
             display: flex;
             align-items: center;
-            gap: 0.3rem;
-            font-size: 0.78rem;
-            margin-top: auto;
-            padding-top: 0.4rem;
+            gap: 0.35rem;
+            font-size: 0.8rem;
         }
-        .stars { color: #F59E0B; font-size: 0.72rem; }
+        .stars { color: #F59E0B; }
         .rating-val { font-weight: 700; color: #F8FAFC; }
         .rating-count { color: #64748b; font-size: 0.72rem; }
 
-        /* ── Card Right (price + buy) ── */
-        .book-right {
+        /* ── Card Footer (price + buy) ── */
+        .book-footer {
+            padding: 0 1.3rem 1.3rem;
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 0.6rem;
-            padding: 1.1rem 1.4rem;
-            min-width: 130px;
-            border-left: 1px solid rgba(255,255,255,0.06);
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
         }
+        .book-price-block { display: flex; flex-direction: column; gap: 0.05rem; }
         .book-price {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 900;
             color: #F8FAFC;
-            white-space: nowrap;
         }
         .book-price-orig {
             font-size: 0.72rem;
             color: #475569;
             text-decoration: line-through;
-            text-align: right;
         }
         .btn-buy {
             background: linear-gradient(135deg, #FF7A00, #FF5A00);
@@ -294,9 +332,9 @@
             border: none;
             border-radius: 50px;
             font-family: 'Outfit', sans-serif;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             font-weight: 700;
-            padding: 0.55rem 1.15rem;
+            padding: 0.6rem 1.3rem;
             cursor: pointer;
             transition: all 0.25s ease;
             white-space: nowrap;
@@ -304,22 +342,9 @@
         }
         .btn-buy:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255,122,0,0.5);
+            box-shadow: 0 8px 22px rgba(255,122,0,0.5);
         }
         .btn-buy:active { transform: translateY(0); }
-
-        /* badge */
-        .bestseller-badge {
-            font-size: 0.58rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            padding: 0.25rem 0.6rem;
-            border-radius: 50px;
-            background: linear-gradient(135deg, #F59E0B, #D97706);
-            color: #fff;
-            white-space: nowrap;
-        }
 
         /* ── Toast ── */
         #book-toast {
@@ -389,11 +414,14 @@
 
             <!-- Python Book -->
             <div class="book-card" data-category="python" onclick="handleBuy('Python Vibe Coding Guide')">
-                <div class="book-banner bn-python">
-                    <div class="b-icon">🐍</div>
-                    <div class="b-cat">Python</div>
+                <div class="book-cover cv-python">
+                    <div class="cover-accent ac-python"></div>
+                    <div class="cover-icon">🐍</div>
+                    <div class="cover-title">Python Vibe<br>Coding Guide</div>
+                    <div class="cover-author">Nelson Omwenga</div>
+                    <span class="bestseller-badge">⭐ Best Seller</span>
                 </div>
-                <div class="book-body">
+                <div class="book-info">
                     <div class="book-title">Python Vibe Coding Guide</div>
                     <div class="book-author-row"><i class="fas fa-user-pen"></i> Nelson Omwenga</div>
                     <div class="book-tags">
@@ -407,21 +435,24 @@
                         <span class="rating-count">(412 reviews)</span>
                     </div>
                 </div>
-                <div class="book-right">
-                    <span class="bestseller-badge">⭐ Best Seller</span>
-                    <div class="book-price">KES 1,200</div>
-                    <div class="book-price-orig">KES 2,000</div>
+                <div class="book-footer">
+                    <div class="book-price-block">
+                        <div class="book-price">KES 1,200</div>
+                        <div class="book-price-orig">KES 2,000</div>
+                    </div>
                     <button class="btn-buy" onclick="handleBuy('Python Vibe Coding Guide');event.stopPropagation()">Buy Now</button>
                 </div>
             </div>
 
             <!-- JavaScript Book -->
             <div class="book-card" data-category="javascript" onclick="handleBuy('JavaScript Mastery')">
-                <div class="book-banner bn-js">
-                    <div class="b-icon">⚡</div>
-                    <div class="b-cat">JavaScript</div>
+                <div class="book-cover cv-js">
+                    <div class="cover-accent ac-js"></div>
+                    <div class="cover-icon">⚡</div>
+                    <div class="cover-title">JavaScript<br>Mastery</div>
+                    <div class="cover-author">Samuel Maveke</div>
                 </div>
-                <div class="book-body">
+                <div class="book-info">
                     <div class="book-title">JavaScript Mastery</div>
                     <div class="book-author-row"><i class="fas fa-user-pen"></i> Samuel Maveke</div>
                     <div class="book-tags">
@@ -435,20 +466,25 @@
                         <span class="rating-count">(289 reviews)</span>
                     </div>
                 </div>
-                <div class="book-right">
-                    <div class="book-price">KES 1,100</div>
-                    <div class="book-price-orig">KES 1,800</div>
+                <div class="book-footer">
+                    <div class="book-price-block">
+                        <div class="book-price">KES 1,100</div>
+                        <div class="book-price-orig">KES 1,800</div>
+                    </div>
                     <button class="btn-buy" onclick="handleBuy('JavaScript Mastery');event.stopPropagation()">Buy Now</button>
                 </div>
             </div>
 
             <!-- NumPy Book -->
             <div class="book-card" data-category="numpy" onclick="handleBuy('NumPy for Data Science')">
-                <div class="book-banner bn-numpy">
-                    <div class="b-icon">📊</div>
-                    <div class="b-cat">NumPy</div>
+                <div class="book-cover cv-numpy">
+                    <div class="cover-accent ac-numpy"></div>
+                    <div class="cover-icon">📊</div>
+                    <div class="cover-title">NumPy for<br>Data Science</div>
+                    <div class="cover-author">Nelson Omwenga</div>
+                    <span class="bestseller-badge" style="background:linear-gradient(135deg,#4FC3F7,#0288D1);">🔥 New</span>
                 </div>
-                <div class="book-body">
+                <div class="book-info">
                     <div class="book-title">NumPy for Data Science</div>
                     <div class="book-author-row"><i class="fas fa-user-pen"></i> Nelson Omwenga</div>
                     <div class="book-tags">
@@ -462,21 +498,25 @@
                         <span class="rating-count">(178 reviews)</span>
                     </div>
                 </div>
-                <div class="book-right">
-                    <span class="bestseller-badge" style="background:linear-gradient(135deg,#4FC3F7,#0288D1);">🔥 New</span>
-                    <div class="book-price">KES 1,000</div>
-                    <div class="book-price-orig">KES 1,600</div>
+                <div class="book-footer">
+                    <div class="book-price-block">
+                        <div class="book-price">KES 1,000</div>
+                        <div class="book-price-orig">KES 1,600</div>
+                    </div>
                     <button class="btn-buy" onclick="handleBuy('NumPy for Data Science');event.stopPropagation()">Buy Now</button>
                 </div>
             </div>
 
             <!-- Web Design Book -->
             <div class="book-card" data-category="web" onclick="handleBuy('Modern Web Design Bible')">
-                <div class="book-banner bn-web">
-                    <div class="b-icon">🎨</div>
-                    <div class="b-cat">Web Design</div>
+                <div class="book-cover cv-web">
+                    <div class="cover-accent ac-web"></div>
+                    <div class="cover-icon">🎨</div>
+                    <div class="cover-title">Modern Web<br>Design Bible</div>
+                    <div class="cover-author">Isaac Mwangi</div>
+                    <span class="bestseller-badge" style="background:linear-gradient(135deg,#E040FB,#AA00FF);">✦ Top Pick</span>
                 </div>
-                <div class="book-body">
+                <div class="book-info">
                     <div class="book-title">Modern Web Design Bible</div>
                     <div class="book-author-row"><i class="fas fa-user-pen"></i> Isaac Mwangi</div>
                     <div class="book-tags">
@@ -490,21 +530,24 @@
                         <span class="rating-count">(354 reviews)</span>
                     </div>
                 </div>
-                <div class="book-right">
-                    <span class="bestseller-badge" style="background:linear-gradient(135deg,#E040FB,#AA00FF);">✦ Top Pick</span>
-                    <div class="book-price">KES 1,150</div>
-                    <div class="book-price-orig">KES 1,900</div>
+                <div class="book-footer">
+                    <div class="book-price-block">
+                        <div class="book-price">KES 1,150</div>
+                        <div class="book-price-orig">KES 1,900</div>
+                    </div>
                     <button class="btn-buy" onclick="handleBuy('Modern Web Design Bible');event.stopPropagation()">Buy Now</button>
                 </div>
             </div>
 
             <!-- Kotlin Book -->
             <div class="book-card" data-category="kotlin" onclick="handleBuy('Kotlin Crash Course')">
-                <div class="book-banner bn-kotlin">
-                    <div class="b-icon">🔷</div>
-                    <div class="b-cat">Kotlin</div>
+                <div class="book-cover cv-kotlin">
+                    <div class="cover-accent ac-kotlin"></div>
+                    <div class="cover-icon">🔷</div>
+                    <div class="cover-title">Kotlin<br>Crash Course</div>
+                    <div class="cover-author">James Njuguna</div>
                 </div>
-                <div class="book-body">
+                <div class="book-info">
                     <div class="book-title">Kotlin Crash Course</div>
                     <div class="book-author-row"><i class="fas fa-user-pen"></i> James Njuguna</div>
                     <div class="book-tags">
@@ -518,20 +561,25 @@
                         <span class="rating-count">(203 reviews)</span>
                     </div>
                 </div>
-                <div class="book-right">
-                    <div class="book-price">KES 1,250</div>
-                    <div class="book-price-orig">KES 2,100</div>
+                <div class="book-footer">
+                    <div class="book-price-block">
+                        <div class="book-price">KES 1,250</div>
+                        <div class="book-price-orig">KES 2,100</div>
+                    </div>
                     <button class="btn-buy" onclick="handleBuy('Kotlin Crash Course');event.stopPropagation()">Buy Now</button>
                 </div>
             </div>
 
             <!-- Android Book -->
             <div class="book-card" data-category="android" onclick="handleBuy('Android App Development Handbook')">
-                <div class="book-banner bn-android">
-                    <div class="b-icon">🤖</div>
-                    <div class="b-cat">Android</div>
+                <div class="book-cover cv-android">
+                    <div class="cover-accent ac-android"></div>
+                    <div class="cover-icon">🤖</div>
+                    <div class="cover-title">Android App Dev<br>Handbook</div>
+                    <div class="cover-author">James Njuguna</div>
+                    <span class="bestseller-badge" style="background:linear-gradient(135deg,#69F0AE,#00C853);color:#003300;">🤖 Hot</span>
                 </div>
-                <div class="book-body">
+                <div class="book-info">
                     <div class="book-title">Android App Development Handbook</div>
                     <div class="book-author-row"><i class="fas fa-user-pen"></i> James Njuguna</div>
                     <div class="book-tags">
@@ -545,10 +593,11 @@
                         <span class="rating-count">(318 reviews)</span>
                     </div>
                 </div>
-                <div class="book-right">
-                    <span class="bestseller-badge" style="background:linear-gradient(135deg,#69F0AE,#00C853);color:#003300;">🤖 Hot</span>
-                    <div class="book-price">KES 1,300</div>
-                    <div class="book-price-orig">KES 2,200</div>
+                <div class="book-footer">
+                    <div class="book-price-block">
+                        <div class="book-price">KES 1,300</div>
+                        <div class="book-price-orig">KES 2,200</div>
+                    </div>
                     <button class="btn-buy" onclick="handleBuy('Android App Development Handbook');event.stopPropagation()">Buy Now</button>
                 </div>
             </div>
