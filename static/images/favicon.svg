@@ -1,0 +1,41 @@
+<svg viewBox="20 50 400 400" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .brand-circle {
+      stroke: #0B1B3D;
+      fill: none;
+      stroke-width: 28;
+    }
+    .brand-arrow {
+      fill: #FF7A00;
+    }
+    .brand-dot {
+      fill: #00A8FF;
+    }
+    .brand-line {
+      stroke: #00A8FF;
+      stroke-width: 10;
+    }
+    @media (prefers-color-scheme: dark) {
+      .brand-circle {
+        stroke: #F1F5F9; /* High-contrast clean white/slate on dark browser tabs */
+      }
+      .brand-dot {
+        fill: #38BDF8; /* Slightly brighter light blue for dark mode visibility */
+      }
+    }
+  </style>
+  
+  <!-- Circle with circuit dots -->
+  <circle class="brand-circle" cx="150" cy="250" r="110"/>
+  
+  <!-- Lines connecting dots -->
+  <line class="brand-line" x1="150" y1="170" x2="150" y2="330"/>
+  
+  <!-- Circuit dots inside circle -->
+  <circle class="brand-dot" cx="150" cy="170" r="16"/>
+  <circle class="brand-dot" cx="150" cy="250" r="16"/>
+  <circle class="brand-dot" cx="150" cy="330" r="16"/>
+  
+  <!-- Arrow/triangle pointing up right -->
+  <polygon class="brand-arrow" points="280,150 280,300 400,225"/>
+</svg>
