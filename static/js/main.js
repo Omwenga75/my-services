@@ -75,6 +75,9 @@ document.addEventListener("DOMContentLoaded", () => {
             let baseNav = `
                 <a href="/"><i class="fas fa-home"></i> Home</a>
                 <a href="/courses"><i class="fas fa-book-open"></i> Courses</a>
+                <a href="/services"><i class="fas fa-concierge-bell"></i> Services</a>
+                <a href="/books"><i class="fas fa-book"></i> Books</a>
+                <a href="/projects"><i class="fas fa-project-diagram"></i> Projects</a>
                 <a href="/about"><i class="fas fa-building"></i> About Us</a>
                 <a href="/contact"><i class="fas fa-envelope"></i> Contact Us</a>
             `;

@@ -130,10 +130,11 @@ html {
 .nav-links {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 2rem;
     flex-wrap: nowrap;
     width: auto;
-    margin-left: auto;
+    flex: 1;
 }
 
 .nav-links a {
