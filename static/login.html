@@ -7,7 +7,7 @@
     <meta name="description" content="Log in to QuickLearn Programming School to continue your learning journey.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Alex+Brush&family=Montserrat:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -133,47 +133,222 @@
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* ── Image Side (Left) ── */
+        /* ── Certificate Side (Left) ── */
         .auth-image-side {
             flex: 1;
             position: relative;
+            background: radial-gradient(circle at center, #111e2f 0%, #061121 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
             overflow: hidden;
-            min-height: 400px;
         }
 
-        .auth-image-side img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* Orange tint overlay */
-        .auth-image-side::after {
+        .auth-image-side::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(255, 90, 0, 0.6) 0%, rgba(11, 30, 54, 0.7) 100%);
-            mix-blend-mode: multiply;
+            background-image: radial-gradient(rgba(255, 122, 0, 0.15) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.7;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        /* Branding text over image */
-        .auth-image-side .image-branding {
+        .auth-image-side::after {
+            content: '';
             position: absolute;
-            bottom: 2rem;
-            left: 2rem;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 122, 0, 0.1) 0%, transparent 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .cert-wrapper {
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .certificate {
+            width: 100%;
+            max-width: 440px;
+            aspect-ratio: 1.414 / 1;
+            background: #ffffff;
+            color: #0f172a;
+            border-radius: 16px;
+            position: relative;
+            padding: 1.5rem 1.8rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 122, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            border: 6px double #d97706;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease;
+        }
+
+        .certificate:hover {
+            transform: translateY(-5px) rotateY(4deg) rotateX(2deg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 122, 0, 0.1);
+        }
+
+        .cert-inner-border {
+            position: absolute;
+            inset: 6px;
+            border: 1px solid rgba(217, 119, 6, 0.3);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .cert-corner-tr {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
             z-index: 2;
-            color: white;
+            pointer-events: none;
         }
-        .auth-image-side .image-branding h2 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            margin-bottom: 0.4rem;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+
+        .cert-corner-bl {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            z-index: 2;
+            pointer-events: none;
         }
-        .auth-image-side .image-branding p {
-            font-size: 0.92rem;
-            opacity: 0.85;
+
+        .cert-content {
+            position: relative;
+            z-index: 3;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+
+        .cert-header {
+            margin-top: 0.1rem;
+        }
+
+        .cert-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #1e293b;
+            line-height: 1.1;
+            margin-bottom: 0.1rem;
+        }
+
+        .cert-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: #dc2626;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cert-subtitle::before, .cert-subtitle::after {
+            content: '';
+            width: 15px;
+            height: 1px;
+            background: #dc2626;
+        }
+
+        .cert-body {
+            margin: 0.3rem 0;
+        }
+
+        .cert-present {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.58rem;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 0.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .cert-name {
+            font-family: 'Alex Brush', cursive;
+            font-size: 2.6rem;
+            color: #0f172a;
+            line-height: 1;
+            margin-bottom: 0.2rem;
+        }
+
+        .cert-description {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.55rem;
+            line-height: 1.4;
+            color: #475569;
+        }
+
+        .cert-school {
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .cert-footer {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .cert-sig {
+            width: 32%;
+            text-align: center;
+        }
+
+        .sig-line {
+            font-family: 'Alex Brush', cursive;
+            font-size: 1.4rem;
+            color: #1e293b;
+            border-bottom: 1.5px solid #cbd5e1;
+            padding-bottom: 2px;
+            line-height: 0.9;
+            margin-bottom: 4px;
+        }
+
+        .sig-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.5rem;
+            font-weight: 600;
+            color: #64748b;
+            line-height: 1.1;
+        }
+        
+        .sig-title span {
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .cert-seal-wrap {
+            width: 20%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cert-seal {
+            width: 48px;
+            height: 48px;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.15));
         }
 
         /* ── Form Side (Right) ── */
@@ -390,11 +565,51 @@
                 max-width: 440px;
             }
             .auth-image-side {
-                min-height: 200px;
-                max-height: 220px;
+                min-height: 250px;
+                max-height: 250px;
+                padding: 1rem;
             }
             .auth-form-side {
                 padding: 2rem 1.8rem;
+            }
+            .certificate {
+                border-width: 4px;
+                padding: 1rem;
+                border-radius: 12px;
+            }
+            .cert-title {
+                font-size: 1.2rem;
+                letter-spacing: 2px;
+            }
+            .cert-subtitle {
+                font-size: 0.5rem;
+                letter-spacing: 3px;
+            }
+            .cert-present {
+                font-size: 0.5rem;
+                margin-bottom: 0;
+            }
+            .cert-name {
+                font-size: 1.8rem;
+                margin-bottom: 0;
+            }
+            .cert-description {
+                font-size: 0.45rem;
+            }
+            .sig-line {
+                font-size: 1rem;
+                margin-bottom: 2px;
+            }
+            .sig-title {
+                font-size: 0.35rem;
+            }
+            .cert-seal {
+                width: 36px;
+                height: 36px;
+            }
+            .cert-corner-tr, .cert-corner-bl {
+                width: 50px;
+                height: 50px;
             }
         }
     </style>
@@ -408,12 +623,65 @@
 
     <div class="auth-container">
         <div class="auth-card">
-            <!-- Image Side -->
+            <!-- Certificate Side -->
             <div class="auth-image-side">
-                <img src="/static/images/men-with-certificate.jpeg" alt="Students with Certificate">
-                <div class="image-branding">
-                    <h2>Welcome Back 👋</h2>
-                    <p>Continue your learning journey with QuickLearn</p>
+                <div class="cert-wrapper">
+                    <div class="certificate">
+                        <div class="cert-inner-border"></div>
+                        
+                        <!-- Top Right Corner Accent -->
+                        <svg class="cert-corner-tr" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <path d="M 0 0 Q 55 15, 100 100 L 100 0 Z" fill="#DC2626" />
+                            <path d="M 25 0 Q 65 15, 100 75 L 100 0 Z" fill="#EF4444" opacity="0.6" />
+                            <path d="M 50 0 Q 80 15, 100 50 L 100 0 Z" fill="#F59E0B" opacity="0.4" />
+                        </svg>
+
+                        <!-- Bottom Left Corner Accent -->
+                        <svg class="cert-corner-bl" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <path d="M 0 0 Q 15 55, 100 100 L 0 100 Z" fill="#DC2626" />
+                            <path d="M 0 25 Q 15 65, 75 100 L 0 100 Z" fill="#EF4444" opacity="0.6" />
+                            <path d="M 0 50 Q 15 80, 50 100 L 0 100 Z" fill="#F59E0B" opacity="0.4" />
+                        </svg>
+
+                        <div class="cert-content">
+                            <div class="cert-header">
+                                <h2 class="cert-title">CERTIFICATE</h2>
+                                <div class="cert-subtitle">OF COMPLETION</div>
+                            </div>
+                            
+                            <div class="cert-body">
+                                <div class="cert-present">This certificate is proudly presented to:</div>
+                                <div class="cert-name">James Njuguna</div>
+                                <div class="cert-description">
+                                    completed a 2 months programming learning at<br>
+                                    <span class="cert-school">QuickLearn Programming School</span>
+                                </div>
+                            </div>
+                            
+                            <div class="cert-footer">
+                                <div class="cert-sig">
+                                    <div class="sig-line">Nelson Omwenga</div>
+                                    <div class="sig-title">Nelson Omwenga<br><span>C.E.O</span></div>
+                                </div>
+                                <div class="cert-seal-wrap">
+                                    <svg class="cert-seal" viewBox="0 0 100 100">
+                                        <!-- Red ribbon tails -->
+                                        <path d="M 40 55 L 30 92 L 48 80 L 66 92 L 56 55 Z" fill="#DC2626" />
+                                        <path d="M 46 55 L 40 92 L 50 83 L 60 92 L 54 55 Z" fill="#991B1B" />
+                                        <!-- Jagged gold seal -->
+                                        <path d="M 50 15 L 53 23 L 61 21 L 59 29 L 66 31 L 62 38 L 67 43 L 61 47 L 64 55 L 56 56 L 57 64 L 50 62 L 43 64 L 44 56 L 36 55 L 39 47 L 33 43 L 38 38 L 34 31 L 41 29 L 39 21 L 47 23 Z" fill="#F59E0B" stroke="#D97706" stroke-width="1.5" />
+                                        <circle cx="50" cy="40" r="16" fill="#FCD34D" stroke="#D97706" stroke-width="1" />
+                                        <circle cx="50" cy="40" r="13" fill="none" stroke="#B45309" stroke-width="1" stroke-dasharray="2 1.5" />
+                                        <polygon points="50,28 53,35 60,35 55,39 57,46 50,42 43,46 45,39 40,35 47,35" fill="#B45309" />
+                                    </svg>
+                                </div>
+                                <div class="cert-sig">
+                                    <div class="sig-line">Daniel Kitheka</div>
+                                    <div class="sig-title">Daniel Kitheka<br><span>Manager</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
