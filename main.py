@@ -438,6 +438,10 @@ async def dashboard_page(user: models.User = Depends(get_current_user)):
 async def about_page():
     return render_html("about.html")
 
+@app.get("/books", response_class=HTMLResponse)
+async def books_page():
+    return render_html("books.html")
+
 @app.get("/contact", response_class=HTMLResponse)
 async def contact_page():
     return render_html("contact.html")
