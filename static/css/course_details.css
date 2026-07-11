@@ -4,11 +4,7 @@ body.course-details-page {
     padding-top: 0;
 }
 
-body.course-details-page .navbar {
-    background: rgba(234, 239, 244, 0.95); /* Matches #EAEFF4 page background */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: none; /* Seamless flat design under the navbar */
-}
+
 
 .page-container {
     background: #EAEFF4;
